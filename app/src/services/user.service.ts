@@ -88,8 +88,8 @@ class UserService implements IUserService {
     }
 
     async findOne(): Promise<User> {
-    const data = await repository.findOne();
-    return data;
+        const data = await repository.findOne();
+        return data;
     }
 
 }

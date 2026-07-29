@@ -32,11 +32,15 @@ class UserRepository implements IUserRepository {
 
     }
 
-    async findOne(): Promise<User> {
-    const user = await User.findOne({ where: { email: "john.doe@example.com" } });
+    async findOne(email: string, password: string): Promise<User> {
+        const user = await User.findOne({ where: { email } });
     
-    if (!user) {
-        throw new Error("Usuario no encontrado"); 
+        if (!user) {
+            throw new Error("Usuario o contraseña incorrectos"); 
+        }
+    
+        if (password != user.password) {
+            throw new Error("Usuario o contraseña incorrectos"); 
         }
         return user; 
     }

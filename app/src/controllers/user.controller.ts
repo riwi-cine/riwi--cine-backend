@@ -158,3 +158,23 @@ export const getUsers = async (_req: Request, res: Response): Promise<Response> 
     }
 
 };
+
+export const findUser = async (_req: Request, res: Response): Promise<Response> => {
+
+    try {
+
+        // Solicita la información al servicio.
+        const user = await userService.findOne();
+
+        // Retorna la colección de usuarios.
+        return res.status(200).json(user);
+
+    } catch (error: any) {
+
+        return res.status(500).json({
+            error: error.message
+        });
+
+    }
+
+};

@@ -22,4 +22,10 @@ export interface IUserRepository {
      */
     findAll(): Promise<User[]>;
 
+
+    /** 
+     * Obtener usuario basado en email (Todavia falta agregar contraseña)
+    */
+    findOne(): Promise<User>;
+
 }

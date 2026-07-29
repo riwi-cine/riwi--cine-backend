@@ -87,6 +87,11 @@ class UserService implements IUserService {
         return await repository.findAll();
     }
 
+    async findOne(): Promise<User> {
+    const data = await repository.findOne();
+    return data;
+    }
+
 }
 
 export default new UserService();

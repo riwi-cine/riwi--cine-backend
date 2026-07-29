@@ -6,14 +6,15 @@
  * Este archivo define las rutas HTTP relacionadas con la entidad `User`.
  * 
  * Endpoints disponibles:
- *  - `POST /users/` : Crear un nuevo usuario.
- *  - `GET /users/`  : Obtener todos los usuarios registrados.
+ *  - `POST /users/`        : Crear un nuevo usuario.
+ *  - `GET /users/`         : Obtener todos los usuarios registrados.
+ *  - `POST /users/search`  : Buscar un usuario específico por email.
  * 
  * Cada ruta se conecta con su respectivo controlador.
  */
 
 import { Router } from "express";
-import { createUser, getUsers } from "../controllers/user.controller";
+import { createUser, getUsers, findUser } from "../controllers/user.controller";
 
 const router = Router();
 
@@ -21,15 +22,6 @@ const router = Router();
  * POST /
  * -----
  * Crea un nuevo usuario en la base de datos.
- * 
- * Request Body:
- *  - `name`: string (obligatorio)
- *  - `email`: string (obligatorio, único)
- * 
- * Response:
- *  - 201 Created: Retorna el usuario creado en formato JSON.
- *  - 500 Internal Server Error: En caso de error en la creación.
- * 
  * 
  * @swagger
  * /api/users:
@@ -81,10 +73,6 @@ router.post("/", createUser);
  * ----
  * Obtiene la lista completa de usuarios registrados en la base de datos.
  * 
- * Response:
- *  - 200 OK: Devuelve un array de usuarios en formato JSON.
- * 
- * 
  * @swagger
  * /api/users:
  *   get:
@@ -117,6 +105,50 @@ router.post("/", createUser);
  */
 router.get("/", getUsers);
 
+/**
+ * POST /search
+ * ------------
+ * Busca un usuario específico utilizando los criterios enviados en el body.
+ * 
+ * @swagger
+ * /api/users/search:
+ *   post:
+ *     summary: Buscar un usuario por email
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "john.doe@example.com"
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado exitosamente
+ *         content:
+ *           application/json:
+ *             example:
+ *               id: 1
+ *               name: "John Doe"
+ *               email: "john.doe@example.com"
+ *       404:
+ *         description: Usuario no encontrado
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Usuario no encontrado"
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Error al buscar el usuario"
+ */
+router.post("/search", findUser);
+
 export default router;
-
-

@@ -13,25 +13,23 @@ import { IUserRepository } from "./interfaces/user.repository.interface";
  */
 
 class UserRepository implements IUserRepository {
-
     /**
      * Crea un nuevo usuario.
      */
     async create(data: UserCreationAttributes): Promise<User> {
-
         return await User.create(data);
-
     }
 
     /**
      * Obtiene todos los usuarios.
      */
     async findAll(): Promise<User[]> {
-
         return await User.findAll();
-
     }
 
+    async findOne(id: number): Promise<User | null> {
+        return User.findOne({ where: { id }, attributes: { exclude: ["password"] } });
+    }
 }
 
 export default new UserRepository();

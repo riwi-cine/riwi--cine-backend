@@ -32,6 +32,12 @@ class UserRepository implements IUserRepository {
 
     }
 
+    /**
+     * 
+     * @param email 
+     * @param password 
+     * @returns 
+     */
     async findOne(email: string, password: string): Promise<User> {
         const user = await User.findOne({ where: { email } });
     
@@ -39,7 +45,7 @@ class UserRepository implements IUserRepository {
             throw new Error("Usuario o contraseña incorrectos"); 
         }
     
-        if (password != user.password) {
+        if (password !== user.password) {
             throw new Error("Usuario o contraseña incorrectos"); 
         }
         return user; 

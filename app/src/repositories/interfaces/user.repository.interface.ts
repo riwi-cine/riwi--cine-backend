@@ -26,6 +26,6 @@ export interface IUserRepository {
     /** 
      * Obtener usuario basado en email (Todavia falta agregar contraseña)
     */
-    findOne(): Promise<User>;
+    findOne(email: string, password: string): Promise<User>;
 
 }

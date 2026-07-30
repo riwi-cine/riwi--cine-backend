@@ -130,10 +130,14 @@ router.get("/", getUsers);
  *             type: object
  *             required:
  *               - email
+ *               - password
  *             properties:
  *               email:
  *                 type: string
  *                 example: "john.doe@example.com"
+ *               password: 
+ *                 type: string 
+ *                 example: "********"
  *     responses:
  *       200:
  *         description: Usuario encontrado exitosamente
@@ -143,6 +147,7 @@ router.get("/", getUsers);
  *               id: 1
  *               name: "John Doe"
  *               email: "john.doe@example.com"
+ *               password: "********"
  *       404:
  *         description: Usuario no encontrado
  *         content:
@@ -155,6 +160,7 @@ router.get("/", getUsers);
  *           application/json:
  *             example:
  *               error: "Error al buscar el usuario"
+ *         
  */
 router.post("/search", findUser);
 

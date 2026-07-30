@@ -87,8 +87,8 @@ class UserService implements IUserService {
         return await repository.findAll();
     }
 
-    async findOne(): Promise<User> {
-        const user = await repository.findOne();
+    async findOne(email: string, password: string): Promise<User> {
+        const user = await repository.findOne(email, password);
         return user;
     }
 

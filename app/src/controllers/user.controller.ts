@@ -58,6 +58,7 @@ import { CreateUserDto } from "../dto/create-user.dto";
  * {
  *   "name": "David Mtz",
  *   "email": "david@example.com"
+ *   "password": "******"
  * }
  *
  * @param {Response} res

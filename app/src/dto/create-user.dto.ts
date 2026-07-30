@@ -24,7 +24,7 @@
  * const dto: CreateUserDto = {
  *   name: "David Mtz",s
  *   email: "david@example.com"
- *  password: "securePassword123"
+ *   password: "securePassword123"
  * };
  */
 
@@ -39,5 +39,8 @@ export interface CreateUserDto {
      */
     email: string;
 
+    /**
+     * Contraseña del usuario.
+     */
     password: string;
 }

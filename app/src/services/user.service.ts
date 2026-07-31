@@ -75,20 +75,30 @@ class UserService implements IUserService {
      * const users = await userService.findAll();
      *
      * console.log(users);
-     * // [
-     * //   {
-     * //     id: 1,
-     * //     name: "David",
-     * //     email: "david@example.com"
-     * //   }
-     * // ]
+     *  [
+     *    {
+     *      id: 1,
+     *      name: "David",
+     *      email: "david@example.com",
+     *      password: "password123"
+     *    }
+     *  ]
      */
     async findAll(): Promise<User[]> {
         return await repository.findAll();
     }
 
-    async findOne(email: string, password: string): Promise<User> {
-        const user = await repository.findOne(email, password);
+
+    /**
+     * Este metodo esta encargado de delegar el inicio de sesión o log-in.
+     * Toma dos inputs el primero se usa para validar mediante el email si el usuario existe en la base de datos
+     * 
+     * @param {string} email -Correo electrónico de usuario
+     * 
+     * @returns {Promise<User>} -Retorna el usuario en forma de promesa luego de la verificación
+     */
+    async findOne(email: string): Promise<User> {
+        const user = await repository.findOne(email);
         return user;
     }
 

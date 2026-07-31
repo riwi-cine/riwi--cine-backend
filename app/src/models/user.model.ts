@@ -15,6 +15,7 @@
 
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database";
+import { hash_password} from "../utils/auth";
 
 /**
  * Atributos principales de la entidad `User`.
@@ -87,7 +88,18 @@ User.init(
         modelName: "User", // Nombre del modelo en Sequelize
         tableName: "users", // Nombre de la tabla en la base de datos
         timestamps: true, // Incluye createdAt y updatedAt
-    },
+        hooks: {
+        beforeCreate: async (user: any) => {
+            if (user.password) {
+            user.password = await hash_password(user.password)
+            }
+        },
+        beforeUpdate: async (user: any) => {
+            if (user.changed('password')) {
+            user.password = await hash_password(user.password)
+            }
+        },
+        },},
 );
 
 export default User;

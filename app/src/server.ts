@@ -25,4 +25,8 @@ app.use("/api/auth", authRoutes);
 // Swagger
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.use("/health", (req, res) => {
+    res.status(200).json({ message: "Healthy" });
+});
+
 export default app;

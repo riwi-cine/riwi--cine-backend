@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import userService from "../services/user.service";
 import { CreateUserDto } from "../dto/create-user.dto";
+import AuthUser from "../services/auth.service";
 
 /**
  * ============================================================================
@@ -185,15 +186,17 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
     try {
         const { email, password } = req.body;
 
-        if (!email || !password) {
+        if (!email) {
             return res.status(400).json({
                 error: "El email y la contraseña son obligatorios."
             });
         }
 
-        const user = await userService.findOne(email, password);
+        const user = await userService.findOne(email);
 
-        return res.status(200).json(user);
+        const validation = await AuthUser.login(user, password);
+
+        return res.status(200).json(validation);
 
     } catch (error: any) {
         return res.status(401).json({

@@ -1,12 +1,12 @@
 // app/src/routes/user.routes.ts
 
 /**
- * Rutas de Usuario
+ * Rutas de Autenticacion
  * ----------------
  * Este archivo define las rutas HTTP relacionadas con la entidad `Auth`.
  * 
  * Endpoints disponibles:
- *  - `POST /users/search`  : Buscar un usuario específico por email.
+ *  - `POST /auth/login`  : Buscar un usuario específico por email.
  * 
  * Cada ruta se conecta con su respectivo controlador.
  */
@@ -22,10 +22,10 @@ const router = Router();
  * Busca un usuario específico utilizando los criterios enviados en el body.
  * 
  * @swagger
- * /api/users/login:
+ * /api/Auth/login:
  *   post:
  *     summary: Buscar un usuario por email
- *     tags: [Users]
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:

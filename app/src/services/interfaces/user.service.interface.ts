@@ -12,5 +12,5 @@ export interface IUserService {
 
     findAll(): Promise<User[]>;
 
-    findOne(email: string, passwordPlain: string): Promise<User | null>;
+    findOne(email: string): Promise<User | null>;
 }

@@ -14,7 +14,7 @@
  */
 
 import { Router } from "express";
-import { createUser, getUsers, findUser } from "../controllers/user.controller";
+import { createUser, getUsers } from "../controllers/user.controller";
 
 const router = Router();
 
@@ -111,57 +111,5 @@ router.post("/", createUser);
  *               error: "Error al obtener los usuarios"
  */
 router.get("/", getUsers);
-
-/**
- * POST /search
- * ------------
- * Busca un usuario específico utilizando los criterios enviados en el body.
- * 
- * @swagger
- * /api/users/search:
- *   post:
- *     summary: Buscar un usuario por email
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 example: "john.doe@example.com"
- *               password: 
- *                 type: string 
- *                 example: "********"
- *     responses:
- *       200:
- *         description: Usuario encontrado exitosamente
- *         content:
- *           application/json:
- *             example:
- *               id: 1
- *               name: "John Doe"
- *               email: "john.doe@example.com"
- *               password: "********"
- *       404:
- *         description: Usuario no encontrado
- *         content:
- *           application/json:
- *             example:
- *               error: "Usuario no encontrado"
- *       500:
- *         description: Error interno del servidor
- *         content:
- *           application/json:
- *             example:
- *               error: "Error al buscar el usuario"
- *         
- */
-router.post("/search", findUser);
 
 export default router;

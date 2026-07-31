@@ -11,6 +11,7 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swagger";
 
 import userRoutes from "./routes/user.routes";
+import authRoutes from "./routes/auth.router"
 
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.json());
 
 // Rutas
 app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
 
 // Swagger
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

@@ -12,7 +12,7 @@
  */
 
 import { Router } from 'express';
-import { findUser } from '../controllers/user.controller';
+import { findUser } from '../controllers/auth.controller';
 
 const router = Router();
 

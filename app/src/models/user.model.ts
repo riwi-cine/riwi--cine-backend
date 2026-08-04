@@ -53,6 +53,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
 
     /** Contraseña del usuario. */
     public password!: string;
+
+    /** Estado del usuario. */
 }
 
 /**
@@ -88,6 +90,7 @@ User.init(
         modelName: "User", // Nombre del modelo en Sequelize
         tableName: "users", // Nombre de la tabla en la base de datos
         timestamps: true, // Incluye createdAt y updatedAt
+        paranoid: true,
         hooks: {
         beforeCreate: async (user: any) => {
             if (user.password) {

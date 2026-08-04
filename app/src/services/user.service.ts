@@ -102,6 +102,15 @@ class UserService implements IUserService {
         return user;
     }
 
+    async delete(id: number): Promise<Boolean> {
+        const userID = await repository.delete(id);
+        return userID;
+    }
+
+    async restore(id: number): Promise<void> {
+        const userID = await repository.restore(id);
+        return userID;
+    }
 }
 
 export default new UserService();

@@ -22,9 +22,9 @@ const router = Router();
  * Busca un usuario específico utilizando los criterios enviados en el body.
  * 
  * @swagger
- * /api/Auth/login:
+ * /api/auth/login:
  *   post:
- *     summary: Buscar un usuario por email
+ *     summary: Autenticar usuario y generar token de acceso    
  *     tags: [Auth]
  *     requestBody:
  *       required: true

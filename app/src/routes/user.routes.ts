@@ -14,7 +14,7 @@
  */
 
 import { Router } from "express";
-import { createUser, getUsers } from "../controllers/user.controller";
+import { createUser, getUsers, deleteUser, restoreUser } from "../controllers/user.controller";
 
 const router = Router();
 
@@ -112,4 +112,94 @@ router.post("/", createUser);
  */
 router.get("/", getUsers);
 
+/**
+ * DELETE /
+ * ----
+ * Elimina a usuarios registrados en la base de datos.
+ * 
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Eliminar usuarios por ID
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: number
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado exitosamente 
+ *         content:
+ *           application/json:
+ *             example:
+ *               - id: 1
+ *       400:
+ *         description: Solicitud inválida
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Parámetros incorrectos"
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Error al eliminar al usuario"
+ *
+ */
+router.delete("/{id}", deleteUser)
+
+
+/**
+ * POST /
+ * ----
+ * Restaura a usuarios registrados en la base de datos.
+ * 
+ * @swagger
+ * /api/users/{id}/restore:
+ *   post:
+ *     summary: Restaurar usuarios por ID
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: number
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Usuario restaurado exitosamente 
+ *         content:
+ *           application/json:
+ *             example:
+ *               - id: 1
+ *       400:
+ *         description: Solicitud inválida
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Parámetros incorrectos"
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Error al restaurar al usuario"
+ *
+ */
+router.post('/{id}/restore', restoreUser)
 export default router;

@@ -49,6 +49,17 @@ class UserRepository implements IUserRepository {
         }
         return user; 
     }
+
+    
+    async delete(id: number): Promise<Boolean> {
+        const row = await User.destroy({where: {id},});
+        return row > 0;
+    }
+    
+    async restore(id: number): Promise<void> {
+        const row = User.restore({where: {id},});   
+        return row;
+    }
 }
 
 export default new UserRepository();

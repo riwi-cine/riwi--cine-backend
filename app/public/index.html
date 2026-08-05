@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,24 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .error-message { color: #ef4444; font-size: 0.875rem; margin-top: 0.25rem; display: none; }
-        .input-error { border-color: #ef4444; }
-        .loading { opacity: 0.5; pointer-events: none; }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .input-error {
+            border-color: #ef4444;
+        }
+
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
     </style>
 </head>
+
 <body class="bg-gray-50 min-h-screen font-sans">
     <nav class="bg-indigo-600 text-white p-4 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
@@ -30,7 +44,7 @@
                     </h2>
                     <form id="user-form" class="space-y-4" novalidate>
                         <input type="hidden" id="user-id">
-                        
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nombre Completo *</label>
                             <input type="text" id="name" name="name" required
@@ -52,7 +66,8 @@
                             <input type="tel" id="phoneNumber" name="phoneNumber" required
                                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                                 placeholder="3001234567">
-                            <p class="error-message" id="error-phoneNumber">Formato de teléfono inválido (10 dígitos numéricos).</p>
+                            <p class="error-message" id="error-phoneNumber">Formato de teléfono inválido (10 dígitos
+                                numéricos).</p>
                         </div>
 
                         <div id="password-group">
@@ -60,7 +75,8 @@
                             <input type="password" id="password" name="password" required
                                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                                 placeholder="Min. 8 caracteres">
-                            <p class="error-message" id="error-password">La contraseña debe tener al menos 8 caracteres.</p>
+                            <p class="error-message" id="error-password">La contraseña debe tener al menos 8 caracteres.
+                            </p>
                         </div>
 
                         <div class="pt-4 flex gap-2">
@@ -88,7 +104,7 @@
                             <i class="fas fa-sync-alt"></i> Actualizar
                         </button>
                     </div>
-                    
+
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
                             <thead>
@@ -129,7 +145,7 @@
         const cancelBtn = document.getElementById('cancel-btn');
         const formTitle = document.getElementById('form-title');
         const passwordGroup = document.getElementById('password-group');
-        
+
         let isEditing = false;
 
         const validators = {
@@ -189,7 +205,7 @@
                 return;
             }
             emptyState.classList.add('hidden');
-            
+
             users.forEach(user => {
                 const tr = document.createElement('tr');
                 tr.className = 'border-b border-gray-50 hover:bg-gray-50 transition-colors';
@@ -223,10 +239,10 @@
 
         form.onsubmit = async (e) => {
             e.preventDefault();
-            
+
             const fieldsToValidate = ['name', 'email', 'phoneNumber'];
             if (!isEditing) fieldsToValidate.push('password');
-            
+
             const allValid = fieldsToValidate.every(validateField);
             if (!allValid) {
                 showToast('Por favor corrige los errores del formulario', 'error');
@@ -266,7 +282,7 @@
                     try {
                         const err = await response.json();
                         errMsg = err.error || errMsg;
-                    } catch(e) {}
+                    } catch (e) { }
                     showToast(errMsg, 'error');
                 }
             } catch (error) {
@@ -283,15 +299,15 @@
             document.getElementById('name').value = user.name;
             document.getElementById('email').value = user.email;
             document.getElementById('phoneNumber').value = user.phoneNumber || '';
-            
+
             formTitle.innerHTML = '<i class="fas fa-user-edit text-indigo-500"></i> Editar Usuario';
             submitBtn.textContent = 'Actualizar Usuario';
             cancelBtn.classList.remove('hidden');
             passwordGroup.classList.add('hidden');
-            
+
             document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
             document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
-            
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
@@ -299,7 +315,7 @@
             if (!confirm(`¿Estás seguro de eliminar el usuario #${id}? Esta acción puede deshacerse restaurándolo.`)) return;
 
             try {
-                const response = await fetch(`${API_URL}/${id}`, { 
+                const response = await fetch(`${API_URL}/${id}`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id })
@@ -324,7 +340,7 @@
             submitBtn.textContent = 'Guardar Usuario';
             cancelBtn.classList.add('hidden');
             passwordGroup.classList.remove('hidden');
-            
+
             document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
             document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
         }
@@ -335,4 +351,5 @@
         fetchUsers();
     </script>
 </body>
+
 </html>

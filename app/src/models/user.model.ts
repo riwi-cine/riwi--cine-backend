@@ -93,9 +93,9 @@ User.init(
     },
     {
         sequelize,
-        modelName: "User",
-        tableName: "users",
-        timestamps: true,
+        modelName: "User", // Nombre del modelo en Sequelize
+        tableName: "users", // Nombre de la tabla en la base de datos
+        timestamps: true, // Incluye createdAt y updatedAt
         paranoid: true,
         hooks: {
             beforeCreate: async (user: any) => {

@@ -7,7 +7,7 @@
 */
 
 import express from "express";
-import path from "path";
+import path from "path"; //se importo path para poder usar el metodo join(sirve para concatenar rutas para leer archivos)
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swagger";
 
@@ -17,7 +17,7 @@ import authRoutes from "./routes/auth.routes";
 const app = express();
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, "../public"))); // leera los archivos que estan en la carpeta public
 
 // Rutas
 app.use("/api/users", userRoutes);

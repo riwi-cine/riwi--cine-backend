@@ -43,4 +43,9 @@ export interface CreateUserDto {
      * Contraseña del usuario.
      */
     password: string;
+
+    /**
+     * Número de teléfono del usuario.
+     */
+    phoneNumber: string;
 }

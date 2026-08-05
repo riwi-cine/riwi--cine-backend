@@ -50,6 +50,13 @@ class UserRepository implements IUserRepository {
         return user; 
     }
 
+    async update(id: number, data: Partial<UserCreationAttributes>): Promise<User | null> {
+        const user = await User.findByPk(id);
+        if (user) {
+            return await user.update(data);
+        }
+        return null;
+    }
     
     async delete(id: number): Promise<Boolean> {
         const row = await User.destroy({where: {id},});

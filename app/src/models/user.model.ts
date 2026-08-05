@@ -15,7 +15,7 @@
 
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database";
-import { hash_password} from "../utils/auth";
+import { hash_password } from "../utils/auth";
 
 /**
  * Atributos principales de la entidad `User`.
@@ -25,6 +25,7 @@ export interface UserAttributes {
     name: string;
     email: string;
     password: string;
+    phoneNumber: string;
 }
 
 /**
@@ -33,7 +34,7 @@ export interface UserAttributes {
  * Se utiliza `Optional` para indicar que `id` no es requerido al momento
  * de la creación, ya que se genera automáticamente por la base de datos.
  */
-export interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
+export interface UserCreationAttributes extends Optional<UserAttributes, "id"> { }
 
 /**
  * Clase que representa el modelo `User` en Sequelize.
@@ -54,7 +55,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     /** Contraseña del usuario. */
     public password!: string;
 
-    /** Estado del usuario. */
+    /** Número de teléfono. */
+    public phoneNumber!: string;
 }
 
 /**
@@ -84,25 +86,30 @@ User.init(
             type: DataTypes.STRING(100),
             allowNull: false,
         },
+        phoneNumber: {
+            type: DataTypes.STRING(20),
+            allowNull: false,
+        },
     },
     {
         sequelize,
-        modelName: "User", // Nombre del modelo en Sequelize
-        tableName: "users", // Nombre de la tabla en la base de datos
-        timestamps: true, // Incluye createdAt y updatedAt
+        modelName: "User",
+        tableName: "users",
+        timestamps: true,
         paranoid: true,
         hooks: {
-        beforeCreate: async (user: any) => {
-            if (user.password) {
-            user.password = await hash_password(user.password)
-            }
+            beforeCreate: async (user: any) => {
+                if (user.password) {
+                    user.password = await hash_password(user.password);
+                }
+            },
+            beforeUpdate: async (user: any) => {
+                if (user.changed('password')) {
+                    user.password = await hash_password(user.password);
+                }
+            },
         },
-        beforeUpdate: async (user: any) => {
-            if (user.changed('password')) {
-            user.password = await hash_password(user.password)
-            }
-        },
-        },},
+    },
 );
 
 export default User;

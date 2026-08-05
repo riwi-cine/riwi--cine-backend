@@ -205,42 +205,82 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
     }
 };
 
-export const deleteUser = async (req: Request, res: Response): Promise<Response> => {
+export const updateUser = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const {id} = req.body;
+        const { id } = req.params;
+        const dto: Partial<CreateUserDto> = req.body;
 
         if (!id) {
             return res.status(400).json({
-                error: "El ID es obligatoria."
+                error: "El ID es obligatorio."
             });
         }
-        const user = await userService.delete(id);
 
-        return res.status(201).json(user);
+        const user = await userService.update(Number(id), dto);
+
+        if (!user) {
+            return res.status(404).json({
+                error: "Usuario no encontrado."
+            });
+        }
+
+        return res.status(200).json(user);
 
     } catch (error: any) {
-        return res.status(401).json({
+        return res.status(500).json({
             error: error.message
-        })
+        });
+    }
+};
+
+export const deleteUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({
+                error: "El ID es obligatorio."
+            });
+        }
+        const deleted = await userService.delete(Number(id));
+
+        if (!deleted) {
+            return res.status(404).json({
+                error: "Usuario no encontrado."
+            });
+        }
+
+        return res.status(200).json({
+            message: "Usuario eliminado correctamente.",
+            id: Number(id)
+        });
+
+    } catch (error: any) {
+        return res.status(500).json({
+            error: error.message
+        });
     }
 
 }
 
 export const restoreUser = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const {id} = req.body;
+        const { id } = req.params;
 
         if (!id) {
             return res.status(400).json({
-                error: "El ID es obligatoria."
+                error: "El ID es obligatorio."
             });
         }
-        const user = await userService.restore(id);
+        await userService.restore(Number(id));
 
-        return res.status(201).json(user);
+        return res.status(200).json({
+            message: "Usuario restaurado correctamente.",
+            id: Number(id)
+        });
     } catch (error: any) {
-        return res.status(401).json({
+        return res.status(500).json({
             error: error.message
-        })
+        });
     }
 }

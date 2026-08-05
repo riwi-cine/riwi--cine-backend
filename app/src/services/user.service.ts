@@ -102,6 +102,10 @@ class UserService implements IUserService {
         return user;
     }
 
+    async update(id: number, dto: Partial<CreateUserDto>): Promise<User | null> {
+        return await repository.update(id, dto);
+    }
+
     async delete(id: number): Promise<Boolean> {
         const userID = await repository.delete(id);
         return userID;

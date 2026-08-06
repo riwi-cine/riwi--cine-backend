@@ -81,7 +81,7 @@ MovieRelease.init(
         sequelize,
         modelName: "MovieRelease",
         tableName: "movie_releases",
-        timestamps: true,
+        timestamps: false,
     },
 );
 

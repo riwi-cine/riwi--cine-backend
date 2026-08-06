@@ -102,7 +102,7 @@ Function.init(
         sequelize,
         modelName: "Function",
         tableName: "functions",
-        timestamps: true,
+        timestamps: false,
     },
 );
 

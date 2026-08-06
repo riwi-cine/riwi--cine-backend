@@ -85,7 +85,7 @@ Department.init(
         sequelize,
         modelName: "Department",
         tableName: "departments",
-        timestamps: true,
+        timestamps: false,
     },
 );
 

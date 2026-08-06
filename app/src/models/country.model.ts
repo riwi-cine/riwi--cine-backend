@@ -103,7 +103,7 @@ Country.init(
         sequelize,
         modelName: "Country",
         tableName: "countries",
-        timestamps: true,
+        timestamps: false,
     },
 );
 

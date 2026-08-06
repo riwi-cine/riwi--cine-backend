@@ -62,7 +62,7 @@ DocumentType.init(
         sequelize,
         modelName: "DocumentType",
         tableName: "document_types",
-        timestamps: true,
+        timestamps: false,
     },
 );
 

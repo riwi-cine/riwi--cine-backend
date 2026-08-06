@@ -3,68 +3,97 @@
 /**
  * Modelo de Usuario
  * -----------------
- * Este archivo define el modelo `User` de Sequelize, que representa la tabla `users` en la base de datos.
+ * Este archivo define el modelo `User` de Sequelize, que representa
+ * la tabla `users` en la base de datos.
  *
- * Contiene:
- *  - Atributos del modelo (`UserAttributes`).
- *  - Atributos requeridos para la creación (`UserCreationAttributes`).
- *  - Definición del modelo con sus columnas y restricciones.
- *
- * Este modelo es utilizado por los servicios y controladores para realizar operaciones CRUD.
+ * Un usuario representa cualquier persona registrada en la plataforma,
+ * ya sea un cliente, administrador o empleado del cine.
  */
 
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database";
-import { hash_password } from "../utils/auth";
 
 /**
- * Atributos principales de la entidad `User`.
+ * Atributos principales de la entidad User.
  */
 export interface UserAttributes {
     id: number;
-    name: string;
+    countryId: number;
     email: string;
-    password: string;
-    phoneNumber: string;
+    passwordHash: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    birthDate: Date;
+    emailVerified: boolean;
+    marketingOptIn: boolean;
+    status: string;
+    failedAttempts: number;
+    lockedUntil: Date | null;
 }
 
 /**
- * Atributos utilizados para la creación de un nuevo usuario.
- *
- * Se utiliza `Optional` para indicar que `id` no es requerido al momento
- * de la creación, ya que se genera automáticamente por la base de datos.
+ * Atributos utilizados durante la creación.
  */
-export interface UserCreationAttributes extends Optional<UserAttributes, "id"> { }
+export interface UserCreationAttributes
+    extends Optional<
+        UserAttributes,
+        | "id"
+        | "emailVerified"
+        | "marketingOptIn"
+        | "failedAttempts"
+        | "lockedUntil"
+    > {}
 
 /**
- * Clase que representa el modelo `User` en Sequelize.
- *
- * Implementa los atributos definidos en `UserAttributes` y `UserCreationAttributes`.
+ * Clase que representa el modelo User.
  */
-
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-    /** Identificador único del usuario. */
+class User
+    extends Model<UserAttributes, UserCreationAttributes>
+    implements UserAttributes
+{
+    /** Identificador del usuario. */
     public id!: number;
 
-    /** Nombre del usuario. */
-    public name!: string;
+    /** País de residencia. */
+    public countryId!: number;
 
     /** Correo electrónico. */
     public email!: string;
 
-    /** Contraseña del usuario. */
-    public password!: string;
+    /** Hash de la contraseña. */
+    public passwordHash!: string;
 
-    /** Número de teléfono. */
-    public phoneNumber!: string;
+    /** Nombre del usuario. */
+    public firstName!: string;
+
+    /** Apellido del usuario. */
+    public lastName!: string;
+
+    /** Número telefónico. */
+    public phone!: string;
+
+    /** Fecha de nacimiento. */
+    public birthDate!: Date;
+
+    /** Indica si el correo fue verificado. */
+    public emailVerified!: boolean;
+
+    /** Aceptación de marketing. */
+    public marketingOptIn!: boolean;
+
+    /** Estado de la cuenta. */
+    public status!: string;
+
+    /** Intentos fallidos de login. */
+    public failedAttempts!: number;
+
+    /** Fecha hasta la que permanece bloqueada la cuenta. */
+    public lockedUntil!: Date | null;
 }
 
 /**
- * Inicialización del modelo `User` con la configuración de Sequelize.
- *
- * - `id`: Entero autoincremental, clave primaria.
- * - `name`: Nombre obligatorio con máximo 100 caracteres.
- * - `email`: Correo electrónico único y obligatorio con máximo 100 caracteres.
+ * Inicialización del modelo User.
  */
 User.init(
     {
@@ -73,42 +102,91 @@ User.init(
             autoIncrement: true,
             primaryKey: true,
         },
-        name: {
-            type: DataTypes.STRING(100),
+
+        countryId: {
+            type: DataTypes.INTEGER,
             allowNull: false,
+            field: "country_id",
         },
+
         email: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.STRING(150),
+            allowNull: false,
             unique: true,
-            allowNull: false,
+            validate: {
+                isEmail: true,
+            },
         },
-        password: {
+
+        passwordHash: {
+            type: DataTypes.STRING(255),
+            allowNull: false,
+            field: "password_hash",
+        },
+
+        firstName: {
             type: DataTypes.STRING(100),
             allowNull: false,
+            field: "first_name",
         },
-        phoneNumber: {
-            type: DataTypes.STRING(20),
+
+        lastName: {
+            type: DataTypes.STRING(100),
             allowNull: false,
+            field: "last_name",
+        },
+
+        phone: {
+            type: DataTypes.STRING(30),
+            allowNull: false,
+        },
+
+        birthDate: {
+            type: DataTypes.DATEONLY,
+            allowNull: false,
+            field: "birth_date",
+        },
+
+        emailVerified: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+            field: "email_verified",
+        },
+
+        marketingOptIn: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+            field: "marketing_opt_in",
+        },
+
+        status: {
+            type: DataTypes.STRING(30),
+            allowNull: false,
+            defaultValue: "ACTIVE",
+        },
+
+        failedAttempts: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+            field: "failed_attempts",
+        },
+
+        lockedUntil: {
+            type: DataTypes.DATE,
+            allowNull: true,
+            field: "locked_until",
         },
     },
     {
         sequelize,
-        modelName: "User", // Nombre del modelo en Sequelize
-        tableName: "users", // Nombre de la tabla en la base de datos
-        timestamps: true, // Incluye createdAt y updatedAt
-        paranoid: true,
-        hooks: {
-            beforeCreate: async (user: any) => {
-                if (user.password) {
-                    user.password = await hash_password(user.password);
-                }
-            },
-            beforeUpdate: async (user: any) => {
-                if (user.changed('password')) {
-                    user.password = await hash_password(user.password);
-                }
-            },
-        },
+        modelName: "User",
+        tableName: "users",
+        timestamps: true,
+        createdAt: "created_at",
+        updatedAt: false,
     },
 );
 

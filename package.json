@@ -18,5 +18,10 @@
   "bugs": {
     "url": "https://github.com/riwi-cine/riwi--cine-backend/issues"
   },
-  "homepage": "https://github.com/riwi-cine/riwi--cine-backend#readme"
+  "homepage": "https://github.com/riwi-cine/riwi--cine-backend#readme",
+  "dependencies": {
+    "pg": "^8.22.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.8"
+  }
 }

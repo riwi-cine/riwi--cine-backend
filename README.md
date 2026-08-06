@@ -203,7 +203,7 @@ docker-compose down
 
 ---
 
-## 👥 Contributors And Authors
+##  Contributors And Authors
 
 | Author          | Role               | Path |
 | --------------- | ------------------ | ---- |

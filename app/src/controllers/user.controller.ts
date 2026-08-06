@@ -205,6 +205,14 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
     }
 };
 
+/**
+ * 
+ * @param {Request} req 
+ * Obtiene la petición HTTP
+ * 
+ * @param {Response} res 
+ * @returns 
+ */
 export const updateUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { id } = req.params;

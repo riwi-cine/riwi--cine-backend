@@ -19,12 +19,14 @@
  * @property {string} name - Nombre completo del usuario.
  * @property {string} email - Dirección de correo electrónico única del usuario.
  * @property {string} password - Contraseña del usuario.
+ * @property {string} phoneNumber - Número telefónico del usuario
  *
  * @example
  * const dto: CreateUserDto = {
- *   name: "David Mtz",s
- *   email: "david@example.com"
- *   password: "securePassword123"
+ *   name: "David Mtz",
+ *   email: "david@example.com",
+ *   password: "securePassword123",
+ *   phoneNUmber: "3215277555"
  * };
  */
 

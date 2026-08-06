@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Riwi Cine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .input-error {
+            border-color: #ef4444;
+        }
+
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen font-sans">
+    <nav class="bg-indigo-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">Riwi Cine - Admin Usuarios</h1>
+            <span class="text-sm">Módulo CRUD</span>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h2 id="form-title" class="text-lg font-semibold mb-6 flex items-center gap-2">
+                        <i class="fas fa-user-plus text-indigo-500"></i>
+                        Crear Nuevo Usuario
+                    </h2>
+                    <form id="user-form" class="space-y-4" novalidate>
+                        <input type="hidden" id="user-id">
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre Completo *</label>
+                            <input type="text" id="name" name="name" required
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                                placeholder="Ej: Juan Pérez">
+                            <p class="error-message" id="error-name">El nombre es obligatorio (min. 3 caracteres).</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico *</label>
+                            <input type="email" id="email" name="email" required
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                                placeholder="juan@correo.com">
+                            <p class="error-message" id="error-email">Ingrese un correo electrónico válido.</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono *</label>
+                            <input type="tel" id="phoneNumber" name="phoneNumber" required
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                                placeholder="3001234567">
+                            <p class="error-message" id="error-phoneNumber">Formato de teléfono inválido (10 dígitos
+                                numéricos).</p>
+                        </div>
+
+                        <div id="password-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña *</label>
+                            <input type="password" id="password" name="password" required
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                                placeholder="Min. 8 caracteres">
+                            <p class="error-message" id="error-password">La contraseña debe tener al menos 8 caracteres.
+                            </p>
+                        </div>
+
+                        <div class="pt-4 flex gap-2">
+                            <button type="submit" id="submit-btn"
+                                class="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors font-medium">
+                                Guardar Usuario
+                            </button>
+                            <button type="button" id="cancel-btn"
+                                class="hidden bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors font-medium">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2">
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-lg font-semibold flex items-center gap-2">
+                            <i class="fas fa-users text-indigo-500"></i>
+                            Lista de Usuarios
+                        </h2>
+                        <button id="refresh-btn" class="text-indigo-600 hover:text-indigo-800 transition-colors">
+                            <i class="fas fa-sync-alt"></i> Actualizar
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="border-b border-gray-100">
+                                    <th class="py-3 px-2 font-semibold text-gray-600">ID</th>
+                                    <th class="py-3 px-2 font-semibold text-gray-600">Nombre</th>
+                                    <th class="py-3 px-2 font-semibold text-gray-600">Email</th>
+                                    <th class="py-3 px-2 font-semibold text-gray-600">Teléfono</th>
+                                    <th class="py-3 px-2 font-semibold text-gray-600">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="empty-state" class="text-center py-12 text-gray-400 hidden">
+                        <i class="fas fa-user-slash text-4xl mb-2"></i>
+                        <p>No hay usuarios registrados</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="toast" class="fixed bottom-4 right-4 transform translate-y-20 transition-transform duration-300 z-50">
+        <div id="toast-content" class="px-6 py-3 rounded-lg shadow-xl text-white font-medium flex items-center gap-2">
+            <span id="toast-icon"></span>
+            <span id="toast-message"></span>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api/users';
+        const form = document.getElementById('user-form');
+        const userTableBody = document.getElementById('user-table-body');
+        const emptyState = document.getElementById('empty-state');
+        const submitBtn = document.getElementById('submit-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const formTitle = document.getElementById('form-title');
+        const passwordGroup = document.getElementById('password-group');
+
+        let isEditing = false;
+
+        const validators = {
+            name: (val) => val.trim().length >= 3,
+            email: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
+            phoneNumber: (val) => /^\d{10}$/.test(val),
+            password: (val) => isEditing ? true : val.length >= 8
+        };
+
+        const validateField = (field) => {
+            const input = document.getElementById(field);
+            const errorMsg = document.getElementById(`error-${field}`);
+            const isValid = validators[field](input.value);
+
+            if (!isValid) {
+                input.classList.add('input-error');
+                errorMsg.style.display = 'block';
+            } else {
+                input.classList.remove('input-error');
+                errorMsg.style.display = 'none';
+            }
+            return isValid;
+        };
+
+        ['name', 'email', 'phoneNumber', 'password'].forEach(field => {
+            document.getElementById(field).addEventListener('input', () => validateField(field));
+        });
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const content = document.getElementById('toast-content');
+            const icon = document.getElementById('toast-icon');
+            const msg = document.getElementById('toast-message');
+
+            content.className = `px-6 py-3 rounded-lg shadow-xl text-white font-medium flex items-center gap-2 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            icon.innerHTML = type === 'success' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-exclamation-triangle"></i>';
+            msg.textContent = message;
+
+            toast.classList.remove('translate-y-20');
+            setTimeout(() => toast.classList.add('translate-y-20'), 3000);
+        }
+
+        async function fetchUsers() {
+            try {
+                const response = await fetch(API_URL);
+                const users = await response.json();
+                renderUsers(users);
+            } catch (error) {
+                showToast('Error al cargar usuarios. Verifique conexión.', 'error');
+            }
+        }
+
+        function renderUsers(users) {
+            userTableBody.innerHTML = '';
+            if (users.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            emptyState.classList.add('hidden');
+
+            users.forEach(user => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-gray-50 hover:bg-gray-50 transition-colors';
+                tr.innerHTML = `
+                    <td class="py-4 px-2 font-medium text-gray-800">#${user.id}</td>
+                    <td class="py-4 px-2 font-medium text-gray-800">${escapeHtml(user.name)}</td>
+                    <td class="py-4 px-2 text-gray-600">${escapeHtml(user.email)}</td>
+                    <td class="py-4 px-2 text-gray-600">${escapeHtml(user.phoneNumber || 'N/A')}</td>
+                    <td class="py-4 px-2">
+                        <div class="flex gap-2">
+                            <button onclick='editUser(${JSON.stringify(user)})' 
+                                class="text-indigo-600 hover:bg-indigo-50 p-2 rounded-lg transition-colors" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteUser(${user.id})" 
+                                class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                userTableBody.appendChild(tr);
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+
+            const fieldsToValidate = ['name', 'email', 'phoneNumber'];
+            if (!isEditing) fieldsToValidate.push('password');
+
+            const allValid = fieldsToValidate.every(validateField);
+            if (!allValid) {
+                showToast('Por favor corrige los errores del formulario', 'error');
+                return;
+            }
+
+            const formData = new FormData(form);
+            const userData = Object.fromEntries(formData.entries());
+            const id = document.getElementById('user-id').value;
+
+            submitBtn.classList.add('loading');
+            submitBtn.textContent = 'Procesando...';
+
+            try {
+                let response;
+                if (isEditing) {
+                    if (!userData.password) delete userData.password;
+                    response = await fetch(`${API_URL}/${id}`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(userData)
+                    });
+                } else {
+                    response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(userData)
+                    });
+                }
+
+                if (response.ok) {
+                    showToast(`Usuario ${isEditing ? 'actualizado' : 'creado'} con éxito`);
+                    resetForm();
+                    fetchUsers();
+                } else {
+                    let errMsg = 'Error en la operación';
+                    try {
+                        const err = await response.json();
+                        errMsg = err.error || errMsg;
+                    } catch (e) { }
+                    showToast(errMsg, 'error');
+                }
+            } catch (error) {
+                showToast('Error de conexión con el servidor', 'error');
+            } finally {
+                submitBtn.classList.remove('loading');
+                submitBtn.textContent = isEditing ? 'Actualizar Usuario' : 'Guardar Usuario';
+            }
+        };
+
+        window.editUser = (user) => {
+            isEditing = true;
+            document.getElementById('user-id').value = user.id;
+            document.getElementById('name').value = user.name;
+            document.getElementById('email').value = user.email;
+            document.getElementById('phoneNumber').value = user.phoneNumber || '';
+
+            formTitle.innerHTML = '<i class="fas fa-user-edit text-indigo-500"></i> Editar Usuario';
+            submitBtn.textContent = 'Actualizar Usuario';
+            cancelBtn.classList.remove('hidden');
+            passwordGroup.classList.add('hidden');
+
+            document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.deleteUser = async (id) => {
+            if (!confirm(`¿Estás seguro de eliminar el usuario #${id}? Esta acción puede deshacerse restaurándolo.`)) return;
+
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                });
+
+                if (response.ok) {
+                    showToast('Usuario eliminado correctamente');
+                    fetchUsers();
+                } else {
+                    showToast('Error al intentar eliminar el usuario', 'error');
+                }
+            } catch (error) {
+                showToast('Error de conexión', 'error');
+            }
+        };
+
+        function resetForm() {
+            isEditing = false;
+            form.reset();
+            document.getElementById('user-id').value = '';
+            formTitle.innerHTML = '<i class="fas fa-user-plus text-indigo-500"></i> Crear Nuevo Usuario';
+            submitBtn.textContent = 'Guardar Usuario';
+            cancelBtn.classList.add('hidden');
+            passwordGroup.classList.remove('hidden');
+
+            document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+        }
+
+        cancelBtn.onclick = resetForm;
+        document.getElementById('refresh-btn').onclick = fetchUsers;
+
+        fetchUsers();
+    </script>
+</body>
+
+</html>

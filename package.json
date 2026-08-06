@@ -1,7 +1,7 @@
 {
   "name": "riwi--cine-backend",
   "version": "1.0.0",
-  "description": "<!-- Title & Cover --> <h1 align=\"center\">      Riwi CIne API   </h1>",
+  "description": "<!-- Title & Cover --> <h1 align=\"center\">      Riwi Cine API   </h1>",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

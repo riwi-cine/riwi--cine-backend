@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import userService from "../services/user.service";
 import { CreateUserDto } from "../dto/create-user.dto";
+import AuthUser from "../services/auth.service";
 
 /**
  * ============================================================================
@@ -185,15 +186,17 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
     try {
         const { email, password } = req.body;
 
-        if (!email || !password) {
+        if (!email) {
             return res.status(400).json({
                 error: "El email y la contraseña son obligatorios."
             });
         }
 
-        const user = await userService.findOne(email, password);
+        const user = await userService.findOne(email);
 
-        return res.status(200).json(user);
+        const validation = await AuthUser.login(user, password);
+
+        return res.status(200).json(validation);
 
     } catch (error: any) {
         return res.status(401).json({
@@ -201,3 +204,91 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
         });
     }
 };
+
+/**
+ * 
+ * @param {Request} req 
+ * Obtiene la petición HTTP
+ * 
+ * @param {Response} res 
+ * @returns 
+ */
+export const updateUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const { id } = req.params;
+        const dto: Partial<CreateUserDto> = req.body;
+
+        if (!id) {
+            return res.status(400).json({
+                error: "El ID es obligatorio."
+            });
+        }
+
+        const user = await userService.update(Number(id), dto);
+
+        if (!user) {
+            return res.status(404).json({
+                error: "Usuario no encontrado."
+            });
+        }
+
+        return res.status(200).json(user);
+
+    } catch (error: any) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
+
+export const deleteUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({
+                error: "El ID es obligatorio."
+            });
+        }
+        const deleted = await userService.delete(Number(id));
+
+        if (!deleted) {
+            return res.status(404).json({
+                error: "Usuario no encontrado."
+            });
+        }
+
+        return res.status(200).json({
+            message: "Usuario eliminado correctamente.",
+            id: Number(id)
+        });
+
+    } catch (error: any) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+
+}
+
+export const restoreUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({
+                error: "El ID es obligatorio."
+            });
+        }
+        await userService.restore(Number(id));
+
+        return res.status(200).json({
+            message: "Usuario restaurado correctamente.",
+            id: Number(id)
+        });
+    } catch (error: any) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}

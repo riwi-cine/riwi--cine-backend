@@ -36,23 +36,34 @@ class UserRepository implements IUserRepository {
      * 
      * @param {string} email -Correo electrónico del usuario
      * 
-     * @param {string} password -Contraseña de usuario
-     * 
      * @returns {Promise<User>} -Retorna el usuario
      * 
      * @throws {Error} -Mensaje de error si el usuario no existe o no es verificado
      */
-    async findOne(email: string, password: string): Promise<User> {
+    async findOne(email: string): Promise<User> {
         const user = await User.findOne({ where: { email } });
-    
         if (!user) {
             throw new Error("Usuario o contraseña incorrectos"); 
         }
-    
-        if (password !== user.password) {
-            throw new Error("Usuario o contraseña incorrectos"); 
-        }
         return user; 
+    }
+
+    async update(id: number, data: Partial<UserCreationAttributes>): Promise<User | null> {
+        const user = await User.findByPk(id);
+        if (user) {
+            return await user.update(data);
+        }
+        return null;
+    }
+    
+    async delete(id: number): Promise<Boolean> {
+        const row = await User.destroy({where: {id},});
+        return row > 0;
+    }
+    
+    async restore(id: number): Promise<void> {
+        const row = User.restore({where: {id},});   
+        return row;
     }
 }
 

@@ -7,6 +7,7 @@
  * 
  * Endpoints disponibles:
  *  - `POST /users/`        : Crear un nuevo usuario.
+ *  - `PATCH /users/:id`    : Actualizar un usuario por ID.
  *  - `GET /users/`         : Obtener todos los usuarios registrados.
  *  - `POST /users/search`  : Buscar un usuario específico por email.
  * 
@@ -14,7 +15,7 @@
  */
 
 import { Router } from "express";
-import { createUser, getUsers, findUser } from "../controllers/user.controller";
+import { createUser, getUsers, deleteUser, restoreUser, updateUser } from "../controllers/user.controller";
 
 const router = Router();
 
@@ -38,6 +39,7 @@ const router = Router();
  *               - name
  *               - email
  *               - password
+ *               - phoneNumber
  *             properties:
  *               name:
  *                 type: string
@@ -48,6 +50,9 @@ const router = Router();
  *               password:
  *                 type: string
  *                 example: "********"
+ *               phoneNumber:
+ *                 type: string
+ *                 example: "3001234567"
  *     responses:
  *       201:
  *         description: Usuario creado exitosamente
@@ -58,6 +63,7 @@ const router = Router();
  *               name: "John Doe"
  *               email: "john.doe@example.com"
  *               password: "********"
+ *               phoneNumber: "3001234567"
  *       400:
  *         description: Datos inválidos
  *         content:
@@ -72,6 +78,52 @@ const router = Router();
  *               error: "No se pudo crear el usuario"
  */
 router.post("/", createUser);
+
+/**
+ * PATCH /:id
+ * ----------
+ * Actualiza la información de un usuario existente.
+ * 
+ * @swagger
+ * /api/users/{id}:
+ *   patch:
+ *     summary: Actualizar un usuario por ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "John Doe Actualizado"
+ *               email:
+ *                 type: string
+ *                 example: "john.actualizado@example.com"
+ *               phoneNumber:
+ *                 type: string
+ *                 example: "3109876543"
+ *               password:
+ *                 type: string
+ *                 example: "nuevapass123"
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado exitosamente
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ */
+router.patch("/:id", updateUser);
 
 /**
  * GET /
@@ -93,10 +145,12 @@ router.post("/", createUser);
  *                 name: "John Doe"
  *                 email: "john.doe@example.com"
  *                 password: "********"
+ *                 phoneNumber: "3001234567"
  *               - id: 2
  *                 name: "Jane Doe"
- *                 email: "john.doe@example.com"
+ *                 email: "jane.doe@example.com"
  *                 password: "********"
+ *                 phoneNumber: "3109876543"
  *       400:
  *         description: Solicitud inválida
  *         content:
@@ -113,55 +167,89 @@ router.post("/", createUser);
 router.get("/", getUsers);
 
 /**
- * POST /search
- * ------------
- * Busca un usuario específico utilizando los criterios enviados en el body.
+ * DELETE /:id
+ * -----------
+ * Elimina a usuarios registrados en la base de datos.
  * 
  * @swagger
- * /api/users/search:
- *   post:
- *     summary: Buscar un usuario por email
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Eliminar usuarios por ID
  *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 example: "john.doe@example.com"
- *               password: 
- *                 type: string 
- *                 example: "********"
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del usuario a eliminar
+ *         schema:
+ *           type: integer
+ *           example: 1
  *     responses:
  *       200:
- *         description: Usuario encontrado exitosamente
+ *         description: Usuario eliminado exitosamente 
  *         content:
  *           application/json:
  *             example:
+ *               message: "Usuario eliminado correctamente"
  *               id: 1
- *               name: "John Doe"
- *               email: "john.doe@example.com"
- *               password: "********"
+ *       400:
+ *         description: Solicitud inválida
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Parámetros incorrectos"
  *       404:
  *         description: Usuario no encontrado
- *         content:
- *           application/json:
- *             example:
- *               error: "Usuario no encontrado"
  *       500:
  *         description: Error interno del servidor
  *         content:
  *           application/json:
  *             example:
- *               error: "Error al buscar el usuario"
- *         
+ *               error: "Error al eliminar al usuario"
+ *
  */
-router.post("/search", findUser);
+router.delete("/:id", deleteUser)
 
+
+/**
+ * POST /:id/restore
+ * -----------------
+ * Restaura a usuarios registrados en la base de datos.
+ * 
+ * @swagger
+ * /api/users/{id}/restore:
+ *   post:
+ *     summary: Restaurar usuarios por ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del usuario a restaurar
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     responses:
+ *       200:
+ *         description: Usuario restaurado exitosamente 
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Usuario restaurado correctamente"
+ *               id: 1
+ *       400:
+ *         description: Solicitud inválida
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Parámetros incorrectos"
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Error al restaurar al usuario"
+ *
+ */
+router.post('/:id/restore', restoreUser)
 export default router;

@@ -22,10 +22,24 @@ export interface IUserRepository {
      */
     findAll(): Promise<User[]>;
 
+    /**
+     * Obtener usuario basado en email.
+     */
+    findOne(email: string): Promise<User>;
 
-    /** 
-     * Obtener usuario basado en email y autentica con contraseña.
-    */
-    findOne(email: string, password: string): Promise<User>;
+    /**
+     * Actualiza un usuario.
+     */
+    update(id: number, data: Partial<UserCreationAttributes>): Promise<User | null>;
+
+    /**
+     * Elimina un usuario (soft delete).
+     */
+    delete(id: number): Promise<Boolean>;
+
+    /**
+     * Restaura un usuario eliminado.
+     */
+    restore(id: number): Promise<void>;
 
 }

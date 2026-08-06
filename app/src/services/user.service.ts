@@ -92,19 +92,29 @@ class UserService implements IUserService {
     /**
      * Este metodo esta encargado de delegar el inicio de sesión o log-in.
      * Toma dos inputs el primero se usa para validar mediante el email si el usuario existe en la base de datos
-     * El segundo tiene como propósito auténticar mediante una contraseña si el usuario es autorizado.
      * 
      * @param {string} email -Correo electrónico de usuario
      * 
-     * @param {string} password -Contraseña para confirmar el usuario
-     * 
      * @returns {Promise<User>} -Retorna el usuario en forma de promesa luego de la verificación
      */
-    async findOne(email: string, password: string): Promise<User> {
-        const user = await repository.findOne(email, password);
+    async findOne(email: string): Promise<User> {
+        const user = await repository.findOne(email);
         return user;
     }
 
+    async update(id: number, dto: Partial<CreateUserDto>): Promise<User | null> {
+        return await repository.update(id, dto);
+    }
+
+    async delete(id: number): Promise<Boolean> {
+        const userID = await repository.delete(id);
+        return userID;
+    }
+
+    async restore(id: number): Promise<void> {
+        const userID = await repository.restore(id);
+        return userID;
+    }
 }
 
 export default new UserService();

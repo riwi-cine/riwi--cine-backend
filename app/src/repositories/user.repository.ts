@@ -27,8 +27,10 @@ class UserRepository implements IUserRepository {
      * Obtiene todos los usuarios.
      */
     async findAll(): Promise<User[]> {
-
-        return await User.findAll();
+        
+        return await User.findAll({
+            attributes: { exclude: ["password"] }
+        });
 
     }
 
@@ -42,7 +44,7 @@ class UserRepository implements IUserRepository {
      * @throws {Error} -Mensaje de error si el usuario no existe o no es verificado
      */
     async findOne(email: string): Promise<User> {
-        const user = await User.findOne({ where: { email } });
+        const user = await User.findOne({ where: { email } },);
     
         if (!user) {
             throw new Error("Usuario o contraseña incorrectos"); 

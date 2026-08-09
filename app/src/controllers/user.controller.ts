@@ -56,11 +56,16 @@ import AuthUser from "../services/auth.service";
  *
  * Espera recibir en el body:
  * @example
- * {
- *   "name": "David Mtz",
- *   "email": "david@example.com"
- *   "password": "******"
- * }
+ *  {
+ *    "country": "Barranquilla",
+ *    "passwordHash": "password123",
+ *    "email": "luisreyes@example.com",
+ *    "firstName": "Luis",
+ *    "lastName": "Reyes",
+ *    "phone": "3025949099",
+ *    "birthDate": "1999-04-05",
+ *    "marketingOptIn": true
+ *  }
  *
  * @param {Response} res
  * Objeto utilizado para construir la respuesta HTTP.
@@ -134,11 +139,20 @@ export const createUser = async (req: Request, res: Response): Promise<Response>
  *
  * @example
  * [
- *   {
- *     "id": 1,
- *     "name": "David",
- *     "email": "david@example.com"
- *   }
+ *  {
+ *   "id": 1,
+ *   "countryId": 1,
+ *   "email": "luisreyes@example.com",
+ *   "firstName": "Luis",
+ *   "lastName": "Reyes",
+ *   "phone": "3025949099",
+ *   "birthDate": "1999-04-05T00:00:00.000Z",
+ *   "emailVerified": false,
+ *   "marketingOptIn": true,
+ *   "status": "active",
+ *   "failedAttempts": 0,
+ *   "lockedUntil": null
+ *  }
  * ]
  */
 export const getUsers = async (_req: Request, res: Response): Promise<Response> => {

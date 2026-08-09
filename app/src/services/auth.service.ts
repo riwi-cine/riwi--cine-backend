@@ -23,7 +23,7 @@ class AuthUser {
      */
     async login(user: User, passwordPlain: string): Promise<User> {
 
-        const isMatch = await compare_password(passwordPlain, user.password);
+        const isMatch = await compare_password(passwordPlain, user.passwordHash);
 
         if (!isMatch) {
             throw new Error("La contraseña es incorrecta.");

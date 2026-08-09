@@ -21,9 +21,10 @@ const router = Router();
 
 /**
  * POST /
- * -----
+ *
+ * ---
  * Crea un nuevo usuario en la base de datos.
- * 
+ *
  * @swagger
  * /api/users:
  *   post:
@@ -36,40 +37,68 @@ const router = Router();
  *           schema:
  *             type: object
  *             required:
- *               - name
+ *               - country
+ *               - passwordHash
  *               - email
- *               - password
- *               - phoneNumber
+ *               - firstName
+ *               - lastName
+ *               - phone
+ *               - birthDate
+ *               - marketingOptIn
  *             properties:
- *               name:
+ *               country:
  *                 type: string
- *                 example: "John Doe"
+ *                 example: "Barranquilla"
+ *               passwordHash:
+ *                 type: string
+ *                 example: "password123"
  *               email:
  *                 type: string
- *                 example: "john.doe@example.com"
- *               password:
+ *                 format: email
+ *                 example: "luisreyes@example.com"
+ *               firstName:
  *                 type: string
- *                 example: "********"
- *               phoneNumber:
+ *                 example: "Luis"
+ *               lastName:
  *                 type: string
- *                 example: "3001234567"
+ *                 example: "Reyes"
+ *               phone:
+ *                 type: string
+ *                 example: "3025949099"
+ *               birthDate:
+ *                 type: string
+ *                 format: date
+ *                 example: "1999-04-05"
+ *               marketingOptIn:
+ *                 type: boolean
+ *                 example: true
+ *
  *     responses:
  *       201:
  *         description: Usuario creado exitosamente
  *         content:
  *           application/json:
  *             example:
- *               id: 3
- *               name: "John Doe"
- *               email: "john.doe@example.com"
- *               password: "********"
- *               phoneNumber: "3001234567"
+ *               id: 1
+ *               countryId: 57
+ *               email: "luisreyes@example.com"
+ *               firstName: "Luis"
+ *               lastName: "Reyes"
+ *               phone: "3025949099"
+ *               birthDate: "1999-04-05T00:00:00.000Z"
+ *               emailVerified: false
+ *               marketingOptIn: true
+ *               status: "active"
+ *               failedAttempts: 0
+ *               lockedUntil: null
+ *
  *       400:
  *         description: Datos inválidos
  *         content:
  *           application/json:
  *             example:
  *               error: "El correo ya existe"
+ *
  *       500:
  *         description: Error interno del servidor
  *         content:
@@ -127,9 +156,10 @@ router.patch("/:id", updateUser);
 
 /**
  * GET /
- * ----
+ *
+ * ---
  * Obtiene la lista completa de usuarios registrados en la base de datos.
- * 
+ *
  * @swagger
  * /api/users:
  *   get:
@@ -142,21 +172,37 @@ router.patch("/:id", updateUser);
  *           application/json:
  *             example:
  *               - id: 1
- *                 name: "John Doe"
- *                 email: "john.doe@example.com"
- *                 password: "********"
- *                 phoneNumber: "3001234567"
+ *                 countryId: 57
+ *                 email: "luisreyes@example.com"
+ *                 firstName: "Luis"
+ *                 lastName: "Reyes"
+ *                 phone: "3025949099"
+ *                 birthDate: "1999-04-05T00:00:00.000Z"
+ *                 emailVerified: false
+ *                 marketingOptIn: true
+ *                 status: "active"
+ *                 failedAttempts: 0
+ *                 lockedUntil: null
  *               - id: 2
- *                 name: "Jane Doe"
- *                 email: "jane.doe@example.com"
- *                 password: "********"
- *                 phoneNumber: "3109876543"
+ *                 countryId: 57
+ *                 email: "david@example.com"
+ *                 firstName: "David"
+ *                 lastName: "Doe"
+ *                 phone: "3109876543"
+ *                 birthDate: "1998-08-20T00:00:00.000Z"
+ *                 emailVerified: true
+ *                 marketingOptIn: false
+ *                 status: "active"
+ *                 failedAttempts: 0
+ *                 lockedUntil: null
+ *
  *       400:
  *         description: Solicitud inválida
  *         content:
  *           application/json:
  *             example:
  *               error: "Parámetros incorrectos"
+ *
  *       500:
  *         description: Error interno del servidor
  *         content:

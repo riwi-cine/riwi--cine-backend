@@ -6,7 +6,7 @@
  * Este archivo define las rutas HTTP relacionadas con la entidad `Auth`.
  * 
  * Endpoints disponibles:
- *  - `POST /auth/login`  : Buscar un usuario específico por email.
+ *  - `POST /user_auth/login`  : Buscar un usuario específico por email.
  * 
  * Cada ruta se conecta con su respectivo controlador.
  */
@@ -25,7 +25,7 @@ const router = Router();
  * /api/auth/login:
  *   post:
  *     summary: Autenticar usuario y generar token de acceso    
- *     tags: [Auth]
+ *     tags: [User_Auth]
  *     requestBody:
  *       required: true
  *       content:

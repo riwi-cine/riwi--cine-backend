@@ -109,22 +109,22 @@ const router = Router();
 router.post("/", createUser);
 
 /**
- * PATCH /:id
+ * PATCH /:
  * ----------
  * Actualiza la información de un usuario existente.
  * 
  * @swagger
- * /api/users/{id}:
+ * /api/users/:
  *   patch:
- *     summary: Actualizar un usuario por ID
+ *     summary: Actualizar un usuario por email
  *     tags: [Users]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: email
  *         required: true
  *         schema:
- *           type: integer
- *         description: ID del usuario a actualizar
+ *           type: string
+ *         description: Email del usuario a actualizar
  *     requestBody:
  *       required: true
  *       content:
@@ -152,7 +152,7 @@ router.post("/", createUser);
  *       500:
  *         description: Error interno del servidor
  */
-router.patch("/:id", updateUser);
+router.patch("/", updateUser);
 
 /**
  * GET /
@@ -213,23 +213,23 @@ router.patch("/:id", updateUser);
 router.get("/", getUsers);
 
 /**
- * DELETE /:id
+ * DELETE /:
  * -----------
  * Elimina a usuarios registrados en la base de datos.
  * 
  * @swagger
- * /api/users/{id}:
+ * /api/users/:
  *   delete:
- *     summary: Eliminar usuarios por ID
+ *     summary: Eliminar usuarios por email
  *     tags: [Users]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: email
  *         required: true
- *         description: ID del usuario a eliminar
+ *         description: Email del usuario a eliminar
  *         schema:
- *           type: integer
- *           example: 1
+ *           type: string
+ *           example: "john.doe@example.com"
  *     responses:
  *       200:
  *         description: Usuario eliminado exitosamente 
@@ -254,27 +254,27 @@ router.get("/", getUsers);
  *               error: "Error al eliminar al usuario"
  *
  */
-router.delete("/:id", deleteUser)
+router.delete("/", deleteUser)
 
 
 /**
- * POST /:id/restore
+ * POST /restore
  * -----------------
  * Restaura a usuarios registrados en la base de datos.
  * 
  * @swagger
- * /api/users/{id}/restore:
+ * /api/users/restore:
  *   post:
- *     summary: Restaurar usuarios por ID
+ *     summary: Restaurar usuarios por email
  *     tags: [Users]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: email
  *         required: true
- *         description: ID del usuario a restaurar
+ *         description: Email del usuario a restaurar
  *         schema:
- *           type: integer
- *           example: 1
+ *           type: string
+ *           example: "john.doe@example.com"
  *     responses:
  *       200:
  *         description: Usuario restaurado exitosamente 
@@ -297,5 +297,5 @@ router.delete("/:id", deleteUser)
  *               error: "Error al restaurar al usuario"
  *
  */
-router.post('/:id/restore', restoreUser)
+router.post('/restore', restoreUser)
 export default router;

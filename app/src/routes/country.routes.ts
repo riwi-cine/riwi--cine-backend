@@ -46,7 +46,7 @@ const router = Router();
  *             properties:
  *               currencyCode:
  *                 type: string
- *                 example: "USD"
+ *                 example: "COP"
  *                 description: Código de la moneda asociada al país.
  *               name:
  *                 type: string
@@ -72,7 +72,7 @@ const router = Router();
  *         content:
  *           application/json:
  *             example:
- *               error: "La moneda \"USD\" no existe."
+ *               error: "La moneda \"COP\" no existe."
  */
 router.post("/", createCountry);
 

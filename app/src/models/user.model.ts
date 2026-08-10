@@ -40,6 +40,8 @@ export interface UserCreationAttributes
         UserAttributes,
         | "id"
         | "emailVerified"
+        | "countryId"
+        | "status"
         | "marketingOptIn"
         | "failedAttempts"
         | "lockedUntil"

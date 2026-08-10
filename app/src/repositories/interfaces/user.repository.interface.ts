@@ -30,15 +30,15 @@ export interface IUserRepository {
     /**
      * Actualiza un usuario.
      */
-    update(id: number, data: Partial<UserCreationAttributes>): Promise<User | null>;
+    update(email: string, data: Partial<UserCreationAttributes>): Promise<User | null>;
 
     /**
      * Elimina un usuario (soft delete).
      */
-    delete(id: number): Promise<Boolean>;
+    delete(email: string): Promise<Boolean>;
 
     /**
      * Restaura un usuario eliminado.
      */
-    restore(id: number): Promise<void>;
+    restore(email: string): Promise<void>;
 }

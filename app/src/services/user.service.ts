@@ -101,17 +101,17 @@ class UserService implements IUserService {
         return user;
     }
 
-    async update(id: number, dto: Partial<CreateUserDto>): Promise<User | null> {
-        return await repository.update(id, dto);
+    async update(email: string, dto: Partial<CreateUserDto>): Promise<User | null> {
+        return await repository.update(email, dto);
     }
 
-    async delete(id: number): Promise<Boolean> {
-        const userID = await repository.delete(id);
+    async delete(email: string): Promise<Boolean> {
+        const userID = await repository.delete(email);
         return userID;
     }
 
-    async restore(id: number): Promise<void> {
-        const userID = await repository.restore(id);
+    async restore(email: string): Promise<void> {
+        const userID = await repository.restore(email);
         return userID;
     }
 }

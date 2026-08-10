@@ -48,21 +48,21 @@ class UserRepository implements IUserRepository {
         return user; 
     }
 
-    async update(id: number, data: Partial<UserCreationAttributes>): Promise<User | null> {
-        const user = await User.findByPk(id);
+    async update(email: string, data: Partial<UserCreationAttributes>): Promise<User | null> {
+        const user = await User.findOne({ where: { email } });
         if (user) {
             return await user.update(data);
         }
         return null;
     }
-    
-    async delete(id: number): Promise<Boolean> {
-        const row = await User.destroy({where: {id},});
+
+    async delete(email: string): Promise<Boolean> {
+        const row = await User.destroy({where: {email},});
         return row > 0;
     }
     
-    async restore(id: number): Promise<void> {
-        const row = User.restore({where: {id},});   
+    async restore(email: string): Promise<void> {
+        const row = User.restore({where: {email},});   
         return row;
     }
 }

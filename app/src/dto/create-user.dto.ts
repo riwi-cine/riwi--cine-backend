@@ -73,7 +73,7 @@ export interface CreateUserDto{
     /**
      * Fecha de nacimiento del usuario.
      */
-    birthDate: string;
+    birthDate: Date;
 
     /**
      * Indica si el usuario acepta recibir comunicaciones de marketing.

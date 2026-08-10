@@ -14,9 +14,9 @@ export interface IUserService {
 
     findOne(email: string): Promise<User | null>;
 
-    update(id: number, dto: Partial<CreateUserDto>): Promise<User | null>;
+    update(email: string, dto: Partial<CreateUserDto>): Promise<User | null>;
 
-    delete(id: number): Promise<Boolean>;
+    delete(email: string): Promise<Boolean>;
 
-    restore(id: number): Promise<void>;
+    restore(email: string): Promise<void>;
 }

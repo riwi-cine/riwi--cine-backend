@@ -229,16 +229,16 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
  */
 export const updateUser = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const { id } = req.params;
+        const { email } = req.params;
         const dto: Partial<CreateUserDto> = req.body;
 
-        if (!id) {
+        if (!email) {
             return res.status(400).json({
-                error: "El ID es obligatorio."
+                error: "El email es obligatorio."
             });
         }
 
-        const user = await userService.update(Number(id), dto);
+        const user = await userService.update(String(email), dto);
 
         if (!user) {
             return res.status(404).json({
@@ -257,14 +257,14 @@ export const updateUser = async (req: Request, res: Response): Promise<Response>
 
 export const deleteUser = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const { id } = req.params;
+        const { email } = req.params;
 
-        if (!id) {
+        if (!email) {
             return res.status(400).json({
                 error: "El ID es obligatorio."
             });
         }
-        const deleted = await userService.delete(Number(id));
+        const deleted = await userService.delete(String(email));
 
         if (!deleted) {
             return res.status(404).json({
@@ -274,7 +274,7 @@ export const deleteUser = async (req: Request, res: Response): Promise<Response>
 
         return res.status(200).json({
             message: "Usuario eliminado correctamente.",
-            id: Number(id)
+            email: String(email)
         });
 
     } catch (error: any) {
@@ -287,18 +287,18 @@ export const deleteUser = async (req: Request, res: Response): Promise<Response>
 
 export const restoreUser = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const { id } = req.params;
+        const { email } = req.params;
 
-        if (!id) {
+        if (!email) {
             return res.status(400).json({
-                error: "El ID es obligatorio."
+                error: "El email es obligatorio."
             });
         }
-        await userService.restore(Number(id));
+        await userService.restore(String(email));
 
         return res.status(200).json({
             message: "Usuario restaurado correctamente.",
-            id: Number(id)
+            email: String(email)
         });
     } catch (error: any) {
         return res.status(500).json({

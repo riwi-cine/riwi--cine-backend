@@ -7,6 +7,7 @@ services:
             - "${APP_PORT}:3000"
         volumes:
             - ./app:/usr/src/app:z
+            - /usr/src/app/node_modules
             - ./.env:/usr/src/app/.env
         env_file:
             - ./.env

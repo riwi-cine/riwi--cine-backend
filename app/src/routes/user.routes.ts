@@ -48,7 +48,7 @@ const router = Router();
  *             properties:
  *               country:
  *                 type: string
- *                 example: "Barranquilla"
+ *                 example: "Colombia"
  *               passwordHash:
  *                 type: string
  *                 example: "password123"

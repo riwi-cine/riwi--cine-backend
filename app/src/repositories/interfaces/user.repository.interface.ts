@@ -41,5 +41,4 @@ export interface IUserRepository {
      * Restaura un usuario eliminado.
      */
     restore(id: number): Promise<void>;
-
 }

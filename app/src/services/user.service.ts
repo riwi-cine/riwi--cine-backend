@@ -31,7 +31,6 @@ import { IUserService } from "./interfaces/user.service.interface";
  */
 
 class UserService implements IUserService {
-
     async create(dto: CreateUserDto): Promise<User> {
 
         /**

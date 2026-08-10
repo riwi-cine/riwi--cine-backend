@@ -57,7 +57,7 @@ import AuthUser from "../services/auth.service";
  * Espera recibir en el body:
  * @example
  *  {
- *    "country": "Barranquilla",
+ *    "country": "Colombia",
  *    "passwordHash": "password123",
  *    "email": "luisreyes@example.com",
  *    "firstName": "Luis",
@@ -142,8 +142,8 @@ export const createUser = async (req: Request, res: Response): Promise<Response>
  *  {
  *   "id": 1,
  *   "countryId": 1,
- *   "email": "luisreyes@example.com",
- *   "firstName": "Luis",
+ *   "email": "natalia@example.com",
+ *   "firstName": "Natalia",
  *   "lastName": "Reyes",
  *   "phone": "3025949099",
  *   "birthDate": "1999-04-05T00:00:00.000Z",

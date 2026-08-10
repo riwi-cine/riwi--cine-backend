@@ -4,18 +4,18 @@
  * Rutas de Usuario
  * ----------------
  * Este archivo define las rutas HTTP relacionadas con la entidad `User`.
- * 
+ *
  * Endpoints disponibles:
  *  - `POST /users/`        : Crear un nuevo usuario.
  *  - `PATCH /users/:id`    : Actualizar un usuario por ID.
  *  - `GET /users/`         : Obtener todos los usuarios registrados.
  *  - `POST /users/search`  : Buscar un usuario específico por email.
- * 
+ *
  * Cada ruta se conecta con su respectivo controlador.
  */
 
 import { Router } from "express";
-import { createUser, getUsers, deleteUser, restoreUser, updateUser } from "../controllers/user.controller";
+import { createUser, deleteUser, getUsers, restoreUser, updateUser } from "../controllers/user.controller";
 
 const router = Router();
 
@@ -112,7 +112,7 @@ router.post("/", createUser);
  * PATCH /:
  * ----------
  * Actualiza la información de un usuario existente.
- * 
+ *
  * @swagger
  * /api/users/:
  *   patch:
@@ -216,7 +216,7 @@ router.get("/", getUsers);
  * DELETE /:
  * -----------
  * Elimina a usuarios registrados en la base de datos.
- * 
+ *
  * @swagger
  * /api/users/:
  *   delete:
@@ -232,7 +232,7 @@ router.get("/", getUsers);
  *           example: "john.doe@example.com"
  *     responses:
  *       200:
- *         description: Usuario eliminado exitosamente 
+ *         description: Usuario eliminado exitosamente
  *         content:
  *           application/json:
  *             example:
@@ -254,14 +254,13 @@ router.get("/", getUsers);
  *               error: "Error al eliminar al usuario"
  *
  */
-router.delete("/", deleteUser)
-
+router.delete("/", deleteUser);
 
 /**
  * POST /restore
  * -----------------
  * Restaura a usuarios registrados en la base de datos.
- * 
+ *
  * @swagger
  * /api/users/restore:
  *   post:
@@ -277,7 +276,7 @@ router.delete("/", deleteUser)
  *           example: "john.doe@example.com"
  *     responses:
  *       200:
- *         description: Usuario restaurado exitosamente 
+ *         description: Usuario restaurado exitosamente
  *         content:
  *           application/json:
  *             example:
@@ -297,5 +296,5 @@ router.delete("/", deleteUser)
  *               error: "Error al restaurar al usuario"
  *
  */
-router.post('/restore', restoreUser)
+router.post("/restore", restoreUser);
 export default router;

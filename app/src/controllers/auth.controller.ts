@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import userService from "../services/user.service";
 import AuthUser from "../services/auth.service";
+import { generateToken } from "../utils/jwt";
 
 /**
  * Inicio de sesión el cual utiliza dos parametros como verificación, correo electrónico y contraseña
@@ -38,7 +39,17 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
 
         const validation = await AuthUser.login(user, password);
 
-        return res.status(200).json(validation);
+        const { password: _, ...userWithoutPassword } = validation.toJSON();
+        const token = await generateToken(userWithoutPassword);
+
+        res.cookie('accesstoken', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 1000 * 60 * 60
+        });
+
+        return res.status(200).json(userWithoutPassword);
 
     } catch (error: any) {
         return res.status(401).json({

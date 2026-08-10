@@ -13,39 +13,37 @@ import { IUserRepository } from "./interfaces/user.repository.interface";
  */
 
 class UserRepository implements IUserRepository {
-
     /**
      * Crea un nuevo usuario.
      */
     async create(data: UserCreationAttributes): Promise<User> {
-
         return await User.create(data);
-
     }
 
     /**
      * Obtiene todos los usuarios.
      */
     async findAll(): Promise<User[]> {
-
-        return await User.findAll();
-
+        return await User.findAll({
+            attributes: { exclude: ["password"] },
+        });
     }
 
     /**
-     * 
+     *
      * @param {string} email -Correo electrónico del usuario
-     * 
+     *
      * @returns {Promise<User>} -Retorna el usuario
-     * 
+     *
      * @throws {Error} -Mensaje de error si el usuario no existe o no es verificado
      */
     async findOne(email: string): Promise<User> {
         const user = await User.findOne({ where: { email } });
+
         if (!user) {
-            throw new Error("Usuario o contraseña incorrectos"); 
+            throw new Error("Usuario o contraseña incorrectos");
         }
-        return user; 
+        return user;
     }
 
     async update(email: string, data: Partial<UserCreationAttributes>): Promise<User | null> {
@@ -57,15 +55,14 @@ class UserRepository implements IUserRepository {
     }
 
     async delete(email: string): Promise<Boolean> {
-        const row = await User.destroy({where: {email},});
+        const row = await User.destroy({ where: { email } });
         return row > 0;
     }
-    
+
     async restore(email: string): Promise<void> {
-        const row = User.restore({where: {email},});   
+        const row = User.restore({ where: { email } });
         return row;
     }
 }
 
 export default new UserRepository();
-

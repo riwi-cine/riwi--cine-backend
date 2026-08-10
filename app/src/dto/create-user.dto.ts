@@ -1,4 +1,4 @@
-    /**
+/**
      * DTO - Creación de Usuario
      *
      * ---
@@ -18,6 +18,7 @@
      * Objeto de transferencia de datos para la creación de usuarios.
      *
      * @property {string} country - País del usuario.
+     * @property {number} countryId - ID del país (opcional).
      * @property {string} passwordHash - Contraseña del usuario.
      * @property {string} email - Dirección de correo electrónico del usuario.
      * @property {string} firstName - Primer nombre del usuario.
@@ -42,8 +43,18 @@
 export interface CreateUserDto{
     /**
      * País del usuario.
+     *
+     * Se acepta como texto (ej: "Colombia") y se transforma a su `countryId`
+     * antes de persistir en la base de datos.
      */
     country: string;
+
+    /**
+     * ID del país opcional.
+     *
+     * Permite aceptar un valor numérico directamente si el cliente ya lo conoce.
+     */
+    countryId?: number;
 
     /**
      * Contraseña del usuario.

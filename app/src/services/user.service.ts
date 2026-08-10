@@ -1,6 +1,8 @@
 // app/src/services/user.service.ts
 
-import User from "../models/user.model";
+import { Op } from "sequelize";
+import User, { UserCreationAttributes } from "../models/user.model";
+import Country from "../models/country.model";
 import { CreateUserDto } from "../dto/create-user.dto";
 import repository from "../repositories/user.repository";
 import { IUserService } from "./interfaces/user.service.interface";
@@ -31,6 +33,33 @@ import { IUserService } from "./interfaces/user.service.interface";
  */
 
 class UserService implements IUserService {
+    private async resolveCountryId(country?: string, countryId?: number): Promise<number> {
+        if (countryId !== undefined && countryId !== null && !Number.isNaN(Number(countryId))) {
+            return Number(countryId);
+        }
+
+        if (typeof country === "string" && country.trim()) {
+            const normalizedCountry = country.trim();
+            const countryRecord = await Country.findOne({
+                where: {
+                    name: {
+                        [Op.iLike]: normalizedCountry,
+                    },
+                },
+                attributes: ["id"],
+                raw: true,
+            });
+
+            if (!countryRecord) {
+                throw new Error(`El país "${normalizedCountry}" no existe.`);
+            }
+
+            return Number(countryRecord.id);
+        }
+
+        throw new Error("Debe enviar un país válido.");
+    }
+
     async create(dto: CreateUserDto): Promise<User> {
 
         /**
@@ -52,7 +81,13 @@ class UserService implements IUserService {
          *  - Enviar un correo de bienvenida.
          */
 
-        return await repository.create(dto);
+        const countryId = await this.resolveCountryId(dto.country, dto.countryId);
+        const { country, countryId: _countryId, ...userData } = dto as CreateUserDto & { countryId?: number };
+
+        return await repository.create({
+            ...userData,
+            countryId,
+        } as UserCreationAttributes);
 
     }
 
@@ -102,7 +137,16 @@ class UserService implements IUserService {
     }
 
     async update(email: string, dto: Partial<CreateUserDto>): Promise<User | null> {
-        return await repository.update(email, dto);
+        const dataToUpdate: Partial<UserCreationAttributes> = { ...dto } as Partial<UserCreationAttributes>;
+
+        if (dto.country !== undefined || dto.countryId !== undefined) {
+            const countryId = await this.resolveCountryId(dto.country, dto.countryId);
+            dataToUpdate.countryId = countryId;
+            delete (dataToUpdate as any).country;
+            delete (dataToUpdate as any).countryId;
+        }
+
+        return await repository.update(email, dataToUpdate);
     }
 
     async delete(email: string): Promise<Boolean> {

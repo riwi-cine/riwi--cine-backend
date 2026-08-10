@@ -12,6 +12,7 @@ import { swaggerSpec } from "./docs/swagger";
 
 import userRoutes from "./routes/user.routes";
 import authRoutes from "./routes/auth.routes";
+import currencyRoutes from "./routes/currency.routes";
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, "../public"))); // leera los archivo
 // Rutas
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/currencies", currencyRoutes);
 
 app.get("/api/docs.json", (_req, res) => {
   res.status(200).json(swaggerSpec);

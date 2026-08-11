@@ -31,8 +31,8 @@ class CurrencyRepository implements ICurrencyRepository {
     /**
      * Obtiene una moneda por su código.
      */
-    async findOne(code: string): Promise<Currency> {
-        const currency = await Currency.findOne({ where: { code } });
+    async findOne(id: number): Promise<Currency> {
+        const currency = await Currency.findOne({ where: { id } });
         if (!currency) {
             throw new Error("Moneda no encontrada");
         }
@@ -42,8 +42,8 @@ class CurrencyRepository implements ICurrencyRepository {
     /**
      * Actualiza una moneda existente.
      */ 
-    async update(code: string, data: Partial<CurrencyCreationAttributes>): Promise<Currency | null> {
-        const currency = await Currency.findOne({ where: { code } });
+    async update(id: number, data: Partial<CurrencyCreationAttributes>): Promise<Currency | null> {
+        const currency = await Currency.findOne({ where: { id } });
         if (currency) {
             return await currency.update(data);
         }
@@ -53,16 +53,16 @@ class CurrencyRepository implements ICurrencyRepository {
     /**
      * Elimina una moneda (soft delete).
      */
-    async delete(code: string): Promise<Boolean> {
-        const row = await Currency.destroy({ where: { code } });
+    async delete(id: number): Promise<Boolean> {
+        const row = await Currency.destroy({ where: { id } });
         return row > 0;
     }
 
     /**
      * Restaura una moneda eliminada.
      */
-    async restore(code: string): Promise<void> {
-        const currency = await Currency.findOne({ where: { code }, paranoid: false });
+    async restore(id: number): Promise<void> {
+        const currency = await Currency.findOne({ where: { id }, paranoid: false });
         if (currency) {
             await currency.restore();
         } else {

@@ -23,13 +23,15 @@ export interface FunctionAttributes {
     functionTypeId: number;
     startsAt: Date;
     basePrice: number;
+    active: boolean;
 }
 
 /**
  * Atributos utilizados durante la creación.
  */
 export interface FunctionCreationAttributes
-    extends Optional<FunctionAttributes, "id"> {}
+    extends Optional<FunctionAttributes, "id" | "active"> {}  // ← "active" opcional en creación (default true)
+
 
 /**
  * Clase que representa el modelo Function.
@@ -55,6 +57,9 @@ class Function
 
     /** Precio base del boleto. */
     public basePrice!: number;
+
+    /** Indica si la función está activa o no. */
+    public active!: boolean; 
 }
 
 /**
@@ -96,6 +101,13 @@ Function.init(
             type: DataTypes.DECIMAL(10, 2),
             allowNull: false,
             field: "base_price",
+        },
+        
+        active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true,
+            field: "active",
         },
     },
     {

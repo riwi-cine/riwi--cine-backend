@@ -31,7 +31,12 @@ export interface OrderAttributes {
  * Atributos para creación.
  */
 export interface OrderCreationAttributes
-    extends Optional<OrderAttributes, "id" | "createdAt"> {}
+    extends Optional<OrderAttributes, 
+    | "id" 
+    | "createdAt" 
+    | "cartId" 
+    | "userId" 
+    >{}
 
 /**
  * Clase del modelo Order.

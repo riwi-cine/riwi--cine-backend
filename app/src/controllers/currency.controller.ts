@@ -58,7 +58,6 @@ export const createCurrency = async (req: Request, res: Response): Promise<void>
  * Obtiene todas las monedas registradas.
  *
  * @async
- * @param {Request} req - Objeto de la petición HTTP.
  * @param {Response} res - Objeto de la respuesta HTTP.
  * 
  * @returns {Promise<void>} - Retorna una promesa que resuelve la respuesta HTTP.
@@ -67,7 +66,7 @@ export const createCurrency = async (req: Request, res: Response): Promise<void>
  * 
  * **500 Internal Server Error**: Si ocurre algún problema durante la obtención de las monedas, retorna un mensaje de error.
  */
-export const getCurrencies = async (req: Request, res: Response): Promise<void> => {
+export const getCurrencies = async (_req: Request, res: Response): Promise<void> => {
     try {
         const currencies = await currencyService.findAll();
         res.status(200).json(currencies);
@@ -93,10 +92,10 @@ export const getCurrencies = async (req: Request, res: Response): Promise<void> 
  */
 export const updateCurrency = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { code } = req.params;
+        const { id } = req.params;
         const updateCurrencyDto: Partial<CreateCurrencyDto> = req.body;
 
-        const updatedCurrency = await currencyService.update(code, updateCurrencyDto);
+        const updatedCurrency = await currencyService.update(parseInt(id), updateCurrencyDto);
         res.status(200).json(updatedCurrency);
     } catch (error) {
         res.status(400).json({ message: (error as Error).message });
@@ -120,9 +119,9 @@ export const updateCurrency = async (req: Request, res: Response): Promise<void>
  */
 export const deleteCurrency = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { code } = req.params;
+        const { id } = req.params;
 
-        await currencyService.delete(code);
+        await currencyService.delete(parseInt(id));
         res.status(200).json({ message: "Moneda eliminada correctamente." });
     } catch (error) {
         res.status(400).json({ message: (error as Error).message });
@@ -147,9 +146,9 @@ export const deleteCurrency = async (req: Request, res: Response): Promise<void>
  */
 export const restoreCurrency = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { code } = req.params;
+        const { id } = req.params;
 
-        await currencyService.restore(code);
+        await currencyService.restore(parseInt(id));
         res.status(200).json({ message: "Moneda restaurada correctamente." });
     } catch (error) {
         res.status(400).json({ message: (error as Error).message });

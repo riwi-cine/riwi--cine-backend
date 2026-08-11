@@ -26,20 +26,20 @@ export interface ICurrencyRepository {
     /**
      * Obtener moneda basado en código.
      */
-    findOne(code: string): Promise<Currency>;
+    findOne(id: number): Promise<Currency>;
 
     /**
      * Actualiza una moneda.
      */
-    update(code: string, data: Partial<CurrencyCreationAttributes>): Promise<Currency | null>;
+    update(id: number, data: Partial<CurrencyCreationAttributes>): Promise<Currency | null>;
 
     /**
      * Elimina una moneda (soft delete).
      */
-    delete(code: string): Promise<Boolean>;
+    delete(id: number): Promise<Boolean>;
 
     /**
      * Restaura una moneda eliminada.
      */
-    restore(code: string): Promise<void>;
+    restore(id: number): Promise<void>;
 }

@@ -29,14 +29,6 @@ class UserRepository implements IUserRepository {
         });
     }
 
-    /**
-     *
-     * @param {string} email -Correo electrónico del usuario
-     *
-     * @returns {Promise<User>} -Retorna el usuario
-     *
-     * @throws {Error} -Mensaje de error si el usuario no existe o no es verificado
-     */
     async findOne(email: string): Promise<User> {
         const user = await User.findOne({ where: { email } });
 

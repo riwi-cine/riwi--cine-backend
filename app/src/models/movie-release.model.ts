@@ -78,11 +78,17 @@ MovieRelease.init(
         },
     },
     {
-        sequelize,
-        modelName: "MovieRelease",
-        tableName: "movie_releases",
-        timestamps: false,
-    },
-);
+            sequelize,
+            modelName: "MovieRelease",
+            tableName: "movie_releases",
+            timestamps: false,
+            indexes: [
+                {
+                    unique: true,
+                    fields: ["movie_id", "country_id"],
+                },
+            ],
+        },
+    );
 
 export default MovieRelease;

@@ -1,0 +1,690 @@
+{
+  "communities": {
+    "0": [
+      "app_src_controllers_currency_controller",
+      "app_src_controllers_currency_controller_createcurrency",
+      "app_src_controllers_currency_controller_deletecurrency",
+      "app_src_controllers_currency_controller_getcurrencies",
+      "app_src_controllers_currency_controller_restorecurrency",
+      "app_src_controllers_currency_controller_updatecurrency",
+      "app_src_dto_create_currency_dto",
+      "app_src_dto_create_currency_dto_createcurrencydto",
+      "app_src_models_currency_model",
+      "app_src_models_currency_model_currency",
+      "app_src_models_currency_model_currencyattributes",
+      "app_src_models_currency_model_currencycreationattributes",
+      "app_src_repositories_currency_repository",
+      "app_src_repositories_currency_repository_currencyrepository",
+      "app_src_repositories_currency_repository_currencyrepository_create",
+      "app_src_repositories_currency_repository_currencyrepository_delete",
+      "app_src_repositories_currency_repository_currencyrepository_findall",
+      "app_src_repositories_currency_repository_currencyrepository_findone",
+      "app_src_repositories_currency_repository_currencyrepository_restore",
+      "app_src_repositories_currency_repository_currencyrepository_update",
+      "app_src_repositories_interfaces_currency_repository_interface",
+      "app_src_repositories_interfaces_currency_repository_interface_icurrencyrepository",
+      "app_src_repositories_interfaces_currency_repository_interface_icurrencyrepository_create",
+      "app_src_repositories_interfaces_currency_repository_interface_icurrencyrepository_delete",
+      "app_src_repositories_interfaces_currency_repository_interface_icurrencyrepository_findall",
+      "app_src_repositories_interfaces_currency_repository_interface_icurrencyrepository_findone",
+      "app_src_repositories_interfaces_currency_repository_interface_icurrencyrepository_restore",
+      "app_src_repositories_interfaces_currency_repository_interface_icurrencyrepository_update",
+      "app_src_routes_currency_routes",
+      "app_src_services_currency_service",
+      "app_src_services_currency_service_currencyservice",
+      "app_src_services_currency_service_currencyservice_create",
+      "app_src_services_currency_service_currencyservice_delete",
+      "app_src_services_currency_service_currencyservice_findall",
+      "app_src_services_currency_service_currencyservice_findone",
+      "app_src_services_currency_service_currencyservice_restore",
+      "app_src_services_currency_service_currencyservice_update",
+      "app_src_services_interfaces_currency_service_interface",
+      "app_src_services_interfaces_currency_service_interface_icurrencyservice",
+      "app_src_services_interfaces_currency_service_interface_icurrencyservice_create",
+      "app_src_services_interfaces_currency_service_interface_icurrencyservice_delete",
+      "app_src_services_interfaces_currency_service_interface_icurrencyservice_findall",
+      "app_src_services_interfaces_currency_service_interface_icurrencyservice_findone",
+      "app_src_services_interfaces_currency_service_interface_icurrencyservice_restore",
+      "app_src_services_interfaces_currency_service_interface_icurrencyservice_update"
+    ],
+    "1": [
+      "app_src_dto_create_user_dto",
+      "app_src_dto_create_user_dto_createuserdto",
+      "app_src_models_user_model",
+      "app_src_models_user_model_user",
+      "app_src_models_user_model_userattributes",
+      "app_src_models_user_model_usercreationattributes",
+      "app_src_repositories_interfaces_user_repository_interface",
+      "app_src_repositories_interfaces_user_repository_interface_iuserrepository",
+      "app_src_repositories_interfaces_user_repository_interface_iuserrepository_create",
+      "app_src_repositories_interfaces_user_repository_interface_iuserrepository_delete",
+      "app_src_repositories_interfaces_user_repository_interface_iuserrepository_findall",
+      "app_src_repositories_interfaces_user_repository_interface_iuserrepository_findone",
+      "app_src_repositories_interfaces_user_repository_interface_iuserrepository_restore",
+      "app_src_repositories_interfaces_user_repository_interface_iuserrepository_update",
+      "app_src_repositories_user_repository",
+      "app_src_repositories_user_repository_userrepository",
+      "app_src_repositories_user_repository_userrepository_create",
+      "app_src_repositories_user_repository_userrepository_delete",
+      "app_src_repositories_user_repository_userrepository_findall",
+      "app_src_repositories_user_repository_userrepository_findone",
+      "app_src_repositories_user_repository_userrepository_restore",
+      "app_src_repositories_user_repository_userrepository_update",
+      "app_src_services_interfaces_user_service_interface",
+      "app_src_services_interfaces_user_service_interface_iuserservice",
+      "app_src_services_interfaces_user_service_interface_iuserservice_create",
+      "app_src_services_interfaces_user_service_interface_iuserservice_delete",
+      "app_src_services_interfaces_user_service_interface_iuserservice_findall",
+      "app_src_services_interfaces_user_service_interface_iuserservice_findone",
+      "app_src_services_interfaces_user_service_interface_iuserservice_restore",
+      "app_src_services_interfaces_user_service_interface_iuserservice_update",
+      "app_src_services_user_service",
+      "app_src_services_user_service_userservice",
+      "app_src_services_user_service_userservice_create",
+      "app_src_services_user_service_userservice_delete",
+      "app_src_services_user_service_userservice_findall",
+      "app_src_services_user_service_userservice_findone",
+      "app_src_services_user_service_userservice_resolvecountryid",
+      "app_src_services_user_service_userservice_restore",
+      "app_src_services_user_service_userservice_update"
+    ],
+    "2": [
+      "app_src_controllers_auth_controller",
+      "app_src_controllers_auth_controller_finduser",
+      "app_src_controllers_user_controller",
+      "app_src_controllers_user_controller_createuser",
+      "app_src_controllers_user_controller_deleteuser",
+      "app_src_controllers_user_controller_finduser",
+      "app_src_controllers_user_controller_getusers",
+      "app_src_controllers_user_controller_restoreuser",
+      "app_src_controllers_user_controller_updateuser",
+      "app_src_docs_swagger",
+      "app_src_docs_swagger_options",
+      "app_src_docs_swagger_swaggerspec",
+      "app_src_index",
+      "app_src_index_start",
+      "app_src_middlewares_auth_middleware",
+      "app_src_middlewares_auth_middleware_authmiddleware",
+      "app_src_routes_auth_routes",
+      "app_src_routes_auth_routes_router",
+      "app_src_routes_currency_routes_router",
+      "app_src_routes_user_routes",
+      "app_src_routes_user_routes_router",
+      "app_src_server",
+      "app_src_server_app",
+      "app_src_services_auth_service",
+      "app_src_services_auth_service_authuser",
+      "app_src_services_auth_service_authuser_hashing",
+      "app_src_services_auth_service_authuser_login",
+      "app_src_services_interfaces_user_payload_interface",
+      "app_src_services_interfaces_user_payload_interface_express",
+      "app_src_services_interfaces_user_payload_interface_request",
+      "app_src_services_interfaces_user_payload_interface_userpayload",
+      "app_src_utils_auth",
+      "app_src_utils_auth_compare_password",
+      "app_src_utils_auth_hash_password",
+      "app_src_utils_jwt",
+      "app_src_utils_jwt_generatetoken",
+      "app_src_utils_jwt_verifytoken"
+    ],
+    "3": [
+      "app_src_controllers_country_controller",
+      "app_src_controllers_country_controller_createcountry",
+      "app_src_controllers_country_controller_getallcountries",
+      "app_src_controllers_country_controller_getcountrybyname",
+      "app_src_dto_create_country_dto",
+      "app_src_dto_create_country_dto_createcountrydto",
+      "app_src_models_country_model",
+      "app_src_models_country_model_country",
+      "app_src_models_country_model_countryattributes",
+      "app_src_models_country_model_countrycreationattributes",
+      "app_src_repositories_country_repository",
+      "app_src_repositories_country_repository_countryrepository",
+      "app_src_repositories_country_repository_countryrepository_create",
+      "app_src_repositories_country_repository_countryrepository_findall",
+      "app_src_repositories_country_repository_countryrepository_findone",
+      "app_src_repositories_interfaces_country_repository_interface",
+      "app_src_repositories_interfaces_country_repository_interface_icountryrepository",
+      "app_src_repositories_interfaces_country_repository_interface_icountryrepository_create",
+      "app_src_repositories_interfaces_country_repository_interface_icountryrepository_findall",
+      "app_src_repositories_interfaces_country_repository_interface_icountryrepository_findone",
+      "app_src_routes_country_routes",
+      "app_src_routes_country_routes_router",
+      "app_src_services_country_service",
+      "app_src_services_country_service_countryservice",
+      "app_src_services_country_service_countryservice_create",
+      "app_src_services_country_service_countryservice_findall",
+      "app_src_services_country_service_countryservice_findone",
+      "app_src_services_country_service_countryservice_resolvecurrencyid",
+      "app_src_services_interfaces_country_service_interface",
+      "app_src_services_interfaces_country_service_interface_icountryservice",
+      "app_src_services_interfaces_country_service_interface_icountryservice_create",
+      "app_src_services_interfaces_country_service_interface_icountryservice_findall",
+      "app_src_services_interfaces_country_service_interface_icountryservice_findone"
+    ],
+    "4": [
+      "app_package",
+      "app_package_dependencies",
+      "app_package_dependencies_bcrypt",
+      "app_package_dependencies_cookie_parser",
+      "app_package_dependencies_express",
+      "app_package_dependencies_jsonwebtoken",
+      "app_package_dependencies_pg",
+      "app_package_dependencies_sequelize",
+      "app_package_dependencies_swagger_jsdoc",
+      "app_package_dependencies_swagger_ui_express",
+      "app_package_description",
+      "app_package_main",
+      "app_package_name",
+      "app_package_scripts",
+      "app_package_scripts_build",
+      "app_package_scripts_dev",
+      "app_package_scripts_start",
+      "app_package_scripts_test",
+      "app_package_version",
+      "bcrypt",
+      "cookie_parser",
+      "express",
+      "jsonwebtoken",
+      "pg",
+      "sequelize",
+      "swagger_jsdoc",
+      "swagger_ui_express"
+    ],
+    "5": [
+      "app_package_devdependencies",
+      "app_package_devdependencies_jest",
+      "app_package_devdependencies_ts_jest",
+      "app_package_devdependencies_tsx",
+      "app_package_devdependencies_types_bcrypt",
+      "app_package_devdependencies_types_cookie_parser",
+      "app_package_devdependencies_types_express",
+      "app_package_devdependencies_types_jest",
+      "app_package_devdependencies_types_jsonwebtoken",
+      "app_package_devdependencies_types_node",
+      "app_package_devdependencies_types_swagger_jsdoc",
+      "app_package_devdependencies_types_swagger_ui_express",
+      "app_package_devdependencies_typescript",
+      "jest",
+      "ts_jest",
+      "tsx",
+      "types_bcrypt",
+      "types_cookie_parser",
+      "types_express",
+      "types_jest",
+      "types_jsonwebtoken",
+      "types_node",
+      "types_swagger_jsdoc",
+      "types_swagger_ui_express",
+      "typescript"
+    ],
+    "6": [
+      "app_tsconfig",
+      "app_tsconfig_compileroptions",
+      "app_tsconfig_compileroptions_esmoduleinterop",
+      "app_tsconfig_compileroptions_forceconsistentcasinginfilenames",
+      "app_tsconfig_compileroptions_module",
+      "app_tsconfig_compileroptions_skiplibcheck",
+      "app_tsconfig_compileroptions_strict",
+      "app_tsconfig_compileroptions_target",
+      "app_tsconfig_compileroptions_types",
+      "app_tsconfig_exclude",
+      "app_tsconfig_include",
+      "ref_dist",
+      "ref_node",
+      "ref_node_modules",
+      "ref_src"
+    ],
+    "7": [
+      "app_src_models_associations",
+      "app_src_models_cinema_room_type_model",
+      "app_src_models_cinema_room_type_model_cinemaroomtype",
+      "app_src_models_cinema_room_type_model_cinemaroomtypeattributes",
+      "app_src_models_seat_lock_model",
+      "app_src_models_seat_lock_model_seatlock",
+      "app_src_models_seat_lock_model_seatlockattributes",
+      "app_src_models_seat_lock_model_seatlockcreationattributes"
+    ],
+    "8": [
+      "app_src_models_cineflash_activation_model",
+      "app_src_models_cineflash_activation_model_cineflashactivation",
+      "app_src_models_cineflash_activation_model_cineflashactivationattributes",
+      "app_src_models_cineflash_activation_model_cineflashactivationcreationattributes",
+      "app_src_models_document_type_model",
+      "app_src_models_document_type_model_documenttype",
+      "app_src_models_document_type_model_documenttypeattributes",
+      "app_src_models_document_type_model_documenttypecreationattributes"
+    ],
+    "9": [
+      "app_src_models_genre_model",
+      "app_src_models_genre_model_genre",
+      "app_src_models_genre_model_genreattributes",
+      "app_src_models_genre_model_genrecreationattributes",
+      "app_src_models_refresh_token_model",
+      "app_src_models_refresh_token_model_refreshtoken",
+      "app_src_models_refresh_token_model_refreshtokenattributes",
+      "app_src_models_refresh_token_model_refreshtokencreationattributes"
+    ],
+    "10": [
+      "app_src_config_database_sequelize",
+      "app_src_models_snack_model",
+      "app_src_models_snack_model_snack",
+      "app_src_models_snack_model_snackattributes",
+      "app_src_models_snack_model_snackcreationattributes"
+    ],
+    "11": [
+      "app_src_config_database",
+      "app_src_models_movie_genre_model",
+      "app_src_models_movie_genre_model_moviegenre",
+      "app_src_models_movie_genre_model_moviegenreattributes"
+    ],
+    "12": [
+      "app_src_models_activation_token_model",
+      "app_src_models_activation_token_model_activationtoken",
+      "app_src_models_activation_token_model_activationtokenattributes",
+      "app_src_models_activation_token_model_activationtokencreationattributes"
+    ],
+    "13": [
+      "app_src_models_audit_log_model",
+      "app_src_models_audit_log_model_auditlog",
+      "app_src_models_audit_log_model_auditlogattributes",
+      "app_src_models_audit_log_model_auditlogcreationattributes"
+    ],
+    "14": [
+      "app_src_models_cart_model",
+      "app_src_models_cart_model_cart",
+      "app_src_models_cart_model_cartattributes",
+      "app_src_models_cart_model_cartcreationattributes"
+    ],
+    "15": [
+      "app_src_models_cart_snack_model",
+      "app_src_models_cart_snack_model_cartsnack",
+      "app_src_models_cart_snack_model_cartsnackattributes",
+      "app_src_models_cart_snack_model_cartsnackcreationattributes"
+    ],
+    "16": [
+      "app_src_models_cinema_model",
+      "app_src_models_cinema_model_cinema",
+      "app_src_models_cinema_model_cinemaattributes",
+      "app_src_models_cinema_model_cinemacreationattributes"
+    ],
+    "17": [
+      "app_src_models_cinema_snack_model",
+      "app_src_models_cinema_snack_model_cinemasnack",
+      "app_src_models_cinema_snack_model_cinemasnackattributes",
+      "app_src_models_cinema_snack_model_cinemasnackcreationattributes"
+    ],
+    "18": [
+      "app_src_models_city_model",
+      "app_src_models_city_model_city",
+      "app_src_models_city_model_cityattributes",
+      "app_src_models_city_model_citycreationattributes"
+    ],
+    "19": [
+      "app_src_models_department_model",
+      "app_src_models_department_model_department",
+      "app_src_models_department_model_departmentattributes",
+      "app_src_models_department_model_departmentcreationattributes"
+    ],
+    "20": [
+      "app_src_models_function_model",
+      "app_src_models_function_model_function",
+      "app_src_models_function_model_functionattributes",
+      "app_src_models_function_model_functioncreationattributes"
+    ],
+    "21": [
+      "app_src_models_function_type_model",
+      "app_src_models_function_type_model_functiontype",
+      "app_src_models_function_type_model_functiontypeattributes",
+      "app_src_models_function_type_model_functiontypecreationattributes"
+    ],
+    "22": [
+      "app_src_models_gift_card_model",
+      "app_src_models_gift_card_model_giftcard",
+      "app_src_models_gift_card_model_giftcardattributes",
+      "app_src_models_gift_card_model_giftcardcreationattributes"
+    ],
+    "23": [
+      "app_src_models_gift_card_redemption_model",
+      "app_src_models_gift_card_redemption_model_giftcardredemption",
+      "app_src_models_gift_card_redemption_model_giftcardredemptionattributes",
+      "app_src_models_gift_card_redemption_model_giftcardredemptioncreationattributes"
+    ],
+    "24": [
+      "app_src_models_membership_model",
+      "app_src_models_membership_model_membership",
+      "app_src_models_membership_model_membershipattributes",
+      "app_src_models_membership_model_membershipcreationattributes"
+    ],
+    "25": [
+      "app_src_models_movie_model",
+      "app_src_models_movie_model_movie",
+      "app_src_models_movie_model_movieattributes",
+      "app_src_models_movie_model_moviecreationattributes"
+    ],
+    "26": [
+      "app_src_models_movie_release_model",
+      "app_src_models_movie_release_model_movierelease",
+      "app_src_models_movie_release_model_moviereleaseattributes",
+      "app_src_models_movie_release_model_moviereleasecreationattributes"
+    ],
+    "27": [
+      "app_src_models_notification_model",
+      "app_src_models_notification_model_notification",
+      "app_src_models_notification_model_notificationattributes",
+      "app_src_models_notification_model_notificationcreationattributes"
+    ],
+    "28": [
+      "app_src_models_order_model",
+      "app_src_models_order_model_order",
+      "app_src_models_order_model_orderattributes",
+      "app_src_models_order_model_ordercreationattributes"
+    ],
+    "29": [
+      "app_src_models_order_promotion_model",
+      "app_src_models_order_promotion_model_orderpromotion",
+      "app_src_models_order_promotion_model_orderpromotionattributes",
+      "app_src_models_order_promotion_model_orderpromotioncreationattributes"
+    ],
+    "30": [
+      "app_src_models_order_snack_model",
+      "app_src_models_order_snack_model_ordersnack",
+      "app_src_models_order_snack_model_ordersnackattributes",
+      "app_src_models_order_snack_model_ordersnackcreationattributes"
+    ],
+    "31": [
+      "app_src_models_payment_model",
+      "app_src_models_payment_model_payment",
+      "app_src_models_payment_model_paymentattributes",
+      "app_src_models_payment_model_paymentcreationattributes"
+    ],
+    "32": [
+      "app_src_models_points_transaction_model",
+      "app_src_models_points_transaction_model_pointtransaction",
+      "app_src_models_points_transaction_model_pointtransactionattributes",
+      "app_src_models_points_transaction_model_pointtransactioncreationattributes"
+    ],
+    "33": [
+      "app_src_models_pqrs_model",
+      "app_src_models_pqrs_model_pqrs",
+      "app_src_models_pqrs_model_pqrsattributes",
+      "app_src_models_pqrs_model_pqrscreationattributes"
+    ],
+    "34": [
+      "app_src_models_promotion_cinema_model",
+      "app_src_models_promotion_cinema_model_promotioncinema",
+      "app_src_models_promotion_cinema_model_promotioncinemaattributes",
+      "app_src_models_promotion_cinema_model_promotioncinemacreationattributes"
+    ],
+    "35": [
+      "app_src_models_promotion_function_type_model",
+      "app_src_models_promotion_function_type_model_promotionfunctiontype",
+      "app_src_models_promotion_function_type_model_promotionfunctiontypeattributes",
+      "app_src_models_promotion_function_type_model_promotionfunctiontypecreationattributes"
+    ],
+    "36": [
+      "app_src_models_promotion_model",
+      "app_src_models_promotion_model_promotion",
+      "app_src_models_promotion_model_promotionattributes",
+      "app_src_models_promotion_model_promotioncreationattributes"
+    ],
+    "37": [
+      "app_src_models_role_model",
+      "app_src_models_role_model_role",
+      "app_src_models_role_model_roleattributes",
+      "app_src_models_role_model_rolecreationattributes"
+    ],
+    "38": [
+      "app_src_models_room_model",
+      "app_src_models_room_model_room",
+      "app_src_models_room_model_roomattributes",
+      "app_src_models_room_model_roomcreationattributes"
+    ],
+    "39": [
+      "app_src_models_room_type_model",
+      "app_src_models_room_type_model_roomtype",
+      "app_src_models_room_type_model_roomtypeattributes",
+      "app_src_models_room_type_model_roomtypecreationattributes"
+    ],
+    "40": [
+      "app_src_models_seat_model",
+      "app_src_models_seat_model_seat",
+      "app_src_models_seat_model_seatattributes",
+      "app_src_models_seat_model_seatcreationattributes"
+    ],
+    "41": [
+      "app_src_models_survey_model",
+      "app_src_models_survey_model_survey",
+      "app_src_models_survey_model_surveyattributes",
+      "app_src_models_survey_model_surveycreationattributes"
+    ],
+    "42": [
+      "app_src_models_ticket_model",
+      "app_src_models_ticket_model_ticket",
+      "app_src_models_ticket_model_ticketattributes",
+      "app_src_models_ticket_model_ticketcreationattributes"
+    ],
+    "43": [
+      "app_src_models_ticket_transfer_model",
+      "app_src_models_ticket_transfer_model_tickettransfer",
+      "app_src_models_ticket_transfer_model_tickettransferattributes",
+      "app_src_models_ticket_transfer_model_tickettransfercreationattributes"
+    ],
+    "44": [
+      "app_src_models_user_document_model",
+      "app_src_models_user_document_model_userdocument",
+      "app_src_models_user_document_model_userdocumentattributes",
+      "app_src_models_user_document_model_userdocumentcreationattributes"
+    ],
+    "45": [
+      "app_src_models_user_role_model",
+      "app_src_models_user_role_model_userrole",
+      "app_src_models_user_role_model_userroleattributes",
+      "app_src_models_user_role_model_userrolecreationattributes"
+    ],
+    "46": [
+      "app_jest_config",
+      "app_jest_config_config"
+    ],
+    "47": [
+      "app_src_middlewares_role_middleware",
+      "app_src_middlewares_role_middleware_rolemiddleware"
+    ]
+  },
+  "cohesion": {
+    "0": 0.09898989898989899,
+    "1": 0.11336032388663968,
+    "2": 0.08708708708708708,
+    "3": 0.14015151515151514,
+    "4": 0.07407407407407407,
+    "5": 0.08,
+    "6": 0.13333333333333333,
+    "7": 0.39285714285714285,
+    "8": 0.2857142857142857,
+    "9": 0.2857142857142857,
+    "10": 0.5,
+    "11": 0.6666666666666666,
+    "12": 0.6666666666666666,
+    "13": 0.6666666666666666,
+    "14": 0.6666666666666666,
+    "15": 0.6666666666666666,
+    "16": 0.6666666666666666,
+    "17": 0.6666666666666666,
+    "18": 0.6666666666666666,
+    "19": 0.6666666666666666,
+    "20": 0.6666666666666666,
+    "21": 0.6666666666666666,
+    "22": 0.6666666666666666,
+    "23": 0.6666666666666666,
+    "24": 0.6666666666666666,
+    "25": 0.6666666666666666,
+    "26": 0.6666666666666666,
+    "27": 0.6666666666666666,
+    "28": 0.6666666666666666,
+    "29": 0.6666666666666666,
+    "30": 0.6666666666666666,
+    "31": 0.6666666666666666,
+    "32": 0.6666666666666666,
+    "33": 0.6666666666666666,
+    "34": 0.6666666666666666,
+    "35": 0.6666666666666666,
+    "36": 0.6666666666666666,
+    "37": 0.6666666666666666,
+    "38": 0.6666666666666666,
+    "39": 0.6666666666666666,
+    "40": 0.6666666666666666,
+    "41": 0.6666666666666666,
+    "42": 0.6666666666666666,
+    "43": 0.6666666666666666,
+    "44": 0.6666666666666666,
+    "45": 0.6666666666666666,
+    "46": 1.0,
+    "47": 1.0
+  },
+  "gods": [
+    {
+      "id": "app_src_config_database_sequelize",
+      "label": "sequelize",
+      "degree": 47
+    },
+    {
+      "id": "app_src_models_user_model_user",
+      "label": "User",
+      "degree": 27
+    },
+    {
+      "id": "app_src_models_currency_model_currency",
+      "label": "Currency",
+      "degree": 26
+    },
+    {
+      "id": "app_src_models_country_model_country",
+      "label": "Country",
+      "degree": 21
+    },
+    {
+      "id": "app_src_dto_create_currency_dto_createcurrencydto",
+      "label": "CreateCurrencyDto",
+      "degree": 9
+    },
+    {
+      "id": "app_src_repositories_interfaces_currency_repository_interface_icurrencyrepository",
+      "label": "ICurrencyRepository",
+      "degree": 9
+    },
+    {
+      "id": "app_src_repositories_interfaces_user_repository_interface_iuserrepository",
+      "label": "IUserRepository",
+      "degree": 9
+    },
+    {
+      "id": "app_src_services_interfaces_currency_service_interface_icurrencyservice",
+      "label": "ICurrencyService",
+      "degree": 9
+    },
+    {
+      "id": "app_src_services_interfaces_user_service_interface_iuserservice",
+      "label": "IUserService",
+      "degree": 9
+    },
+    {
+      "id": "app_src_services_user_service_userservice",
+      "label": "UserService",
+      "degree": 9
+    }
+  ],
+  "surprises": [
+    {
+      "source": "findUser()",
+      "target": "generateToken()",
+      "source_files": [
+        "app/src/controllers/auth.controller.ts",
+        "app/src/utils/jwt.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    },
+    {
+      "source": "authMiddleware()",
+      "target": "verifytoken()",
+      "source_files": [
+        "app/src/middlewares/auth.middleware.ts",
+        "app/src/utils/jwt.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    },
+    {
+      "source": "CountryRepository",
+      "target": "ICountryRepository",
+      "source_files": [
+        "app/src/repositories/country.repository.ts",
+        "app/src/repositories/interfaces/country.repository.interface.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "implements",
+      "why": "cross-file semantic connection"
+    },
+    {
+      "source": "CurrencyRepository",
+      "target": "ICurrencyRepository",
+      "source_files": [
+        "app/src/repositories/currency.repository.ts",
+        "app/src/repositories/interfaces/currency.repository.interface.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "implements",
+      "why": "cross-file semantic connection"
+    },
+    {
+      "source": "UserRepository",
+      "target": "IUserRepository",
+      "source_files": [
+        "app/src/repositories/user.repository.ts",
+        "app/src/repositories/interfaces/user.repository.interface.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "implements",
+      "why": "cross-file semantic connection"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `sequelize` connect `Community 10` to `Community 0`, `Community 1`, `Community 2`, `Community 3`, `Community 7`, `Community 8`, `Community 9`, `Community 11`, `Community 12`, `Community 13`, `Community 14`, `Community 15`, `Community 16`, `Community 17`, `Community 18`, `Community 19`, `Community 20`, `Community 21`, `Community 22`, `Community 23`, `Community 24`, `Community 25`, `Community 26`, `Community 27`, `Community 28`, `Community 29`, `Community 30`, `Community 31`, `Community 32`, `Community 33`, `Community 34`, `Community 35`, `Community 36`, `Community 37`, `Community 38`, `Community 39`, `Community 40`, `Community 41`, `Community 42`, `Community 43`, `Community 44`, `Community 45`?",
+      "why": "High betweenness centrality (0.120) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `User` connect `Community 1` to `Community 2`, `Community 7`?",
+      "why": "High betweenness centrality (0.104) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Country` connect `Community 3` to `Community 1`, `Community 7`?",
+      "why": "High betweenness centrality (0.094) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `config`, `name`, `version` to the rest of the system?",
+      "why": "82 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 0` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.09898989898989899 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 1` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.11336032388663968 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 2` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.08708708708708708 - nodes in this community are weakly interconnected."
+    }
+  ]
+}

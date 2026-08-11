@@ -11,8 +11,8 @@ import path from "path"; //se importo path para poder usar el metodo join(sirve 
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swagger";
 import authRoutes from "./routes/auth.routes";
-import countryRoutes from "./routes/country.routes";
 import currencyRoutes from "./routes/currency.routes";
+import countryRoutes from "./routes/locations.routes";
 import userRoutes from "./routes/user.routes";
 
 const app = express();

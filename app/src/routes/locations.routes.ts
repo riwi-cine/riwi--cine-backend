@@ -1,4 +1,3 @@
-
 // app/src/routes/country.routes.ts
 
 /**
@@ -17,11 +16,7 @@
  */
 
 import { Router } from "express";
-import {
-  createCountry,
-  getAllCountries,
-  getCountryByName,
-} from "../controllers/country.controller";
+import { createCountry, getAllCountries, getCountryByName } from "../controllers/locations.controller";
 
 const router = Router();
 
@@ -151,4 +146,3 @@ router.get("/", getAllCountries);
 router.get("/:name", getCountryByName);
 
 export default router;
-

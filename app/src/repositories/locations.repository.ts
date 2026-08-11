@@ -1,7 +1,7 @@
 // app/src/repositories/country.repository.ts
 
 import Country, { CountryCreationAttributes } from "../models/country.model";
-import { ICountryRepository } from "./interfaces/country.repository.interface";
+import { ICountryRepository } from "./interfaces/locations.repository.interface";
 
 /**
  * Repositorio de Países
@@ -13,7 +13,6 @@ import { ICountryRepository } from "./interfaces/country.repository.interface";
  */
 
 class CountryRepository implements ICountryRepository {
-
     /**
      * Crea un nuevo país.
      */

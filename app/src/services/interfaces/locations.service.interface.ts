@@ -1,6 +1,6 @@
 // app/src/services/interfaces/country.service.interface.ts
 
-import { CreateCountryDto } from "../../dto/create-country.dto";
+import { CreateCountryDto } from "../../dto/create-locations.dto";
 import Country from "../../models/country.model";
 
 /**

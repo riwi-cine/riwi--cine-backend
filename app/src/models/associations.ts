@@ -283,6 +283,18 @@ User.belongsTo(Country, {
     as: "country",
 });
 
+//City ---> User
+
+City.hasMany(User, {
+    foreignKey: "cityId",
+    as: "users",
+});
+
+User.belongsTo(City, {
+    foreignKey: "cityId",
+    as: "city",
+});
+
 //User ---> UserDocument
 
 User.hasMany(UserDocument, {

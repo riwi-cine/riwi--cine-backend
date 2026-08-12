@@ -16,7 +16,13 @@
  */
 
 import { Router } from "express";
-import { createCountry, getAllCountries, getCountryByName } from "../controllers/locations.controller";
+import {
+    createCountry,
+    getAllCountries,
+    getCities,
+    getCountryByName,
+    getDepartments,
+} from "../controllers/locations.controller";
 
 const router = Router();
 
@@ -69,7 +75,7 @@ const router = Router();
  *             example:
  *               error: "La moneda \"COP\" no existe."
  */
-router.post("/", createCountry);
+router.post("/countries", createCountry);
 
 /**
  * Obtiene todos los países registrados en la base de datos.
@@ -95,7 +101,50 @@ router.post("/", createCountry);
  *             example:
  *               error: "Error al obtener los países."
  */
-router.get("/", getAllCountries);
+router.get("/countries", getAllCountries);
+
+/**
+ * @swagger
+ * /api/departments/{countryId}:
+ *   get:
+ *     summary: Obtener departamentos activos por país
+ *     tags: [Locations]
+ *     parameters:
+ *       - in: path
+ *         name: countryId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del país.
+ *     responses:
+ *       200:
+ *         description: Lista de departamentos obtenida exitosamente.
+ *       400:
+ *         description: ID de país inválido.
+ */
+router.get("/departments/:countryId", getDepartments);
+
+/**
+ * @swagger
+ * /api/cities/{departmentId}:
+ *   get:
+ *     summary: Obtener ciudades activas por departamento
+ *     description: RN-006 - Solo retorna ciudades activas que tienen al menos un cine activo.
+ *     tags: [Locations]
+ *     parameters:
+ *       - in: path
+ *         name: departmentId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del departamento.
+ *     responses:
+ *       200:
+ *         description: Lista de ciudades con cines activos obtenida exitosamente.
+ *       400:
+ *         description: ID de departamento inválido.
+ */
+router.get("/cities/:departmentId", getCities);
 
 /**
  * Obtiene un país específico por su nombre.
@@ -143,6 +192,6 @@ router.get("/", getAllCountries);
  *             example:
  *               error: "Error interno del servidor."
  */
-router.get("/:name", getCountryByName);
+router.get("/countries/:name", getCountryByName);
 
 export default router;

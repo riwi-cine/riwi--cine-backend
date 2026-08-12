@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/currencies", currencyRoutes);
-app.use("/api/countries", countryRoutes);
+app.use("/api", countryRoutes);
 
 app.get("/api/docs.json", (_req, res) => {
     res.status(200).json(swaggerSpec);

@@ -19,6 +19,7 @@ import sequelize from "../config/database";
 export interface UserAttributes {
     id: number;
     countryId: number;
+    cityId: number | null;
     email: string;
     passwordHash: string;
     firstName: string;
@@ -41,6 +42,7 @@ export interface UserCreationAttributes
         | "id"
         | "emailVerified"
         | "countryId"
+        | "cityId"
         | "status"
         | "marketingOptIn"
         | "failedAttempts"
@@ -59,6 +61,9 @@ class User
 
     /** País de residencia. */
     public countryId!: number;
+
+    /** Ciudad seleccionada para personalizar la experiencia. */
+    public cityId!: number | null;
 
     /** Correo electrónico. */
     public email!: string;
@@ -109,6 +114,12 @@ User.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             field: "country_id",
+        },
+
+        cityId: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            field: "city_id",
         },
 
         email: {

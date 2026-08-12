@@ -2,8 +2,10 @@
 
 import { Op } from "sequelize";
 import { CreateCountryDto } from "../dto/create-locations.dto";
+import City from "../models/city.model";
 import Country from "../models/country.model";
 import Currency from "../models/currency.model";
+import Department from "../models/department.model";
 import repository from "../repositories/locations.repository";
 import { ICountryService } from "./interfaces/locations.service.interface";
 
@@ -77,6 +79,22 @@ class CountryService implements ICountryService {
         } catch (error) {
             return null;
         }
+    }
+
+    async getDepartments(countryId: number): Promise<Department[]> {
+        if (!Number.isInteger(countryId) || countryId <= 0) {
+            throw new Error("El ID del país debe ser un número válido.");
+        }
+
+        return await repository.getDepartmentsByCountry(countryId);
+    }
+
+    async getCities(departmentId: number): Promise<City[]> {
+        if (!Number.isInteger(departmentId) || departmentId <= 0) {
+            throw new Error("El ID del departamento debe ser un número válido.");
+        }
+
+        return await repository.getCitiesByDepartment(departmentId);
     }
 }
 

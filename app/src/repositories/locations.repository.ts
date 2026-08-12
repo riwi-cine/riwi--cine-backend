@@ -1,6 +1,9 @@
 // app/src/repositories/country.repository.ts
 
 import Country, { CountryCreationAttributes } from "../models/country.model";
+import City from "../models/city.model";
+import Cinema from "../models/cinema.model";
+import Department from "../models/department.model";
 import { ICountryRepository } from "./interfaces/locations.repository.interface";
 
 /**
@@ -36,6 +39,35 @@ class CountryRepository implements ICountryRepository {
             throw new Error("País no encontrado");
         }
         return country;
+    }
+
+    async getDepartmentsByCountry(countryId: number): Promise<Department[]> {
+        return await Department.findAll({
+            where: {
+                countryId,
+                active: true,
+            },
+            order: [["name", "ASC"]],
+        });
+    }
+
+    async getCitiesByDepartment(departmentId: number): Promise<City[]> {
+        return await City.findAll({
+            where: {
+                departmentId,
+                active: true,
+            },
+            include: [
+                {
+                    model: Cinema,
+                    as: "cinemas",
+                    where: { active: true },
+                    required: true,
+                    attributes: [],
+                },
+            ],
+            order: [["name", "ASC"]],
+        });
     }
 }
 

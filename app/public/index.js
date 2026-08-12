@@ -90,7 +90,8 @@ async function loadCities(departmentId) {
 }
 
 countrySelect.addEventListener('change', async () => {
-    const countryId = Number(countrySelect.value);
+    const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+    const countryId = Number(selectedOption?.dataset.id);
     departmentSelect.innerHTML = '<option value="">Seleccione un departamento</option>';
     citySelect.innerHTML = '<option value="">Seleccione una ciudad</option>';
     if (!countryId) return;
@@ -160,19 +161,7 @@ async function fetchUsers() {
 }
 
 
-async function getCountryData(countryId) {
-    const data = await fetch(`${API_COUNTRY_URL}/${countryId}`);
-    if (!data.ok) throw new Error('No se pudo cargar país');
-    return await data.json();
-}
-
-async function renderCountryName(countryId) {
-    const data = await getCountryData(countryId);
-    console.log(data);
-    return data?.name || 'N/A';
-}
-
-async function renderUsers(users) {
+function renderUsers(users) {
     userTableBody.innerHTML = '';
     if (users.length === 0) {
         emptyState.classList.remove('hidden');
@@ -184,8 +173,8 @@ async function renderUsers(users) {
         const tr = document.createElement('tr');
         tr.className = 'border-b border-gray-50 hover:bg-gray-50 transition-colors';
         const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
-        const countryName = renderCountryName(user.countryId);
-        const cityName = user.city?.name || user.cityId || 'N/A';
+        const countryName = user.country?.name || 'N/A';
+        const cityName = user.city?.name || 'N/A';
         const birth = user.birthDate || 'N/A';
         const marketing = user.marketingOptIn ? 'Sí' : 'No';
         tr.innerHTML = `
@@ -194,7 +183,7 @@ async function renderUsers(users) {
                     <td class="py-4 px-2 text-gray-600">${escapeHtml(user.email)}</td>
                     <td class="py-4 px-2 text-gray-600">${escapeHtml(user.phone || 'N/A')}</td>
                     <td class="py-4 px-2 text-gray-600">${escapeHtml(countryName)}</td>
-                    <td class="py-4 px-2 text-gray-600">${escapeHtml(user.city?.name || user.cityId || 'N/A')}</td>
+                    <td class="py-4 px-2 text-gray-600">${escapeHtml(cityName)}</td>
                     <td class="py-4 px-2 text-gray-600">${escapeHtml(birth)}</td>
                     <td class="py-4 px-2 text-gray-600">${escapeHtml(marketing)}</td>
                     <td class="py-4 px-2">

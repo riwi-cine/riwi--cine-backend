@@ -34,20 +34,16 @@ const seedLocations = async () => {
             name: "Antioquia",
             cities: [
                 { name: "Medellin", hasActiveCinema: true },
-                { name: "Envigado", hasActiveCinema: false },
+                { name: "Envigado", hasActiveCinema: true },
             ],
         },
         {
             name: "Cundinamarca",
-            cities: [
-                { name: "Bogota", hasActiveCinema: true },
-            ],
+            cities: [{ name: "Bogota", hasActiveCinema: true }],
         },
         {
             name: "Valle del Cauca",
-            cities: [
-                { name: "Cali", hasActiveCinema: false },
-            ],
+            cities: [{ name: "Cali", hasActiveCinema: false }],
         },
     ];
 
@@ -100,7 +96,7 @@ seedLocations()
         console.log("Seed de ubicaciones ejecutado correctamente.");
         await sequelize.close();
     })
-    .catch(async (error) => {
+    .catch(async error => {
         console.error("Error ejecutando seed de ubicaciones:", error);
         await sequelize.close();
         process.exit(1);

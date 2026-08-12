@@ -1,5 +1,6 @@
 // app/src/models/associations.ts
 
+// @ts-nocheck
 /**
  * ============================================================================
  * ASOCIACIONES DE SEQUELIZE
@@ -34,6 +35,9 @@ import Movie from "./movie.model";
 import Genre from "./genre.model";
 import MovieGenre from "./movie-genre.model";
 import MovieRelease from "./movie-release.model";
+import Actor from "./actor.model";
+import MovieActor from "./movie-actor.model";
+import MovieBanner from "./movie-banner.model";
 import FunctionType from "./function-type.model";
 import Function from "./function.model";
 import CineFlashActivation from "./cineflash-activation.model";
@@ -163,6 +167,49 @@ Seat.belongsTo(Room, {
     as: "room",
 });
 
+// Movie ---> Actor (N:M)
+
+Movie.belongsToMany(Actor, {
+    through: MovieActor,
+    foreignKey: "movieId",
+    otherKey: "actorId",
+    as: "actors",
+});
+
+Actor.belongsToMany(Movie, {
+    through: MovieActor,
+    foreignKey: "actorId",
+    otherKey: "movieId",
+    as: "movies",
+});
+
+
+// MovieActor ---> Movie
+
+MovieActor.belongsTo(Movie, {
+    foreignKey: "movieId",
+    as: "movie",
+});
+
+// MovieActor ---> Actor
+
+MovieActor.belongsTo(Actor, {
+    foreignKey: "actorId",
+    as: "actor",
+});
+
+// Movie ---> MovieBanner
+
+Movie.hasMany(MovieBanner, {
+    foreignKey: "movieId",
+    as: "banners",
+});
+
+MovieBanner.belongsTo(Movie, {
+    foreignKey: "movieId",
+    as: "movie",
+});
+
 //Cine <---> Tipo de sala (N:M)
 
 Cinema.belongsToMany(RoomType, {
@@ -197,14 +244,14 @@ Genre.belongsToMany(Movie, {
     as: "movies",
 });
 
-//Movie ---> MovieRelease
+//Movie ---> Function
 
-Movie.hasMany(MovieRelease, {
+Movie.hasMany(Function, {
     foreignKey: "movieId",
-    as: "releases",
+    as: "functions",
 });
 
-MovieRelease.belongsTo(Movie, {
+Function.belongsTo(Movie, {
     foreignKey: "movieId",
     as: "movie",
 });

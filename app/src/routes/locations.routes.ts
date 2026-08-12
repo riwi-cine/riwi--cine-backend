@@ -1,16 +1,18 @@
 // app/src/routes/country.routes.ts
 
 /**
- * Rutas de Países
+ * Rutas de Ubicaciones (Locations)
  *
  * ---
- * Este archivo define las rutas HTTP relacionadas con la entidad `Country`.
+ * Este archivo define las rutas HTTP relacionadas con ubicaciones (`Country`, `Department`, `City`).
  *
  * Endpoints disponibles:
  *
- * - `POST /countries/`       : Crear un nuevo país.
- * - `GET /countries/`        : Obtener todos los países registrados.
- * - `GET /countries/:name`   : Obtener un país específico por nombre.
+ * - `POST /countries/`            : Crear un nuevo país.
+ * - `GET /countries/`             : Obtener todos los países registrados.
+ * - `GET /departments/:countryId` : Obtener departamentos activos por país.
+ * - `GET /cities/:departmentId`   : Obtener ciudades activas por departamento.
+ * - `GET /countries/:name`        : Obtener un país específico por nombre.
  *
  * Cada ruta se conecta con su respectivo controlador.
  */
@@ -33,7 +35,7 @@ const router = Router();
  * /api/countries:
  *   post:
  *     summary: Crear un nuevo país
- *     tags: [Countries]
+ *     tags: [Locations]
  *     requestBody:
  *       required: true
  *       content:
@@ -84,7 +86,7 @@ router.post("/countries", createCountry);
  * /api/countries:
  *   get:
  *     summary: Obtener todos los países
- *     tags: [Countries]
+ *     tags: [Locations]
  *     responses:
  *       200:
  *         description: Lista de países obtenida exitosamente.
@@ -153,7 +155,7 @@ router.get("/cities/:departmentId", getCities);
  * /api/countries/{name}:
  *   get:
  *     summary: Obtener un país por nombre
- *     tags: [Countries]
+ *     tags: [Locations]
  *     parameters:
  *       - in: path
  *         name: name

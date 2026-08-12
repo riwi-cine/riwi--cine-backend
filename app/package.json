@@ -4,7 +4,7 @@
     "description": "API con Node, Express, TypeScript, Swagger, Jest y Sequelize para PostgreSQL",
     "main": "dist/index.js",
     "scripts": {
-        "dev": "tsx watch src/index.ts",
+        "dev": "tsx --watch src/index.ts",
         "build": "tsc",
         "start": "node dist/index.js",
         "test": "jest --passWithNoTests",

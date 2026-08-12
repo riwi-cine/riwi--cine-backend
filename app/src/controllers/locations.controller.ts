@@ -14,17 +14,17 @@ export const getAllCountries = async (req: Request, res: Response): Promise<Resp
     }
 };
 
-export const getCountryByName = async (req: Request, res: Response): Promise<Response> => {
+export const getCountryById = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const { name } = req.params;
+        const { id } = req.params;
 
-        if (!name) {
+        if (!id) {
             return res.status(400).json({
-                error: "El nombre del país es obligatorio.",
+                error: "El ID del país es obligatorio.",
             });
         }
 
-        const country = await CountryService.findOne(name);
+        const country = await CountryService.findOne(Number(id));
 
         if (!country) {
             return res.status(404).json({

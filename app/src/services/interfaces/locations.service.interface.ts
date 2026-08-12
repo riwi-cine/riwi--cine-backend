@@ -14,7 +14,7 @@ export interface ICountryService {
 
     findAll(): Promise<Country[]>;
 
-    findOne(name: string): Promise<Country | null>;
+    findOne(id: number): Promise<Country | null>;
 
     getDepartments(countryId: number): Promise<Department[]>;
 

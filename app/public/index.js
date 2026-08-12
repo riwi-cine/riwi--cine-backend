@@ -1,4 +1,5 @@
 const API_URL = '/api/users';
+const API_COUNTRY_URL = '/api/countries';
 const form = document.getElementById('user-form');
 const userTableBody = document.getElementById('user-table-body');
 const emptyState = document.getElementById('empty-state');
@@ -6,14 +7,21 @@ const submitBtn = document.getElementById('submit-btn');
 const cancelBtn = document.getElementById('cancel-btn');
 const formTitle = document.getElementById('form-title');
 const passwordGroup = document.getElementById('password-group');
+const countrySelect = document.getElementById('country');
+const departmentSelect = document.getElementById('departmentId');
+const citySelect = document.getElementById('cityId');
 
 let isEditing = false;
+let countriesCache = [];
 
 const validators = {
-    name: (val) => val.trim().length >= 3,
+    firstName: (val) => val.trim().length >= 2,
+    lastName: (val) => val.trim().length >= 2,
     email: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
-    phoneNumber: (val) => /^\d{10}$/.test(val),
+    phone: (val) => /^\d{10}$/.test(val),
+    birthDate: (val) => val.trim().length > 0,
     country: (val) => val.trim().length > 0,
+    cityId: (val) => val.trim().length > 0,
     password: (val) => isEditing ? true : val.length >= 8
 };
 
@@ -32,8 +40,99 @@ const validateField = (field) => {
     return isValid;
 };
 
-['name', 'email', 'phoneNumber', 'country', 'password'].forEach(field => {
-    document.getElementById(field).addEventListener('input', () => validateField(field));
+['firstName', 'lastName', 'email', 'phone', 'birthDate', 'country', 'cityId', 'password'].forEach(field => {
+    const el = document.getElementById(field);
+    if (!el) return;
+    el.addEventListener('input', () => validateField(field));
+    el.addEventListener('change', () => validateField(field));
+});
+
+
+
+async function loadCountries() {
+    try {
+        const res = await fetch(API_COUNTRY_URL);
+        if (!res.ok) throw new Error('No se pudo cargar países');
+        countriesCache = await res.json();
+        countrySelect.innerHTML = '<option value="">Seleccione un país</option>';
+        countriesCache.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.name;
+            opt.dataset.id = c.id;
+            opt.textContent = c.name;
+            countrySelect.appendChild(opt);
+        });
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function loadDepartments(countryId) {
+    try {
+        const res = await fetch(`/api/departments/${countryId}`);
+        if (!res.ok) throw new Error('No se pudieron cargar departamentos');
+        return await res.json();
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+}
+
+async function loadCities(departmentId) {
+    try {
+        const res = await fetch(`/api/cities/${departmentId}`);
+        if (!res.ok) throw new Error('No se pudieron cargar ciudades');
+        return await res.json();
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+}
+
+countrySelect.addEventListener('change', async () => {
+    const countryId = Number(countrySelect.value);
+    departmentSelect.innerHTML = '<option value="">Seleccione un departamento</option>';
+    citySelect.innerHTML = '<option value="">Seleccione una ciudad</option>';
+    if (!countryId) return;
+
+    const country = countriesCache.find(c => c.id === countryId);
+    if (!country) return;
+
+    const departments = await loadDepartments(countryId);
+    if (departments.length === 0) {
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = 'No hay departamentos';
+        departmentSelect.appendChild(opt);
+        return;
+    }
+    departments.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.id;
+        opt.textContent = d.name;
+        departmentSelect.appendChild(opt);
+    });
+});
+
+departmentSelect.addEventListener('change', async () => {
+    const departmentId = Number(departmentSelect.value);
+    citySelect.innerHTML = '<option value="">Seleccione una ciudad</option>';
+    if (!departmentId) return;
+
+    const cities = await loadCities(departmentId);
+    if (cities.length === 0) {
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = 'No hay ciudades disponibles';
+        citySelect.appendChild(opt);
+        return;
+    }
+    cities.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name;
+        citySelect.appendChild(opt);
+    });
 });
 
 function showToast(message, type = 'success') {
@@ -60,7 +159,20 @@ async function fetchUsers() {
     }
 }
 
-function renderUsers(users) {
+
+async function getCountryData(countryId) {
+    const data = await fetch(`${API_COUNTRY_URL}/${countryId}`);
+    if (!data.ok) throw new Error('No se pudo cargar país');
+    return await data.json();
+}
+
+async function renderCountryName(countryId) {
+    const data = await getCountryData(countryId);
+    console.log(data);
+    return data?.name || 'N/A';
+}
+
+async function renderUsers(users) {
     userTableBody.innerHTML = '';
     if (users.length === 0) {
         emptyState.classList.remove('hidden');
@@ -71,12 +183,20 @@ function renderUsers(users) {
     users.forEach(user => {
         const tr = document.createElement('tr');
         tr.className = 'border-b border-gray-50 hover:bg-gray-50 transition-colors';
+        const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+        const countryName = renderCountryName(user.countryId);
+        const cityName = user.city?.name || user.cityId || 'N/A';
+        const birth = user.birthDate || 'N/A';
+        const marketing = user.marketingOptIn ? 'Sí' : 'No';
         tr.innerHTML = `
                     <td class="py-4 px-2 font-medium text-gray-800">#${user.id}</td>
-                    <td class="py-4 px-2 font-medium text-gray-800">${escapeHtml(user.name)}</td>
+                    <td class="py-4 px-2 font-medium text-gray-800">${escapeHtml(fullName)}</td>
                     <td class="py-4 px-2 text-gray-600">${escapeHtml(user.email)}</td>
-                    <td class="py-4 px-2 text-gray-600">${escapeHtml(user.phoneNumber || 'N/A')}</td>
-                    <td class="py-4 px-2 text-gray-600">${escapeHtml(user.country || 'N/A')}</td>
+                    <td class="py-4 px-2 text-gray-600">${escapeHtml(user.phone || 'N/A')}</td>
+                    <td class="py-4 px-2 text-gray-600">${escapeHtml(countryName)}</td>
+                    <td class="py-4 px-2 text-gray-600">${escapeHtml(user.city?.name || user.cityId || 'N/A')}</td>
+                    <td class="py-4 px-2 text-gray-600">${escapeHtml(birth)}</td>
+                    <td class="py-4 px-2 text-gray-600">${escapeHtml(marketing)}</td>
                     <td class="py-4 px-2">
                         <div class="flex gap-2">
                             <button onclick='editUser(${JSON.stringify(user)})' 
@@ -103,7 +223,7 @@ function escapeHtml(text) {
 form.onsubmit = async (e) => {
     e.preventDefault();
 
-    const fieldsToValidate = ['name', 'email', 'phoneNumber', 'country'];
+    const fieldsToValidate = ['firstName', 'lastName', 'email', 'phone', 'birthDate', 'country', 'cityId'];
     if (!isEditing) fieldsToValidate.push('password');
 
     const allValid = fieldsToValidate.every(validateField);
@@ -113,7 +233,14 @@ form.onsubmit = async (e) => {
     }
 
     const formData = new FormData(form);
-    const userData = Object.fromEntries(formData.entries());
+    const data = Object.fromEntries(formData.entries());
+    data.marketingOptIn = document.getElementById('marketingOptIn').checked;
+    data.passwordHash = data.password;
+    delete data.password;
+    if (data.cityId) {
+        data.cityId = Number(data.cityId);
+    }
+
     const id = document.getElementById('user-id').value;
 
     submitBtn.classList.add('loading');
@@ -122,17 +249,16 @@ form.onsubmit = async (e) => {
     try {
         let response;
         if (isEditing) {
-            if (!userData.password) delete userData.password;
             response = await fetch(`${API_URL}/${id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(userData)
+                body: JSON.stringify(data)
             });
         } else {
             response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(userData)
+                body: JSON.stringify(data)
             });
         }
 
@@ -156,13 +282,15 @@ form.onsubmit = async (e) => {
     }
 };
 
-window.editUser = (user) => {
+window.editUser = async (user) => {
     isEditing = true;
     document.getElementById('user-id').value = user.id;
-    document.getElementById('name').value = user.name;
+    document.getElementById('firstName').value = user.firstName || '';
+    document.getElementById('lastName').value = user.lastName || '';
     document.getElementById('email').value = user.email;
-    document.getElementById('phoneNumber').value = user.phoneNumber || '';
-    document.getElementById('country').value = user.country || '';
+    document.getElementById('phone').value = user.phone || '';
+    document.getElementById('birthDate').value = user.birthDate || '';
+    document.getElementById('marketingOptIn').checked = !!user.marketingOptIn;
 
     formTitle.innerHTML = '<i class="fas fa-user-edit text-indigo-500"></i> Editar Usuario';
     submitBtn.textContent = 'Actualizar Usuario';
@@ -171,6 +299,38 @@ window.editUser = (user) => {
 
     document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
     document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+    const countryName = user.country?.name || user.country;
+    if (countryName) {
+        countrySelect.value = countryName;
+        const country = countriesCache.find(c => c.name === countryName);
+        if (country) {
+            const departments = await loadDepartments(country.id);
+            departmentSelect.innerHTML = '<option value="">Seleccione un departamento</option>';
+            departments.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.id;
+                opt.textContent = d.name;
+                departmentSelect.appendChild(opt);
+            });
+
+            const userDepartmentId = user.departmentId || user.city?.departmentId;
+            if (userDepartmentId) {
+                departmentSelect.value = userDepartmentId;
+                const cities = await loadCities(userDepartmentId);
+                citySelect.innerHTML = '<option value="">Seleccione una ciudad</option>';
+                cities.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.name;
+                    citySelect.appendChild(opt);
+                });
+                if (user.cityId) {
+                    citySelect.value = user.cityId;
+                }
+            }
+        }
+    }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
@@ -204,6 +364,8 @@ function resetForm() {
     submitBtn.textContent = 'Guardar Usuario';
     cancelBtn.classList.add('hidden');
     passwordGroup.classList.remove('hidden');
+    departmentSelect.innerHTML = '<option value="">Seleccione un departamento</option>';
+    citySelect.innerHTML = '<option value="">Seleccione una ciudad</option>';
 
     document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
     document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
@@ -212,4 +374,5 @@ function resetForm() {
 cancelBtn.onclick = resetForm;
 document.getElementById('refresh-btn').onclick = fetchUsers;
 
+loadCountries();
 fetchUsers();

@@ -22,7 +22,7 @@ import {
     createCountry,
     getAllCountries,
     getCities,
-    getCountryByName,
+    getCountryById,
     getDepartments,
 } from "../controllers/locations.controller";
 
@@ -152,18 +152,18 @@ router.get("/cities/:departmentId", getCities);
  * Obtiene un país específico por su nombre.
  *
  * @swagger
- * /api/countries/{name}:
+ * /api/countries/{id}:
  *   get:
- *     summary: Obtener un país por nombre
+ *     summary: Obtener un país por ID
  *     tags: [Locations]
  *     parameters:
  *       - in: path
- *         name: name
+ *         name: id
  *         required: true
  *         schema:
- *           type: string
- *         description: Nombre del país a buscar.
- *         example: "Colombia"
+ *           type: integer
+ *         description: ID del país a buscar.
+ *         example: 1
  *     responses:
  *       200:
  *         description: País encontrado exitosamente.
@@ -176,11 +176,11 @@ router.get("/cities/:departmentId", getCities);
  *               code: "CO"
  *               active: true
  *       400:
- *         description: El nombre del país es obligatorio.
+ *         description: El ID del país es obligatorio.
  *         content:
  *           application/json:
  *             example:
- *               error: "El nombre del país es obligatorio."
+ *               error: "El ID del país es obligatorio."    
  *       404:
  *         description: País no encontrado.
  *         content:
@@ -194,6 +194,6 @@ router.get("/cities/:departmentId", getCities);
  *             example:
  *               error: "Error interno del servidor."
  */
-router.get("/countries/:name", getCountryByName);
+router.get("/countries/:id", getCountryById);
 
 export default router;

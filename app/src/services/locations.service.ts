@@ -73,9 +73,9 @@ class CountryService implements ICountryService {
         return await repository.findAll();
     }
 
-    async findOne(name: string): Promise<Country | null> {
+    async findOne(id: number): Promise<Country | null> {
         try {
-            return await repository.findOne(name);
+            return await repository.findOne(id);
         } catch (error) {
             return null;
         }

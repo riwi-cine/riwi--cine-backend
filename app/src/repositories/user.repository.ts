@@ -1,6 +1,8 @@
 // app/src/repositories/user.repository.ts
 
 import User, { UserCreationAttributes } from "../models/user.model";
+import Country from "../models/country.model";
+import City from "../models/city.model";
 import { IUserRepository } from "./interfaces/user.repository.interface";
 
 /**
@@ -25,7 +27,11 @@ class UserRepository implements IUserRepository {
      */
     async findAll(): Promise<User[]> {
         return await User.findAll({
-            attributes: { exclude: ["password"] },
+            attributes: { exclude: ["passwordHash"] },
+            include: [
+                { model: Country, as: "country" },
+                { model: City, as: "city" },
+            ],
         });
     }
 

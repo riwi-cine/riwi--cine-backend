@@ -33,8 +33,8 @@ class CountryRepository implements ICountryRepository {
     /**
      * Obtiene un país por su nombre.
      */
-    async findOne(name: string): Promise<Country> {
-        const country = await Country.findOne({ where: { name } });
+    async findOne(id: number): Promise<Country> {
+        const country = await Country.findOne({ where: { id } });
         if (!country) {
             throw new Error("País no encontrado");
         }

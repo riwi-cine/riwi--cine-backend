@@ -27,7 +27,7 @@ export interface ICountryRepository {
     /**
      * Obtener país basado en su nombre.
      */
-    findOne(name: string): Promise<Country>;
+    findOne(id: number): Promise<Country>;
 
     /**
      * Obtiene los departamentos de un país.

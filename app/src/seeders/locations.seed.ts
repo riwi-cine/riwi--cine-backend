@@ -10,7 +10,7 @@ const seedLocations = async () => {
     await sequelize.authenticate();
     await sequelize.sync({ alter: true });
 
-    const [currency] = await Currency.findOrCreate({
+    const [copCurrency] = await Currency.findOrCreate({
         where: { code: "COP" },
         defaults: {
             code: "COP",
@@ -19,17 +19,17 @@ const seedLocations = async () => {
         },
     });
 
-    const [country] = await Country.findOrCreate({
+    const [colombia] = await Country.findOrCreate({
         where: { code: "CO" },
         defaults: {
             name: "Colombia",
             code: "CO",
-            currencyId: currency.id,
+            currencyId: copCurrency.id,
             active: true,
         },
     });
 
-    const departments = [
+    const colombiaDepartments = [
         {
             name: "Antioquia",
             cities: [
@@ -47,14 +47,14 @@ const seedLocations = async () => {
         },
     ];
 
-    for (const departmentData of departments) {
+    for (const departmentData of colombiaDepartments) {
         const [department] = await Department.findOrCreate({
             where: {
-                countryId: country.id,
+                countryId: colombia.id,
                 name: departmentData.name,
             },
             defaults: {
-                countryId: country.id,
+                countryId: colombia.id,
                 name: departmentData.name,
                 active: true,
             },
@@ -89,6 +89,82 @@ const seedLocations = async () => {
             }
         }
     }
+
+    const [vesCurrency] = await Currency.findOrCreate({
+        where: { code: "VES" },
+        defaults: {
+            code: "VES",
+            name: "Bolívar Venezolano",
+            symbol: "Bs.",
+        },
+    });
+
+    const [venezuela] = await Country.findOrCreate({
+        where: { code: "VE" },
+        defaults: {
+            name: "Venezuela",
+            code: "VE",
+            currencyId: vesCurrency.id,
+            active: true,
+        },
+    });
+
+    const venezuelaDepartments = [
+        {
+            name: "Distrito Capital",
+            cities: [{ name: "Caracas", hasActiveCinema: true }],
+        },
+        {
+            name: "Carabobo",
+            cities: [{ name: "Valencia", hasActiveCinema: false }],
+        },
+    ];
+
+    for (const departmentData of venezuelaDepartments) {
+        const [department] = await Department.findOrCreate({
+            where: {
+                countryId: venezuela.id,
+                name: departmentData.name,
+            },
+            defaults: {
+                countryId: venezuela.id,
+                name: departmentData.name,
+                active: true,
+            },
+        });
+
+        for (const cityData of departmentData.cities) {
+            const [city] = await City.findOrCreate({
+                where: {
+                    departmentId: department.id,
+                    name: cityData.name,
+                },
+                defaults: {
+                    departmentId: department.id,
+                    name: cityData.name,
+                    active: true,
+                },
+            });
+
+            if (cityData.hasActiveCinema) {
+                await Cinema.findOrCreate({
+                    where: {
+                        cityId: city.id,
+                        name: `Riwi Cine ${cityData.name}`,
+                    },
+                    defaults: {
+                        cityId: city.id,
+                        name: `Riwi Cine ${cityData.name}`,
+                        address: `Centro comercial principal de ${cityData.name}`,
+                        active: true,
+                    },
+                });
+            }
+        }
+    }
+
+    console.log("Seed de ubicaciones ejecutado correctamente.");
+    await sequelize.close();
 };
 
 seedLocations()

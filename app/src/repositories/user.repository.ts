@@ -25,7 +25,7 @@ class UserRepository implements IUserRepository {
      */
     async findAll(): Promise<User[]> {
         return await User.findAll({
-            attributes: { exclude: ["password"] },
+            attributes: { exclude: ["passwordHash"] },
         });
     }
 

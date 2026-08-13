@@ -39,8 +39,7 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
 
         const validation = await AuthUser.login(user, password);
 
-        const { password: _, ...userWithoutPassword } = validation.toJSON();
-        const token = await generateToken(userWithoutPassword);
+        const token = await generateToken({id: user.id});
 
         res.cookie('accesstoken', token, {
         httpOnly: true,
@@ -49,7 +48,7 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
         maxAge: 1000 * 60 * 60
         });
 
-        return res.status(200).json(userWithoutPassword);
+        return res.status(200).json(validation);
 
     } catch (error: any) {
         return res.status(401).json({

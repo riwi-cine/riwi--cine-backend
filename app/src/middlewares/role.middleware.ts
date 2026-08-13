@@ -1,16 +1,21 @@
 import {Request, Response, NextFunction} from 'express'
+import userService from '../services/user.service'
 
 export const roleMiddleware = (allowedRoles: string[]) => {
-    return (req: Request, res: Response, next: NextFunction) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
         return res.status(401).json({message: "you are not authenticated."})
     }
+    const userGoal = Number(req.params.id)
+    const userData = await userService.findOne(req.user.email)
 
-    const hashrol = allowedRoles.includes(req.user.role)
+    const rol = allowedRoles.includes(userData.role)
 
-    if (!hashrol) {
-        return res.status(403).json({message: "you dont have alloweds."})
+    if (rol) {
+        next()
+    } else if (userData.id === userGoal) {
+        next()
     }
 
-    next()
+    return res.status(403).json({message: "Forbidden: you dont have alloweds."})
 }}

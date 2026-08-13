@@ -109,12 +109,12 @@ const router = Router();
 router.post("/", createUser);
 
 /**
- * PATCH /:
+ * PATCH /:email:
  * ----------
  * Actualiza la información de un usuario existente.
  *
  * @swagger
- * /api/users/:
+ * /api/users/{email}:
  *   patch:
  *     summary: Actualizar un usuario por email
  *     tags: [Users]
@@ -152,7 +152,7 @@ router.post("/", createUser);
  *       500:
  *         description: Error interno del servidor
  */
-router.patch("/", updateUser);
+router.patch("/:email", updateUser);
 
 /**
  * GET /
@@ -213,14 +213,14 @@ router.patch("/", updateUser);
 router.get("/", getUsers);
 
 /**
- * DELETE /:
+ * DELETE /:email:
  * -----------
- * Elimina a usuarios registrados en la base de datos.
+ * Elimina un usuario registrado en la base de datos a partir de su email.
  *
  * @swagger
- * /api/users/:
+ * /api/users/{email}:
  *   delete:
- *     summary: Eliminar usuarios por email
+ *     summary: Eliminar usuario por email
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -237,13 +237,13 @@ router.get("/", getUsers);
  *           application/json:
  *             example:
  *               message: "Usuario eliminado correctamente"
- *               id: 1
+ *               email: "john.doe@example.com"
  *       400:
  *         description: Solicitud inválida
  *         content:
  *           application/json:
  *             example:
- *               error: "Parámetros incorrectos"
+ *               error: "Formato de email inválido"
  *       404:
  *         description: Usuario no encontrado
  *       500:
@@ -252,19 +252,18 @@ router.get("/", getUsers);
  *           application/json:
  *             example:
  *               error: "Error al eliminar al usuario"
- *
  */
-router.delete("/", deleteUser);
+router.delete("/:email", deleteUser);
 
 /**
- * POST /restore
+ * POST /restore/{email}:
  * -----------------
- * Restaura a usuarios registrados en la base de datos.
+ * Restaura a un usuario registrado en la base de datos por su email.
  *
  * @swagger
- * /api/users/restore:
+ * /api/users/restore/{email}:
  *   post:
- *     summary: Restaurar usuarios por email
+ *     summary: Restaurar usuario por email
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -288,13 +287,14 @@ router.delete("/", deleteUser);
  *           application/json:
  *             example:
  *               error: "Parámetros incorrectos"
+ *       404:
+ *         description: Usuario no encontrado
  *       500:
  *         description: Error interno del servidor
  *         content:
  *           application/json:
  *             example:
  *               error: "Error al restaurar al usuario"
- *
  */
-router.post("/restore", restoreUser);
-export default router;
+router.post("/restore/:email", restoreUser);
+    export default router;

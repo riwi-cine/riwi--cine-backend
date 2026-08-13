@@ -150,8 +150,8 @@ class UserService implements IUserService {
     }
 
     async delete(email: string): Promise<Boolean> {
-        const userID = await repository.delete(email);
-        return userID;
+        const userEmail = await repository.delete(email);
+        return userEmail;
     }
 
     async restore(email: string): Promise<void> {

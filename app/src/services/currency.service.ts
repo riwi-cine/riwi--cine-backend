@@ -57,33 +57,32 @@ class CurrencyService implements ICurrencyService {
     /**
      * Obtiene una moneda por su código.
      */
-    async findOne(code: string
-    ): Promise<Currency | null> {
-        return await repository.findOne(code);
+    async findOne(id: number): Promise<Currency | null> {
+        return await repository.findOne(id);
     }
 
-    async update(code: string, dto: Partial<CreateCurrencyDto>): Promise<Currency | null> {
-        const currency = await repository.findOne(code);
+    async update(id: number, dto: Partial<CreateCurrencyDto>): Promise<Currency | null> {
+        const currency = await repository.findOne(id);
         if (!currency) {
             throw new Error("Moneda no encontrada");
         }
-        return await repository.update(code, dto);
+        return await repository.update(id, dto);
     }
 
-    async delete(code: string): Promise<Boolean> {
-        const currency = await repository.findOne(code);
+    async delete(id:number): Promise<Boolean> {
+        const currency = await repository.findOne(id);
         if (!currency) {
             throw new Error("Moneda no encontrada");
         }
-        return await repository.delete(code);
+        return await repository.delete(id);
     }
 
-    async restore(code: string): Promise<void> {
-        const currency = await repository.findOne(code);
+    async restore(id: number): Promise<void> {
+        const currency = await repository.findOne(id);
         if (!currency) {
             throw new Error("Moneda no encontrada");
         }
-        await repository.restore(code);
+        await repository.restore(id);
     }   
 }
 

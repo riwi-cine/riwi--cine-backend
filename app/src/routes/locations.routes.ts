@@ -1,27 +1,30 @@
-
 // app/src/routes/country.routes.ts
 
 /**
- * Rutas de Países
+ * Rutas de Ubicaciones (Locations)
  *
  * ---
- * Este archivo define las rutas HTTP relacionadas con la entidad `Country`.
+ * Este archivo define las rutas HTTP relacionadas con ubicaciones (`Country`, `Department`, `City`).
  *
  * Endpoints disponibles:
  *
- * - `POST /countries/`       : Crear un nuevo país.
- * - `GET /countries/`        : Obtener todos los países registrados.
- * - `GET /countries/:name`   : Obtener un país específico por nombre.
+ * - `POST /countries/`            : Crear un nuevo país.
+ * - `GET /countries/`             : Obtener todos los países registrados.
+ * - `GET /departments/:countryId` : Obtener departamentos activos por país.
+ * - `GET /cities/:departmentId`   : Obtener ciudades activas por departamento.
+ * - `GET /countries/:name`        : Obtener un país específico por nombre.
  *
  * Cada ruta se conecta con su respectivo controlador.
  */
 
 import { Router } from "express";
 import {
-  createCountry,
-  getAllCountries,
-  getCountryByName,
-} from "../controllers/country.controller";
+    createCountry,
+    getAllCountries,
+    getCities,
+    getCountryById,
+    getDepartments,
+} from "../controllers/locations.controller";
 
 const router = Router();
 
@@ -32,7 +35,7 @@ const router = Router();
  * /api/countries:
  *   post:
  *     summary: Crear un nuevo país
- *     tags: [Countries]
+ *     tags: [Locations]
  *     requestBody:
  *       required: true
  *       content:
@@ -74,7 +77,7 @@ const router = Router();
  *             example:
  *               error: "La moneda \"COP\" no existe."
  */
-router.post("/", createCountry);
+router.post("/countries", createCountry);
 
 /**
  * Obtiene todos los países registrados en la base de datos.
@@ -83,7 +86,7 @@ router.post("/", createCountry);
  * /api/countries:
  *   get:
  *     summary: Obtener todos los países
- *     tags: [Countries]
+ *     tags: [Locations]
  *     responses:
  *       200:
  *         description: Lista de países obtenida exitosamente.
@@ -100,24 +103,67 @@ router.post("/", createCountry);
  *             example:
  *               error: "Error al obtener los países."
  */
-router.get("/", getAllCountries);
+router.get("/countries", getAllCountries);
+
+/**
+ * @swagger
+ * /api/departments/{countryId}:
+ *   get:
+ *     summary: Obtener departamentos activos por país
+ *     tags: [Locations]
+ *     parameters:
+ *       - in: path
+ *         name: countryId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del país.
+ *     responses:
+ *       200:
+ *         description: Lista de departamentos obtenida exitosamente.
+ *       400:
+ *         description: ID de país inválido.
+ */
+router.get("/departments/:countryId", getDepartments);
+
+/**
+ * @swagger
+ * /api/cities/{departmentId}:
+ *   get:
+ *     summary: Obtener ciudades activas por departamento
+ *     description: RN-006 - Solo retorna ciudades activas que tienen al menos un cine activo.
+ *     tags: [Locations]
+ *     parameters:
+ *       - in: path
+ *         name: departmentId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del departamento.
+ *     responses:
+ *       200:
+ *         description: Lista de ciudades con cines activos obtenida exitosamente.
+ *       400:
+ *         description: ID de departamento inválido.
+ */
+router.get("/cities/:departmentId", getCities);
 
 /**
  * Obtiene un país específico por su nombre.
  *
  * @swagger
- * /api/countries/{name}:
+ * /api/countries/{id}:
  *   get:
- *     summary: Obtener un país por nombre
- *     tags: [Countries]
+ *     summary: Obtener un país por ID
+ *     tags: [Locations]
  *     parameters:
  *       - in: path
- *         name: name
+ *         name: id
  *         required: true
  *         schema:
- *           type: string
- *         description: Nombre del país a buscar.
- *         example: "Colombia"
+ *           type: integer
+ *         description: ID del país a buscar.
+ *         example: 1
  *     responses:
  *       200:
  *         description: País encontrado exitosamente.
@@ -130,11 +176,11 @@ router.get("/", getAllCountries);
  *               code: "CO"
  *               active: true
  *       400:
- *         description: El nombre del país es obligatorio.
+ *         description: El ID del país es obligatorio.
  *         content:
  *           application/json:
  *             example:
- *               error: "El nombre del país es obligatorio."
+ *               error: "El ID del país es obligatorio."    
  *       404:
  *         description: País no encontrado.
  *         content:
@@ -148,7 +194,6 @@ router.get("/", getAllCountries);
  *             example:
  *               error: "Error interno del servidor."
  */
-router.get("/:name", getCountryByName);
+router.get("/countries/:id", getCountryById);
 
 export default router;
-

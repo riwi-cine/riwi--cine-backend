@@ -28,7 +28,11 @@ export interface CartAttributes {
  * Atributos para creación.
  */
 export interface CartCreationAttributes
-    extends Optional<CartAttributes, "id" | "createdAt"> {}
+    extends Optional<CartAttributes, 
+    | "id" 
+    | "createdAt"
+    | "userId"
+    > {}
 
 /**
  * Clase del modelo Cart.

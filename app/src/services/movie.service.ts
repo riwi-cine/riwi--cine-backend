@@ -1,3 +1,5 @@
+// app/src/services/movie.service.ts
+
 import Movie from "../models/movie.model";
 import repository from "../repositories/movie.repository";
 import { IMovieService, MovieFunctionDetail } from "./interfaces/movie.service.interface";
@@ -5,8 +7,8 @@ import { IMovieService, MovieFunctionDetail } from "./interfaces/movie.service.i
 /**
  * Servicio de Películas
  * --------------------
- * Contiene la lógica de negocio relacionada con la consulta
- * de detalles, funciones y recomendaciones de películas.
+ * Contiene la lógica de negocio relacionada con el catálogo general,
+ * la consulta de detalles, funciones futuras y recomendaciones de películas.
  */
 class MovieService implements IMovieService {
     private normalizeTrailerUrl(trailerUrl: string): string {
@@ -23,6 +25,13 @@ class MovieService implements IMovieService {
         }
 
         return trailerUrl;
+    }
+
+    /**
+     * Obtiene el catálogo general de películas ordenadas alfabéticamente.
+     */
+    async getAll(): Promise<Movie[]> {
+        return await repository.findAll();
     }
 
     /**

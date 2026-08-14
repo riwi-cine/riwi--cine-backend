@@ -5,7 +5,6 @@ import Movie from "../models/movie.model";
 import Actor from "../models/actor.model";
 import Genre from "../models/genre.model";
 import FunctionModel from "../models/function.model";
-import Function from "../models/function.model";
 import Room from "../models/room.model";
 import Cinema from "../models/cinema.model";
 import City from "../models/city.model";
@@ -33,8 +32,37 @@ const SeatLockModel: any = SeatLock;
  *
  * Esta clase es la única responsable de interactuar con Sequelize.
  */
-
 class MovieRepository implements IMovieRepository {
+
+    /**
+     * Obtiene todas las películas ordenadas alfabéticamente.
+     */
+    async findAll(): Promise<Movie[]> {
+        return await Movie.findAll({
+            order: [["title", "ASC"]],
+        });
+    }
+
+    /**
+     * Obtiene una película por ID.
+     */
+    async findById(id: number): Promise<Movie | null> {
+        return await Movie.findByPk(id);
+    }
+
+    /**
+     * Busca películas por coincidencia parcial de título.
+     */
+    async findByTitle(title: string): Promise<Movie[]> {
+        return await Movie.findAll({
+            where: {
+                title: {
+                    [Op.iLike]: `%${title}%`,
+                },
+            },
+            order: [["title", "ASC"]],
+        });
+    }
 
     /**
      * Obtiene el detalle completo de una película.
@@ -221,7 +249,5 @@ class MovieRepository implements IMovieRepository {
         return uniqueRecommendations;
     }
 }
-
-
 
 export default new MovieRepository();

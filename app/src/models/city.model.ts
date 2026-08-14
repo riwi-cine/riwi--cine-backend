@@ -31,7 +31,10 @@ export interface CityAttributes {
  * Atributos utilizados para la creación de una nueva ciudad.
  */
 export interface CityCreationAttributes
-    extends Optional<CityAttributes, "id"> {}
+    extends Optional<CityAttributes, 
+    | "id"
+    | "departmentId"
+    > {}
 
 /**
  * Clase que representa el modelo `City`.

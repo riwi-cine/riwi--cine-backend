@@ -77,4 +77,10 @@ export interface IMovieRepository {
      * características compartidas con la película consultada.
      */
     findRecommendations(movieId: number): Promise<Movie[]>;
+/**
+ * Contrato del repositorio de catálogo de películas.
+ */
+    findAll(): Promise<Movie[]>;
+    findById(id: number): Promise<Movie>;
+    findByTitle(title: string): Promise<Movie[]>;
 }

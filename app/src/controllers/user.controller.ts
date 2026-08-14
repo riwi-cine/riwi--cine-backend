@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import userService from "../services/user.service";
 import { CreateUserDto } from "../dto/create-user.dto";
+import { UpdateUserLocationDto } from "../dto/update-user-location.dto";
 import AuthUser from "../services/auth.service";
 
 /**
@@ -251,6 +252,43 @@ export const updateUser = async (req: Request, res: Response): Promise<Response>
     } catch (error: any) {
         return res.status(500).json({
             error: error.message
+        });
+    }
+};
+
+export const updateUserLocation = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const dto: UpdateUserLocationDto = req.body;
+        const userId = req.user?.id;
+        const cityId = Number(dto.cityId);
+
+        if (!userId) {
+            return res.status(401).json({
+                error: "Usuario no autenticado.",
+            });
+        }
+
+        if (!Number.isInteger(cityId) || cityId <= 0) {
+            return res.status(400).json({
+                error: "El campo cityId es obligatorio y debe ser un número válido.",
+            });
+        }
+
+        const user = await userService.updateLocation(Number(userId), cityId);
+
+        if (!user) {
+            return res.status(404).json({
+                error: "Usuario no encontrado.",
+            });
+        }
+
+        return res.status(200).json({
+            message: "Ubicación actualizada correctamente.",
+            user,
+        });
+    } catch (error: any) {
+        return res.status(400).json({
+            error: error.message,
         });
     }
 };

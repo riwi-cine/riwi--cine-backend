@@ -1,6 +1,8 @@
 // app/src/repositories/user.repository.ts
 
 import User, { UserCreationAttributes } from "../models/user.model";
+import Country from "../models/country.model";
+import City from "../models/city.model";
 import { IUserRepository } from "./interfaces/user.repository.interface";
 
 /**
@@ -25,18 +27,14 @@ class UserRepository implements IUserRepository {
      */
     async findAll(): Promise<User[]> {
         return await User.findAll({
-            attributes: { exclude: ["password"] },
+            attributes: { exclude: ["passwordHash"] },
+            include: [
+                { model: Country, as: "country" },
+                { model: City, as: "city" },
+            ],
         });
     }
 
-    /**
-     *
-     * @param {string} email -Correo electrónico del usuario
-     *
-     * @returns {Promise<User>} -Retorna el usuario
-     *
-     * @throws {Error} -Mensaje de error si el usuario no existe o no es verificado
-     */
     async findOne(email: string): Promise<User> {
         const user = await User.findOne({ where: { email } });
 
@@ -48,6 +46,14 @@ class UserRepository implements IUserRepository {
 
     async update(email: string, data: Partial<UserCreationAttributes>): Promise<User | null> {
         const user = await User.findOne({ where: { email } });
+        if (user) {
+            return await user.update(data);
+        }
+        return null;
+    }
+
+    async updateById(id: number, data: Partial<UserCreationAttributes>): Promise<User | null> {
+        const user = await User.findByPk(id);
         if (user) {
             return await user.update(data);
         }

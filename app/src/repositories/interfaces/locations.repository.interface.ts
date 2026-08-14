@@ -1,6 +1,8 @@
 // app/src/repositories/interfaces/country.repository.interface.ts
 
 import Country, { CountryCreationAttributes } from "../../models/country.model";
+import City from "../../models/city.model";
+import Department from "../../models/department.model";
 
 /**
  * Contrato del Repositorio de Países
@@ -25,5 +27,15 @@ export interface ICountryRepository {
     /**
      * Obtener país basado en su nombre.
      */
-    findOne(name: string): Promise<Country>;
+    findOne(id: number): Promise<Country>;
+
+    /**
+     * Obtiene los departamentos de un país.
+     */
+    getDepartmentsByCountry(countryId: number): Promise<Department[]>;
+
+    /**
+     * Obtiene ciudades de un departamento con al menos un cine activo.
+     */
+    getCitiesByDepartment(departmentId: number): Promise<City[]>;
 }   

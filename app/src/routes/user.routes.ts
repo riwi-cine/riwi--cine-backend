@@ -15,7 +15,8 @@
  */
 
 import { Router } from "express";
-import { createUser, deleteUser, getUsers, restoreUser, updateUser } from "../controllers/user.controller";
+import { createUser, deleteUser, getUsers, restoreUser, updateUser, updateUserLocation } from "../controllers/user.controller";
+import { authMiddleware } from "../middlewares/auth.middleware";
 
 const router = Router();
 
@@ -107,6 +108,37 @@ const router = Router();
  *               error: "No se pudo crear el usuario"
  */
 router.post("/", createUser);
+
+/**
+ * @swagger
+ * /api/users/location:
+ *   post:
+ *     summary: Guardar ciudad seleccionada por el usuario autenticado
+ *     description: Debe llamarse después del login. El frontend puede enviar el cityId seleccionado desde localStorage. Solo acepta ciudades activas con al menos un cine activo.
+ *     tags: [Users]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - cityId
+ *             properties:
+ *               cityId:
+ *                 type: integer
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Ubicación actualizada correctamente.
+ *       400:
+ *         description: Ciudad inválida o sin cines activos.
+ *       401:
+ *         description: Usuario no autenticado.
+ */
+router.post("/location", authMiddleware, updateUserLocation);
 
 /**
  * PATCH /:

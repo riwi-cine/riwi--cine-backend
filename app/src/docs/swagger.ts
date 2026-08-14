@@ -43,15 +43,21 @@ const options: swaggerJSDoc.Options = {
         description: "local service",
       },
     ],
+
+    components: {
+      securitySchemes: {
+        cookieAuth: {
+          type: "apiKey",
+          in: "cookie",
+          name: "accesstoken",
+          description: "Autenticación basada en JWT almacenado en Cookie HTTP-Only",
+        },
+      },
+    },
   },
   apis: [
     path.join(__dirname, "../routes/*.ts"),
     path.join(__dirname, "../routes/*.js"),
-  ], // Escanea las rutas para extraer anotaciones Swagger
+  ],
 };
-
-/**
- * Esquema de especificación Swagger/OpenAPI generado dinámicamente.
- * Este objeto es exportado y utilizado por `swagger-ui-express`.
- */
 export const swaggerSpec = swaggerJSDoc(options);

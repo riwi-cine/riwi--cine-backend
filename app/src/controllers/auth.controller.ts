@@ -39,16 +39,19 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
 
         const validation = await AuthUser.login(user, password);
 
-        const token = await generateToken({id: user.id});
+        const plainUser = validation.get ? validation.get({ plain: true }) : validation;
+        const {passwordHash:_ , ...withoutpassword} = plainUser;
+
+        const token = await generateToken({email: user.email});
 
         res.cookie('accesstoken', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 1000 * 60 * 60
+        maxAge: 1000 * 60 * 15
         });
 
-        return res.status(200).json(validation);
+        return res.status(200).json(withoutpassword);
 
     } catch (error: any) {
         return res.status(401).json({

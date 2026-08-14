@@ -16,6 +16,8 @@
 
 import { Router } from "express";
 import { createUser, deleteUser, getUsers, restoreUser, updateUser } from "../controllers/user.controller";
+import { authMiddleware } from '../middlewares/auth.middleware'
+import { roleMiddleware } from '../middlewares/role.middleware'
 
 const router = Router();
 
@@ -109,7 +111,7 @@ const router = Router();
 router.post("/", createUser);
 
 /**
- * PATCH /:email:
+ * PATCH /:email
  * ----------
  * Actualiza la información de un usuario existente.
  *
@@ -124,8 +126,9 @@ router.post("/", createUser);
  *         required: true
  *         schema:
  *           type: string
- *         description: Email del usuario a actualizar
- *     requestBody:
+ *           format: email
+ *         description: Email actual del usuario a actualizar
+ *     requestBody: 
  *       required: true
  *       content:
  *         application/json:
@@ -135,25 +138,30 @@ router.post("/", createUser);
  *               name:
  *                 type: string
  *                 example: "John Doe Actualizado"
- *               email:
- *                 type: string
- *                 example: "john.actualizado@example.com"
  *               phoneNumber:
  *                 type: string
  *                 example: "3109876543"
  *               password:
  *                 type: string
+ *                 format: password
  *                 example: "nuevapass123"
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Usuario actualizado exitosamente
+ *       400:
+ *         description: Petición inválida o datos mal formados
+ *       401:
+ *         description: No autenticado (Sesión no válida)
+ *       403:
+ *         description: No autorizado (Requiere rol de administrador)
  *       404:
  *         description: Usuario no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-router.patch("/:email", updateUser);
-
+router.patch("/:email", authMiddleware, roleMiddleware(["admin"]), updateUser);
 /**
  * GET /
  *
@@ -165,6 +173,8 @@ router.patch("/:email", updateUser);
  *   get:
  *     summary: Obtener todos los usuarios
  *     tags: [Users]
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Lista de usuarios obtenida exitosamente
@@ -210,7 +220,7 @@ router.patch("/:email", updateUser);
  *             example:
  *               error: "Error al obtener los usuarios"
  */
-router.get("/", getUsers);
+router.get("/", authMiddleware ,getUsers);
 
 /**
  * DELETE /:email:

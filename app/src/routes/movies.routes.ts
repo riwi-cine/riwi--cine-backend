@@ -3,6 +3,9 @@
 import { Router } from "express";
 import {
     getFilteredBillboard,
+    getMovieDetail,
+    getMovieFunctions,
+    getMovieRecommendations,
     getMovies,
     getTodayBillboard,
     getWeeklyBillboard,
@@ -232,5 +235,64 @@ router.get("/today", getTodayBillboard);
  *         description: Parámetros inválidos.
  */
 router.get("/filter", getFilteredBillboard);
+
+/**
+ * @swagger
+ * /api/movies/{id}:
+ *   get:
+ *     summary: Obtener detalle de una película por ID
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la película
+ *     responses:
+ *       200:
+ *         description: Detalle de la película
+ *       404:
+ *         description: Película no encontrada
+ */
+router.get("/:id", getMovieDetail);
+
+/**
+ * @swagger
+ * /api/movies/{id}/functions:
+ *   get:
+ *     summary: Obtener funciones de una película
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la película
+ *     responses:
+ *       200:
+ *         description: Lista de funciones
+ */
+router.get("/:id/functions", getMovieFunctions);
+
+/**
+ * @swagger
+ * /api/movies/{id}/recommendations:
+ *   get:
+ *     summary: Obtener recomendaciones relacionadas a una película
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la película
+ *     responses:
+ *       200:
+ *         description: Recomendaciones obtenidas
+ */
+router.get("/:id/recommendations", getMovieRecommendations);
 
 export default router;

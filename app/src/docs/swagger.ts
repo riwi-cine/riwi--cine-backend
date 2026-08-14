@@ -14,8 +14,8 @@
  *  - Disponible en `/api/docs` (ver `server.ts`).
  */
 
-import swaggerJSDoc from "swagger-jsdoc";
 import path from "path";
+import swaggerJSDoc from "swagger-jsdoc";
 
 /**
  * Opciones de configuración para swagger-jsdoc.
@@ -29,25 +29,21 @@ import path from "path";
  *    que describen los endpoints (en este caso, los archivos de rutas).
  */
 const options: swaggerJSDoc.Options = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "API Example",
-      version: "1.0.0",
-      description:
-        "Documentación generada automáticamente con Swagger para la API de ejemplo.",
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "API Example",
+            version: "1.0.0",
+            description: "Documentación generada automáticamente con Swagger para la API de ejemplo.",
+        },
+        servers: [
+            {
+                url: "http://localhost:3000",
+                description: "local service",
+            },
+        ],
     },
-    servers: [
-      {
-        url: "http://localhost:3000",
-        description: "local service",
-      },
-    ],
-  },
-  apis: [
-    path.join(__dirname, "../routes/*.ts"),
-    path.join(__dirname, "../routes/*.js"),
-  ], // Escanea las rutas para extraer anotaciones Swagger
+    apis: [path.join(__dirname, "../routes/*.ts"), path.join(__dirname, "../routes/*.js")], // Escanea las rutas para extraer anotaciones Swagger
 };
 
 /**

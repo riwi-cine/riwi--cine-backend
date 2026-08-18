@@ -299,7 +299,7 @@ export const deleteUser = async (req: Request, res: Response): Promise<Response>
 
         if (!email) {
             return res.status(400).json({
-                error: "El ID es obligatorio."
+                error: "El email es obligatorio."
             });
         }
         const deleted = await userService.delete(String(email));

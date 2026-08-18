@@ -31,11 +31,23 @@ app.use("/api/countries", countryRoutes);
 app.use("/api/movies", moviesRoutes);
 
 app.get("/api/docs.json", (_req, res) => {
-    res.status(200).json(swaggerSpec);
+  res.status(200).json(swaggerSpec);
 });
 
 // Swagger
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(
+  "/api/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: {
+      requestInterceptor: (req: any) => {
+        req.credentials = "include";
+        return req;
+      },
+      persistAuthorization: true,
+    },
+  })
+);
 
 app.use("/health", (req, res) => {
     res.status(200).json({ message: "Healthy" });

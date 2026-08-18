@@ -32,9 +32,9 @@ const options: swaggerJSDoc.Options = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "API Example",
+            title: "API RIWI Cinema",
             version: "1.0.0",
-            description: "Documentación generada automáticamente con Swagger para la API de ejemplo.",
+            description: "Swagger api endpoints",
         },
         servers: [
             {

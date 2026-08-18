@@ -2,6 +2,8 @@
 
 import { Op } from "sequelize";
 import User, { UserCreationAttributes } from "../models/user.model";
+import City from "../models/city.model";
+import Cinema from "../models/cinema.model";
 import Country from "../models/country.model";
 import { CreateUserDto } from "../dto/create-user.dto";
 import repository from "../repositories/user.repository";
@@ -149,9 +151,41 @@ class UserService implements IUserService {
         return await repository.update(email, dataToUpdate);
     }
 
+    async updateLocation(userId: number, cityId: number): Promise<User | null> {
+        if (!Number.isInteger(userId) || userId <= 0) {
+            throw new Error("El ID del usuario autenticado no es válido.");
+        }
+
+        if (!Number.isInteger(cityId) || cityId <= 0) {
+            throw new Error("El ID de la ciudad debe ser un número válido.");
+        }
+
+        const city = await City.findOne({
+            where: {
+                id: cityId,
+                active: true,
+            },
+            include: [
+                {
+                    model: Cinema,
+                    as: "cinemas",
+                    where: { active: true },
+                    required: true,
+                    attributes: [],
+                },
+            ],
+        });
+
+        if (!city) {
+            throw new Error("La ciudad no existe o no tiene cines activos.");
+        }
+
+        return await repository.updateById(userId, { cityId });
+    }
+
     async delete(email: string): Promise<Boolean> {
-        const userID = await repository.delete(email);
-        return userID;
+        const userEmail = await repository.delete(email);
+        return userEmail;
     }
 
     async restore(email: string): Promise<void> {

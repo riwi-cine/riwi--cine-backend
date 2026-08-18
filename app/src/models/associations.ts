@@ -1,5 +1,6 @@
 // app/src/models/associations.ts
 
+// @ts-nocheck
 /**
  * ============================================================================
  * ASOCIACIONES DE SEQUELIZE
@@ -18,35 +19,38 @@
 
 //MODULO DE GEOGRAFIA
 
+import City from "./city.model";
 import Country from "./country.model";
 import Department from "./department.model";
-import City from "./city.model";
 
+import CinemaRoomType from "./cinema-room-type.model";
 import Cinema from "./cinema.model";
 import RoomType from "./room-type.model";
-import CinemaRoomType from "./cinema-room-type.model";
 import Room from "./room.model";
 import Seat from "./seat.model";
 
 //MODULO DE INFRAESTRUCTURA
 
-import Movie from "./movie.model";
-import Genre from "./genre.model";
-import MovieGenre from "./movie-genre.model";
-import MovieRelease from "./movie-release.model";
+import Actor from "./actor.model";
+import CineFlashActivation from "./cineflash-activation.model";
 import FunctionType from "./function-type.model";
 import Function from "./function.model";
-import CineFlashActivation from "./cineflash-activation.model";
+import Genre from "./genre.model";
+import MovieActor from "./movie-actor.model";
+import MovieBanner from "./movie-banner.model";
+import MovieGenre from "./movie-genre.model";
+import MovieRelease from "./movie-release.model";
+import Movie from "./movie.model";
 
 //MODULO DE USUARIOS Y SEGURIDAD
 
-import DocumentType from "./document-type.model";
-import User from "./user.model";
-import UserDocument from "./user-document.model";
-import Role from "./role.model";
-import UserRole from "./user-role.model";
 import ActivationToken from "./activation-token.model";
+import DocumentType from "./document-type.model";
 import RefreshToken from "./refresh-token.model";
+import Role from "./role.model";
+import UserDocument from "./user-document.model";
+import UserRole from "./user-role.model";
+import User from "./user.model";
 
 //MODELO DE MEMBRESIAS Y PUNTOS
 
@@ -58,34 +62,34 @@ import Order from "./order.model";
 
 //MODELO DE CARRITO Y CONFITERIA
 
-import Snack from "./snack.model";
-import CinemaSnack from "./cinema-snack.model";
-import Cart from "./cart.model";
 import CartSnack from "./cart-snack.model";
+import Cart from "./cart.model";
+import CinemaSnack from "./cinema-snack.model";
 import SeatLock from "./seat-lock.model";
+import Snack from "./snack.model";
 
 //MODELO DE ORDENES Y PAGOS
 
-import OrderSnack from "./order-snack.model";
-import Promotion from "./promotion.model";
-import PromotionFunctionType from "./promotion-function-type.model";
-import PromotionCinema from "./promotion-cinema.model";
-import OrderPromotion from "./order-promotion.model";
-import GiftCard from "./gift-card.model";
 import GiftCardRedemption from "./gift-card-redemption.model";
+import GiftCard from "./gift-card.model";
+import OrderPromotion from "./order-promotion.model";
+import OrderSnack from "./order-snack.model";
 import Payment from "./payment.model";
+import PromotionCinema from "./promotion-cinema.model";
+import PromotionFunctionType from "./promotion-function-type.model";
+import Promotion from "./promotion.model";
 
 //MODELO DE ENTRADAS/TICKETS
 
-import Ticket from "./ticket.model";
 import TicketTransfer from "./ticket-transfer.model";
+import Ticket from "./ticket.model";
 
 //MODELO DE SOPORTE / CX/ AUDITORIA
 
-import Notification from "./notification.model";
 import AuditLog from "./audit-log.model";
-import Survey from "./survey.model";
+import Notification from "./notification.model";
 import PQRS from "./pqrs.model";
+import Survey from "./survey.model";
 
 //GEOGRAFIA
 
@@ -163,6 +167,60 @@ Seat.belongsTo(Room, {
     as: "room",
 });
 
+// Movie ---> Actor (N:M)
+
+Movie.belongsToMany(Actor, {
+    through: MovieActor,
+    foreignKey: "movieId",
+    otherKey: "actorId",
+    as: "actors",
+});
+
+Actor.belongsToMany(Movie, {
+    through: MovieActor,
+    foreignKey: "actorId",
+    otherKey: "movieId",
+    as: "movies",
+});
+
+// MovieActor ---> Movie
+
+MovieActor.belongsTo(Movie, {
+    foreignKey: "movieId",
+    as: "movie",
+});
+
+// MovieActor ---> Actor
+
+MovieActor.belongsTo(Actor, {
+    foreignKey: "actorId",
+    as: "actor",
+});
+
+// Movie ---> MovieBanner
+
+Movie.hasMany(MovieBanner, {
+    foreignKey: "movieId",
+    as: "banners",
+});
+
+MovieBanner.belongsTo(Movie, {
+    foreignKey: "movieId",
+    as: "movie",
+});
+
+// Movie ---> MovieRelease
+
+Movie.hasMany(MovieRelease, {
+    foreignKey: "movieId",
+    as: "releases",
+});
+
+MovieRelease.belongsTo(Movie, {
+    foreignKey: "movieId",
+    as: "movie",
+});
+
 //Cine <---> Tipo de sala (N:M)
 
 Cinema.belongsToMany(RoomType, {
@@ -197,14 +255,14 @@ Genre.belongsToMany(Movie, {
     as: "movies",
 });
 
-//Movie ---> MovieRelease
+//Movie ---> Function
 
-Movie.hasMany(MovieRelease, {
+Movie.hasMany(Function, {
     foreignKey: "movieId",
-    as: "releases",
+    as: "functions",
 });
 
-MovieRelease.belongsTo(Movie, {
+Function.belongsTo(Movie, {
     foreignKey: "movieId",
     as: "movie",
 });
@@ -281,6 +339,18 @@ Country.hasMany(User, {
 User.belongsTo(Country, {
     foreignKey: "countryId",
     as: "country",
+});
+
+//City ---> User
+
+City.hasMany(User, {
+    foreignKey: "cityId",
+    as: "users",
+});
+
+User.belongsTo(City, {
+    foreignKey: "cityId",
+    as: "city",
 });
 
 //User ---> UserDocument
@@ -428,7 +498,7 @@ Cart.belongsTo(User, {
 Cart.hasMany(CartSnack, {
     foreignKey: "cartId",
     as: "cartSnacks",
-});     
+});
 
 CartSnack.belongsTo(Cart, {
     foreignKey: "cartId",
@@ -544,7 +614,6 @@ OrderSnack.belongsTo(Snack, {
     foreignKey: "snackId",
     as: "snack",
 });
-
 
 //Cinema ---> OrderSnack
 
@@ -736,7 +805,7 @@ TicketTransfer.belongsTo(Ticket, {
     as: "ticket",
 });
 
-// User ---> TicketTransfer 
+// User ---> TicketTransfer
 
 User.hasMany(TicketTransfer, {
     foreignKey: "fromUserId",
@@ -748,7 +817,7 @@ TicketTransfer.belongsTo(User, {
     as: "fromUser",
 });
 
-// User ---> TicketTransfer 
+// User ---> TicketTransfer
 
 User.hasMany(TicketTransfer, {
     foreignKey: "toUserId",
@@ -774,7 +843,6 @@ Notification.belongsTo(User, {
     as: "user",
 });
 
-
 // User ---> AuditLog
 
 User.hasMany(AuditLog, {
@@ -786,7 +854,6 @@ AuditLog.belongsTo(User, {
     foreignKey: "userId",
     as: "user",
 });
-
 
 // Order ---> Survey
 

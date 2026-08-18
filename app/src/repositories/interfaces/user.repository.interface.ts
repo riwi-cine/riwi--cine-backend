@@ -33,6 +33,11 @@ export interface IUserRepository {
     update(email: string, data: Partial<UserCreationAttributes>): Promise<User | null>;
 
     /**
+     * Actualiza un usuario por ID.
+     */
+    updateById(id: number, data: Partial<UserCreationAttributes>): Promise<User | null>;
+
+    /**
      * Elimina un usuario (soft delete).
      */
     delete(email: string): Promise<Boolean>;

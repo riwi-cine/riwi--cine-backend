@@ -16,6 +16,8 @@ export interface IUserService {
 
     update(email: string, dto: Partial<CreateUserDto>): Promise<User | null>;
 
+    updateLocation(userId: number, cityId: number): Promise<User | null>;
+
     delete(email: string): Promise<Boolean>;
 
     restore(email: string): Promise<void>;

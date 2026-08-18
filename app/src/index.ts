@@ -9,7 +9,9 @@
  */
 
 import sequelize from "./config/database";
+import "./models/associations";
 import app from "./server";
+import "./models/associations";
 
 const PORT = process.env.APP_PORT || 3000;
 

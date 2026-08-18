@@ -12,6 +12,7 @@
 
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database";
+import  {hash_password}  from "../utils/auth";
 
 /**
  * Atributos principales de la entidad User.
@@ -19,6 +20,7 @@ import sequelize from "../config/database";
 export interface UserAttributes {
     id: number;
     countryId: number;
+    cityId: number | null;
     email: string;
     passwordHash: string;
     firstName: string;
@@ -30,6 +32,7 @@ export interface UserAttributes {
     status: string;
     failedAttempts: number;
     lockedUntil: Date | null;
+    role: string;
 }
 
 /**
@@ -41,6 +44,7 @@ export interface UserCreationAttributes
         | "id"
         | "emailVerified"
         | "countryId"
+        | "cityId"
         | "status"
         | "marketingOptIn"
         | "failedAttempts"
@@ -59,6 +63,9 @@ class User
 
     /** País de residencia. */
     public countryId!: number;
+
+    /** Ciudad seleccionada para personalizar la experiencia. */
+    public cityId!: number | null;
 
     /** Correo electrónico. */
     public email!: string;
@@ -92,6 +99,9 @@ class User
 
     /** Fecha hasta la que permanece bloqueada la cuenta. */
     public lockedUntil!: Date | null;
+
+    /** Rol del usuario. */
+    public role!: string;
 }
 
 /**
@@ -109,6 +119,13 @@ User.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             field: "country_id",
+            defaultValue: 1, // Valor por defecto para el país (ejemplo: 1 para un país específico)
+        },
+
+        cityId: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            field: "city_id",
         },
 
         email: {
@@ -181,6 +198,12 @@ User.init(
             allowNull: true,
             field: "locked_until",
         },
+
+        role: {
+            type: DataTypes.STRING(30),
+            allowNull: false,
+            defaultValue: "user",
+        },
     },
     {
         sequelize,
@@ -189,6 +212,18 @@ User.init(
         timestamps: true,
         createdAt: "created_at",
         updatedAt: false,
+        paranoid: true,
+        hooks: {
+            beforeCreate: async (user: User) => {
+                if (user.passwordHash) {
+                    user.passwordHash = await hash_password(user.passwordHash);
+                }
+            },
+            beforeUpdate: async (user: User) => {
+                if (user.passwordHash) {
+                    user.passwordHash = await hash_password(user.passwordHash);
+                } },
+        },
     },
 );
 

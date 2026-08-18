@@ -39,7 +39,7 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
 
         const validation = await AuthUser.login(user, password);
 
-        const { password: _, ...userWithoutPassword } = validation.toJSON();
+        const { passwordHash: _, ...userWithoutPassword } = validation.toJSON();
         const token = await generateToken(userWithoutPassword);
 
         res.cookie('accesstoken', token, {

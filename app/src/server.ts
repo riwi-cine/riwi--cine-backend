@@ -11,8 +11,9 @@ import path from "path"; //se importo path para poder usar el metodo join(sirve 
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swagger";
 import authRoutes from "./routes/auth.routes";
-import countryRoutes from "./routes/country.routes";
 import currencyRoutes from "./routes/currency.routes";
+import countryRoutes from "./routes/locations.routes";
+import moviesRoutes from "./routes/movies.routes";
 import userRoutes from "./routes/user.routes";
 
 const app = express();
@@ -26,13 +27,27 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/currencies", currencyRoutes);
 app.use("/api/countries", countryRoutes);
+// Rutas de películas: catálogo, detalles, funciones y recomendaciones
+app.use("/api/movies", moviesRoutes);
 
 app.get("/api/docs.json", (_req, res) => {
-    res.status(200).json(swaggerSpec);
+  res.status(200).json(swaggerSpec);
 });
 
 // Swagger
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(
+  "/api/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: {
+      requestInterceptor: (req: any) => {
+        req.credentials = "include";
+        return req;
+      },
+      persistAuthorization: true,
+    },
+  })
+);
 
 app.use("/health", (req, res) => {
     res.status(200).json({ message: "Healthy" });

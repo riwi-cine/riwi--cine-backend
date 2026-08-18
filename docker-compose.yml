@@ -28,6 +28,11 @@ services:
         image: postgres:15-alpine
         container_name: ${DB_CONTAINER_NAME}
         restart: always
+<<<<<<< Updated upstream
+=======
+        ports:
+            - "5435:5432"
+>>>>>>> Stashed changes
         environment:
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

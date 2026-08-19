@@ -86,4 +86,4 @@ class CurrencyService implements ICurrencyService {
     }   
 }
 
-export default new CurrencyService()
+export default new CurrencyService();

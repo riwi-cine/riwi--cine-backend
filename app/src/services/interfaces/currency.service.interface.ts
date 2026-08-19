@@ -7,6 +7,7 @@ import Currency from "../../models/currency.model";
  * Contrato del Servicio de Monedas.
  */
 export interface ICurrencyService {
+    
     create(dto: CreateCurrencyDto): Promise<Currency>;
 
     findAll(): Promise<Currency[]>;

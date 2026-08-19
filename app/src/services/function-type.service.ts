@@ -47,7 +47,7 @@ class FunctionTypeService implements IfunctionTypeRespository {
     async update(id: number, dto: Partial<CreateFunctionTypeDto>): Promise<FunctionType | null> {
         const currency = await repository.findOne(id);
         if (!currency) {
-            throw new Error("Moneda no encontrada");
+            throw new Error("Función no encontrada");
         }
         return await repository.update(id, dto);
     }
@@ -55,7 +55,7 @@ class FunctionTypeService implements IfunctionTypeRespository {
     async delete(id:number): Promise<Boolean> {
         const currency = await repository.findOne(id);
         if (!currency) {
-            throw new Error("Moneda no encontrada");
+            throw new Error("Función no encontrada");
         }
         return await repository.delete(id);
     }
@@ -63,7 +63,7 @@ class FunctionTypeService implements IfunctionTypeRespository {
     async restore(id: number): Promise<void> {
         const currency = await repository.findOne(id);
         if (!currency) {
-            throw new Error("Moneda no encontrada");
+            throw new Error("Función no encontrada");
         }
         await repository.restore(id);
     }

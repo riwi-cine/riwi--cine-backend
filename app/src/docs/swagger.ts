@@ -34,7 +34,7 @@ const options: swaggerJSDoc.Options = {
         info: {
             title: "MineRoyal",
             version: "1.0.0",
-            description: "Swagger api endpoints",
+            description: "Swagger Api endpoints para aplicación de cine",
         },
         components: {
             securitySchemes: {

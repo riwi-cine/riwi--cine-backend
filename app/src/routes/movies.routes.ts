@@ -8,9 +8,9 @@ import {
     getMovieRecommendations,
     getMovies,
     getTodayBillboard,
-    getWeeklyBillboard,
-    getUpcomingMovies,
     getUpcomingMovieDetail,
+    getUpcomingMovies,
+    getWeeklyBillboard,
 } from "../controllers/movies.controller";
 
 const router = Router();
@@ -139,7 +139,44 @@ router.get("/", getMovies);
 /**
  * Próximos estrenos por país (opcional cityId)
  */
+/**
+ * @swagger
+ * /api/movies/upcoming:
+ *   get:
+ *     summary: Obtener próximos estrenos
+ *     description: Devuelve una lista de próximos estrenos. Acepta `cityId` como query opcional para filtrar por ciudad.
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: query
+ *         name: cityId
+ *         schema:
+ *           type: integer
+ *         description: ID de la ciudad (opcional)
+ *     responses:
+ *       200:
+ *         description: Lista de próximos estrenos
+ */
 router.get("/upcoming", getUpcomingMovies);
+
+/**
+ * @swagger
+ * /api/movies/upcoming/{id}:
+ *   get:
+ *     summary: Obtener detalle de próximo estreno por ID
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del próximo estreno
+ *     responses:
+ *       200:
+ *         description: Detalle del próximo estreno
+ *       404:
+ *         description: No encontrado
+ */
 router.get("/upcoming/:id", getUpcomingMovieDetail);
 
 /**

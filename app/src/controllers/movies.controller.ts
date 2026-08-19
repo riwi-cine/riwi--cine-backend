@@ -197,3 +197,44 @@ export const getMovieRecommendations = async (req: Request, res: Response): Prom
         return res.status(500).json({ error: error.message });
     }
 };
+
+export const getUpcomingMovies = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const countryId = parseRequiredId(req.query.countryId, "countryId");
+        const cityIdParam = req.query.cityId;
+        let cityId: number | undefined;
+
+        if (cityIdParam !== undefined) {
+            cityId = Number(cityIdParam);
+            if (Number.isNaN(cityId) || cityId <= 0) {
+                throw new Error("cityId debe ser un número válido");
+            }
+        }
+
+        const list = await movieService.getUpcoming(countryId, cityId);
+
+        res.status(200).json(list);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+export const getUpcomingMovieDetail = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const countryId = parseRequiredId(req.query.countryId, "countryId");
+        const movieId = Number(req.params.id);
+
+        if (Number.isNaN(movieId) || movieId <= 0) {
+            return res.status(400).json({ error: "El id de la película debe ser un número válido." });
+        }
+
+        const detail = await movieService.getUpcomingDetail(movieId, countryId);
+
+        return res.status(200).json(detail);
+    } catch (error: any) {
+        if (error.message === "Próximo estreno no encontrado para el país especificado.") {
+            return res.status(404).json({ error: error.message });
+        }
+        return res.status(500).json({ error: error.message });
+    }
+};

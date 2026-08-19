@@ -15,6 +15,7 @@ import currencyRoutes from "./routes/currency.routes";
 import countryRoutes from "./routes/locations.routes";
 import moviesRoutes from "./routes/movies.routes";
 import userRoutes from "./routes/user.routes";
+import notificationsRoutes from "./routes/notifications.routes";
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use("/api/currencies", currencyRoutes);
 app.use("/api/countries", countryRoutes);
 // Rutas de películas: catálogo, detalles, funciones y recomendaciones
 app.use("/api/movies", moviesRoutes);
+app.use("/api/notifications", notificationsRoutes);
 
 app.get("/api/docs.json", (_req, res) => {
   res.status(200).json(swaggerSpec);

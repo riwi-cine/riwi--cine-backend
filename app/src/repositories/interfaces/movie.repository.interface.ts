@@ -77,10 +77,12 @@ export interface IMovieRepository {
      * características compartidas con la película consultada.
      */
     findRecommendations(movieId: number): Promise<Movie[]>;
+    findUpcoming(countryId: number): Promise<any[]>;
+    findUpcomingDetail(movieId: number, countryId: number): Promise<any | null>;
 /**
  * Contrato del repositorio de catálogo de películas.
  */
     findAll(): Promise<Movie[]>;
-    findById(id: number): Promise<Movie>;
+    findById(id: number): Promise<Movie | null>;
     findByTitle(title: string): Promise<Movie[]>;
 }

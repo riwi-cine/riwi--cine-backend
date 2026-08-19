@@ -9,6 +9,8 @@ import {
     getMovies,
     getTodayBillboard,
     getWeeklyBillboard,
+    getUpcomingMovies,
+    getUpcomingMovieDetail,
 } from "../controllers/movies.controller";
 
 const router = Router();
@@ -133,6 +135,12 @@ const router = Router();
  *         description: Catálogo obtenido exitosamente.
  */
 router.get("/", getMovies);
+
+/**
+ * Próximos estrenos por país (opcional cityId)
+ */
+router.get("/upcoming", getUpcomingMovies);
+router.get("/upcoming/:id", getUpcomingMovieDetail);
 
 /**
  * @swagger

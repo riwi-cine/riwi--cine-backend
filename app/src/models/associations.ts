@@ -88,6 +88,7 @@ import Ticket from "./ticket.model";
 
 import AuditLog from "./audit-log.model";
 import Notification from "./notification.model";
+import UpcomingNotification from "./upcoming-notification.model";
 import PQRS from "./pqrs.model";
 import Survey from "./survey.model";
 
@@ -841,6 +842,39 @@ User.hasMany(Notification, {
 Notification.belongsTo(User, {
     foreignKey: "userId",
     as: "user",
+});
+
+// User ---> UpcomingNotification
+User.hasMany(UpcomingNotification, {
+    foreignKey: "userId",
+    as: "upcomingNotifications",
+});
+
+UpcomingNotification.belongsTo(User, {
+    foreignKey: "userId",
+    as: "user",
+});
+
+// Movie ---> UpcomingNotification
+Movie.hasMany(UpcomingNotification, {
+    foreignKey: "movieId",
+    as: "upcomingNotifications",
+});
+
+UpcomingNotification.belongsTo(Movie, {
+    foreignKey: "movieId",
+    as: "movie",
+});
+
+// City ---> UpcomingNotification (opcional)
+City.hasMany(UpcomingNotification, {
+    foreignKey: "cityId",
+    as: "upcomingNotifications",
+});
+
+UpcomingNotification.belongsTo(City, {
+    foreignKey: "cityId",
+    as: "city",
 });
 
 // User ---> AuditLog

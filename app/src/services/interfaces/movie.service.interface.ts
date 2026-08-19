@@ -56,4 +56,6 @@ export interface IMovieService {
     findDetailById(id: number): Promise<Movie>;
     findFutureFunctions(movieId: number, cityId?: number): Promise<MovieFunctionDetail[]>;
     findRecommendations(movieId: number): Promise<Movie[]>;
+    getUpcoming(countryId: number, cityId?: number): Promise<any[]>;
+    getUpcomingDetail(movieId: number, countryId: number): Promise<any>;
 }

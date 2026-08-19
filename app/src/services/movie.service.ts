@@ -87,6 +87,27 @@ class MovieService implements IMovieService {
 
         return await repository.findRecommendations(movieId);
     }
+
+    async getUpcoming(countryId: number, cityId?: number): Promise<any[]> {
+        const results = await repository.findUpcoming(countryId);
+
+        return results.map((r: any) => ({
+            ...r,
+            trailerUrl: this.normalizeTrailerUrl(r.trailerUrl),
+        }));
+    }
+
+    async getUpcomingDetail(movieId: number, countryId: number): Promise<any> {
+        const detail = await repository.findUpcomingDetail(movieId, countryId);
+
+        if (!detail) {
+            throw new Error("Próximo estreno no encontrado para el país especificado.");
+        }
+
+        detail.trailerUrl = this.normalizeTrailerUrl(detail.trailerUrl);
+
+        return detail;
+    }
 }
 
 export default new MovieService();

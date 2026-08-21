@@ -20,10 +20,6 @@ const start = async () => {
         await sequelize.authenticate();
         console.log("Conexión a la BD establecida...");
 
-        await sequelize.sync({
-            alter: true,
-        }); // crea tablas si no existen
-
         app.listen(PORT, () => {
             console.log(`Servidor escuchando en puerto ${PORT}`);
         });

@@ -119,7 +119,6 @@ User.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             field: "country_id",
-            defaultValue: 1, // Valor por defecto para el país (ejemplo: 1 para un país específico)
         },
 
         cityId: {

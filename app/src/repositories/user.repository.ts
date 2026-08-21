@@ -69,7 +69,7 @@ class UserRepository implements IUserRepository {
         const user = await User.findOne({ where: { email }, paranoid: false });
 
         if (!user) {
-            throw new Error("Tipo de función no encontrado");
+            throw new Error("Usuario no encontrado");
         }
         await user.restore();
         await user.reload();

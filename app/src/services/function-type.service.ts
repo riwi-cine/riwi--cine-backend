@@ -61,10 +61,6 @@ class FunctionTypeService implements IfunctionTypeRespository {
     }
 
     async restore(id: number): Promise<void> {
-        const currency = await repository.findOne(id);
-        if (!currency) {
-            throw new Error("Función no encontrada");
-        }
         await repository.restore(id);
     }
 }

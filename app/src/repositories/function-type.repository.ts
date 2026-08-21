@@ -67,12 +67,14 @@ class FunctionTypeRepository implements IfunctionTypeRespository {
      */
     async restore(id: number): Promise<void> {
         const functionType = await FunctionType.findOne({ where: { id }, paranoid: false });
-        if (functionType) {
-            await functionType.restore();
-        } else {
-            throw new Error("Moneda no encontrada");
+
+        if (!functionType) {
+            throw new Error("Tipo de función no encontrado");
         }
-    };
+        await functionType.restore();
+        await functionType.reload();
+        return functionType;
+    }
 }
 
 export default new FunctionTypeRepository();

@@ -80,7 +80,8 @@ FunctionType.init(
         sequelize,
         modelName: "FunctionType",
         tableName: "function_types",
-        timestamps: false,
+        timestamps: true,
+        paranoid: true,
     },
 );
 

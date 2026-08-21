@@ -85,6 +85,7 @@ Currency.init(
         modelName: "Currency",
         tableName: "currencies",
         timestamps: true,
+        paranoid: true,
     },
 );
 

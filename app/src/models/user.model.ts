@@ -119,7 +119,6 @@ User.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             field: "country_id",
-            defaultValue: 1, // Valor por defecto para el país (ejemplo: 1 para un país específico)
         },
 
         cityId: {
@@ -161,7 +160,7 @@ User.init(
         },
 
         birthDate: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.STRING(50),
             allowNull: false,
             field: "birth_date",
         },
@@ -211,7 +210,7 @@ User.init(
         tableName: "users",
         timestamps: true,
         createdAt: "created_at",
-        updatedAt: false,
+        updatedAt: true,
         paranoid: true,
         hooks: {
             beforeCreate: async (user: User) => {

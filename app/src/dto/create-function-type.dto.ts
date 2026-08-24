@@ -5,9 +5,7 @@
  */
 
 
-/**
- * 
- */
+
 export interface CreateFunctionTypeDto {
 
     name: string;

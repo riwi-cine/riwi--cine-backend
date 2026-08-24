@@ -30,7 +30,12 @@ export interface FunctionAttributes {
  * Atributos utilizados durante la creación.
  */
 export interface FunctionCreationAttributes
-  extends Optional<FunctionAttributes, "id" | "active"> {}
+  extends Optional<FunctionAttributes, 
+  | "id" 
+  | "active"
+  | "functionTypeId"
+  | "movieId"
+  | "roomId"> {}
 
 /**
  * Clase que representa el modelo Function.
@@ -116,5 +121,56 @@ Function.init(
     timestamps: false,
   },
 );
+
+/**
+ * Esta es la respuesta esperada para algunas parte del CRUD, como update o findOne.
+ */
+export interface FunctionDetail {
+    id: number;
+    startsAt: Date;
+    basePrice: number;
+    active: boolean;
+
+    functionType: {
+        id: number;
+        name: string;
+        projection: string;
+        language: string;
+    } | null;
+
+    room: {
+        id: number;
+        name: string;
+        capacity: number;
+        extraPrice: number;
+
+        roomType: {
+        id: number;
+        name: string;
+        description: string;
+        } | null;
+
+        cinema: {
+        id: number;
+        name: string;
+        address: string;
+
+            city: {
+                id: number;
+                name: string;
+            } | null;
+        } | null;
+    } | null;
+
+    movie: {
+        id: number;
+        releaseDate: Date;
+        countryId: number;
+    };
+
+    ticketsCount: number;
+    seatLocksCount: number;
+}
+
 
 export default Function;

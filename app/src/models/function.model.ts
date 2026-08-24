@@ -130,44 +130,41 @@ export interface FunctionDetail {
     startsAt: Date;
     basePrice: number;
     active: boolean;
-
     functionType: {
         id: number;
         name: string;
         projection: string;
         language: string;
     } | null;
-
     room: {
         id: number;
         name: string;
         capacity: number;
         extraPrice: number;
-
         roomType: {
-        id: number;
-        name: string;
-        description: string;
+            id: number;
+            name: string;
+            description: string;
         } | null;
-
         cinema: {
-        id: number;
-        name: string;
-        address: string;
-
+            id: number;
+            name: string;
+            address: string;
             city: {
                 id: number;
                 name: string;
             } | null;
         } | null;
     } | null;
-
-    movie: {
+    movieRelease?: {
         id: number;
         releaseDate: Date;
         countryId: number;
+        movie?: {
+          id: number;
+          title: string;
+        }
     };
-
     ticketsCount: number;
     seatLocksCount: number;
 }

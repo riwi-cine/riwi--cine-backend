@@ -4,7 +4,7 @@ import { Op } from "sequelize";
 import Movie from "../models/movie.model";
 import Actor from "../models/actor.model";
 import Genre from "../models/genre.model";
-import FunctionModel from "../models/function.model";
+import FunctionModel, {FunctionDetail} from "../models/function.model";
 import Room from "../models/room.model";
 import Cinema from "../models/cinema.model";
 import City from "../models/city.model";
@@ -15,8 +15,7 @@ import MovieRelease from "../models/movie-release.model";
 import Ticket from "../models/ticket.model";
 import SeatLock from "../models/seat-lock.model";
 import {
-    IMovieRepository,
-    MovieFunctionDetail,
+    IMovieRepository
 } from "./interfaces/movie.repository.interface";
 
 const MovieModel: any = Movie;
@@ -107,7 +106,7 @@ class MovieRepository implements IMovieRepository {
     async findFutureFunctions(
         movieId: number,
         cityId?: number
-    ): Promise<MovieFunctionDetail[]> {
+    ): Promise<FunctionDetail[]> {
         const whereClause: any = {
             movieId,
             active: true,
@@ -147,6 +146,12 @@ class MovieRepository implements IMovieRepository {
                 {
                     model: MovieRelease,
                     as: "movieRelease",
+                    include: [
+                        {
+                            model: Movie,
+                            as: "movie"
+                        }
+                    ]
                 },
             ],
             order: [["startsAt", "ASC"]],
@@ -178,6 +183,10 @@ class MovieRepository implements IMovieRepository {
                         id: base.movieRelease.id,
                         releaseDate: base.movieRelease.releaseDate,
                         countryId: base.movieRelease.countryId,
+                        movie: base.movieRelease.movie ? {
+                            id: base.movieRelease.movie.id,
+                            title: base.movieRelease.title
+                        } : undefined
                     } : undefined,
                     ticketsCount,
                     seatLocksCount,

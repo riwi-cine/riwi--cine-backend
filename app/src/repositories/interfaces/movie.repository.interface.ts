@@ -1,46 +1,8 @@
 // app/src/repositories/interfaces/movie.repository.interface.ts
 
 import Movie from "../../models/movie.model";
+import { FunctionDetail } from "../../models/function.model";
 
-export interface MovieFunctionDetail {
-    id: number;
-    startsAt: Date;
-    basePrice: number;
-    active: boolean;
-    functionType: {
-        id: number;
-        name: string;
-        projection: string;
-        language: string;
-    } | null;
-    room: {
-        id: number;
-        name: string;
-        capacity: number;
-        extraPrice: number;
-        roomType: {
-            id: number;
-            name: string;
-            description: string;
-        } | null;
-        cinema: {
-            id: number;
-            name: string;
-            address: string;
-            city: {
-                id: number;
-                name: string;
-            } | null;
-        } | null;
-    } | null;
-    movieRelease?: {
-        id: number;
-        releaseDate: Date;
-        countryId: number;
-    };
-    ticketsCount: number;
-    seatLocksCount: number;
-}
 
 /**
  * Contrato del Repositorio de Películas
@@ -68,7 +30,7 @@ export interface IMovieRepository {
     findFutureFunctions(
         movieId: number,
         cityId?: number
-    ): Promise<MovieFunctionDetail[]>;
+    ): Promise<FunctionDetail[]>;
 
     /**
      * Obtiene recomendaciones de películas similares.

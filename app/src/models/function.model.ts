@@ -167,6 +167,7 @@ export interface FunctionDetail {
     };
     ticketsCount: number;
     seatLocksCount: number;
+    isSoldOut?: boolean | null;
 }
 
 

@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import functionTypeService from "../services/function-type.service";
-import { CreateFunctionTypeDto } from "../dto/function-type.dto";
+import { CreateFunctionTypeDto } from "../dto/create-function-type.dto";
 import FunctionType from "../models/function-type.model";
 
 /**

@@ -2,7 +2,8 @@
 
 import Movie from "../models/movie.model";
 import repository from "../repositories/movie.repository";
-import { IMovieService, MovieFunctionDetail } from "./interfaces/movie.service.interface";
+import { IMovieService } from "./interfaces/movie.service.interface";
+import { FunctionDetail } from "../models/function.model";
 
 /**
  * Servicio de Películas
@@ -60,7 +61,7 @@ class MovieService implements IMovieService {
     async findFutureFunctions(
         movieId: number,
         cityId?: number,
-    ): Promise<MovieFunctionDetail[]> {
+    ): Promise<FunctionDetail[]> {
         const movie = await repository.findDetailById(movieId);
         if (!movie) {
             throw new Error("Película no encontrada.");

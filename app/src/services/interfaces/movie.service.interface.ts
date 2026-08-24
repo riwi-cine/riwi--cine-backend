@@ -1,47 +1,7 @@
 // app/src/services/interfaces/movie.service.interface.ts
 
 import Movie from "../../models/movie.model";
-
-export interface MovieFunctionDetail {
-    id: number;
-    startsAt: Date;
-    basePrice: number;
-    active: boolean;
-    functionType: {
-        id: number;
-        name: string;
-        projection: string;
-        language: string;
-    } | null;
-    room: {
-        id: number;
-        name: string;
-        capacity: number;
-        extraPrice: number;
-        roomType: {
-            id: number;
-            name: string;
-            description: string;
-        } | null;
-        cinema: {
-            id: number;
-            name: string;
-            address: string;
-            city: {
-                id: number;
-                name: string;
-            } | null;
-        } | null;
-    } | null;
-    movieRelease?: {
-        id: number;
-        releaseDate: Date;
-        countryId: number;
-    };
-    ticketsCount: number;
-    seatLocksCount: number;
-    isSoldOut: boolean;
-}
+import { FunctionDetail } from "../../models/function.model";
 
 /**
  * Contrato del Servicio de Películas
@@ -54,7 +14,7 @@ export interface IMovieService {
 
     // Métodos especializados de cartelera y recomendaciones (de feat/movie)
     findDetailById(id: number): Promise<Movie>;
-    findFutureFunctions(movieId: number, cityId?: number): Promise<MovieFunctionDetail[]>;
+    findFutureFunctions(movieId: number, cityId?: number): Promise<FunctionDetail[]>;
     findRecommendations(movieId: number): Promise<Movie[]>;
     getUpcoming(countryId: number, cityId?: number): Promise<any[]>;
     getUpcomingDetail(movieId: number, countryId: number): Promise<any>;

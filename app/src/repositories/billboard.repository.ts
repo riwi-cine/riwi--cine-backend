@@ -1,7 +1,7 @@
 // app/src/repositories/billboard.repository.ts
 
-import { QueryTypes } from "sequelize";
-import sequelize from "../config/database";
+import { Sequelize } from "sequelize";
+import dbInstance from "../config/database";
 import City from "../models/city.model";
 import MovieRelease from "../models/movie-release.model";
 import {
@@ -9,6 +9,10 @@ import {
     IBillboardRepository,
     OccupancyInfo,
 } from "./interfaces/billboard.repository.interface";
+
+// Casteamos la conexión a 'any' para que TypeScript permita invocar .query() sin conflicto de definiciones
+const sequelize: any = dbInstance;
+const QueryTypes = (Sequelize as any).QueryTypes || { SELECT: "SELECT" };
 
 type GenreRow = {
     movieId: number;
@@ -18,6 +22,11 @@ type GenreRow = {
 type CountRow = {
     functionId: number;
     count: string;
+};
+
+type CapacityRow = {
+    functionId: number;
+    capacity: number;
 };
 
 /**
@@ -46,7 +55,7 @@ class BillboardRepository implements IBillboardRepository {
         dateFrom: Date,
         dateTo: Date,
     ): Promise<ActiveFunctionRow[]> {
-        return await sequelize.query<ActiveFunctionRow>(
+        return (await sequelize.query(
             `
             SELECT
                 f.id AS "functionId",
@@ -90,7 +99,7 @@ class BillboardRepository implements IBillboardRepository {
                 replacements: { cityId, dateFrom, dateTo },
                 type: QueryTypes.SELECT,
             },
-        );
+        )) as unknown as ActiveFunctionRow[];
     }
 
     /**
@@ -103,7 +112,7 @@ class BillboardRepository implements IBillboardRepository {
             return genresByMovie;
         }
 
-        const rows = await sequelize.query<GenreRow>(
+        const rows = (await sequelize.query(
             `
             SELECT mg.movie_id AS "movieId", g.name AS "genreName"
             FROM movie_genres mg
@@ -115,7 +124,7 @@ class BillboardRepository implements IBillboardRepository {
                 replacements: { movieIds },
                 type: QueryTypes.SELECT,
             },
-        );
+        )) as unknown as GenreRow[];
 
         for (const row of rows) {
             const movieId = Number(row.movieId);
@@ -145,10 +154,7 @@ class BillboardRepository implements IBillboardRepository {
             return occupancyByFunction;
         }
 
-        const capacityRows = await sequelize.query<{
-            functionId: number;
-            capacity: number;
-        }>(
+        const capacityRows = (await sequelize.query(
             `
             SELECT f.id AS "functionId", r.capacity AS "capacity"
             FROM functions f
@@ -159,9 +165,9 @@ class BillboardRepository implements IBillboardRepository {
                 replacements: { functionIds },
                 type: QueryTypes.SELECT,
             },
-        );
+        )) as unknown as CapacityRow[];
 
-        const soldRows = await sequelize.query<CountRow>(
+        const soldRows = (await sequelize.query(
             `
             SELECT function_id AS "functionId", COUNT(*) AS "count"
             FROM tickets
@@ -172,9 +178,9 @@ class BillboardRepository implements IBillboardRepository {
                 replacements: { functionIds },
                 type: QueryTypes.SELECT,
             },
-        );
+        )) as unknown as CountRow[];
 
-        const lockedRows = await sequelize.query<CountRow>(
+        const lockedRows = (await sequelize.query(
             `
             SELECT function_id AS "functionId", COUNT(*) AS "count"
             FROM seat_locks
@@ -186,7 +192,7 @@ class BillboardRepository implements IBillboardRepository {
                 replacements: { functionIds },
                 type: QueryTypes.SELECT,
             },
-        );
+        )) as unknown as CountRow[];
 
         const soldByFunction = this.toCountMap(soldRows);
         const lockedByFunction = this.toCountMap(lockedRows);
@@ -232,10 +238,13 @@ class BillboardRepository implements IBillboardRepository {
         });
 
         for (const release of releases) {
-            releasesByMovie.set(
-                release.movieId,
-                new Date(`${release.releaseDate}T00:00:00`),
-            );
+            const releaseDateVal = release.releaseDate;
+            const parsedDate =
+                releaseDateVal instanceof Date
+                    ? releaseDateVal
+                    : new Date(`${String(releaseDateVal).split("T")[0]}T00:00:00`);
+
+            releasesByMovie.set(release.movieId, parsedDate);
         }
 
         return releasesByMovie;

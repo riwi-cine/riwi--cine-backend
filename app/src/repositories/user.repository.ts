@@ -7,24 +7,12 @@ import { IUserRepository } from "./interfaces/user.repository.interface";
 
 /**
  * Repositorio de Usuarios
- * -----------------------
- * Implementa el patrón Repository para encapsular todas las operaciones
- * de persistencia relacionadas con la entidad User.
- *
- * Esta clase es la única responsable de interactuar con Sequelize.
  */
-
 class UserRepository implements IUserRepository {
-    /**
-     * Crea un nuevo usuario.
-     */
     async create(data: UserCreationAttributes): Promise<User> {
         return await User.create(data);
     }
 
-    /**
-     * Obtiene todos los usuarios.
-     */
     async findAll(): Promise<User[]> {
         return await User.findAll({
             attributes: { exclude: ["passwordHash"] },
@@ -35,13 +23,8 @@ class UserRepository implements IUserRepository {
         });
     }
 
-    async findOne(email: string): Promise<User> {
-        const user = await User.findOne({ where: { email } });
-
-        if (!user) {
-            throw new Error("Usuario o contraseña incorrectos");
-        }
-        return user;
+    async findOne(email: string): Promise<User | null> {
+        return await User.findOne({ where: { email } });
     }
 
     async update(email: string, data: Partial<UserCreationAttributes>): Promise<User | null> {
@@ -60,14 +43,14 @@ class UserRepository implements IUserRepository {
         return null;
     }
 
-    async delete(email: string): Promise<Boolean> {
+    async delete(email: string): Promise<boolean> {
         const row = await User.destroy({ where: { email } });
         return row > 0;
     }
 
     async restore(email: string): Promise<void> {
-        const row = User.restore({ where: { email } });
-        return row;
+        // El cast a 'any' resuelve la firma de TypeScript si el modelo no fue definido como Paranoid
+        await (User as any).restore({ where: { email } });
     }
 }
 

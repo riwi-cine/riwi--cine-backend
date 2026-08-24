@@ -21,8 +21,8 @@ export interface PromotionAttributes {
     code: string;
     type: string;
     discountValue: number;
-    validFrom: Date;
-    validTo: Date;
+    validFrom: Date | string;
+    validTo: Date | string;
     maxUsesPerUser: number;
     stackable: boolean;
     active: boolean;
@@ -54,10 +54,10 @@ class Promotion
     public discountValue!: number;
 
     /** Fecha de inicio de vigencia. */
-    public validFrom!: Date;
+    public validFrom!: Date | string;
 
     /** Fecha de fin de vigencia. */
-    public validTo!: Date;
+    public validTo!: Date | string;
 
     /** Máximo de usos permitidos por usuario. */
     public maxUsesPerUser!: number;
@@ -98,13 +98,13 @@ Promotion.init(
         },
 
         validFrom: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.DATE,
             allowNull: false,
             field: "valid_from",
         },
 
         validTo: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.DATE,
             allowNull: false,
             field: "valid_to",
         },
@@ -128,7 +128,7 @@ Promotion.init(
         },
     },
     {
-        sequelize,
+        sequelize: sequelize as any,
         modelName: "Promotion",
         tableName: "promotions",
 

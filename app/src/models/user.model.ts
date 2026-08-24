@@ -12,7 +12,7 @@
 
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database";
-import  {hash_password}  from "../utils/auth";
+import { hash_password } from "../utils/auth";
 
 /**
  * Atributos principales de la entidad User.
@@ -26,12 +26,12 @@ export interface UserAttributes {
     firstName: string;
     lastName: string;
     phone: string;
-    birthDate: Date;
+    birthDate: Date | string;
     emailVerified: boolean;
     marketingOptIn: boolean;
     status: string;
     failedAttempts: number;
-    lockedUntil: Date | null;
+    lockedUntil: Date | string | null;
     role: string;
 }
 
@@ -83,7 +83,7 @@ class User
     public phone!: string;
 
     /** Fecha de nacimiento. */
-    public birthDate!: Date;
+    public birthDate!: Date | string;
 
     /** Indica si el correo fue verificado. */
     public emailVerified!: boolean;
@@ -98,7 +98,7 @@ class User
     public failedAttempts!: number;
 
     /** Fecha hasta la que permanece bloqueada la cuenta. */
-    public lockedUntil!: Date | null;
+    public lockedUntil!: Date | string | null;
 
     /** Rol del usuario. */
     public role!: string;
@@ -160,7 +160,7 @@ User.init(
         },
 
         birthDate: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.DATE,
             allowNull: false,
             field: "birth_date",
         },
@@ -205,7 +205,7 @@ User.init(
         },
     },
     {
-        sequelize,
+        sequelize: sequelize as any,
         modelName: "User",
         tableName: "users",
         timestamps: true,
@@ -221,7 +221,8 @@ User.init(
             beforeUpdate: async (user: User) => {
                 if (user.passwordHash) {
                     user.passwordHash = await hash_password(user.passwordHash);
-                } },
+                }
+            },
         },
     },
 );

@@ -16,7 +16,9 @@ const Cinema: any = CinemaModel;
 
 const seedLocations = async () => {
     await sequelize.authenticate();
-    await sequelize.sync({ alter: true });
+    // ⚠️ Ya NO se hace sync({ alter: true }) aquí.
+    // La estructura de las tablas la maneja únicamente sequelize-cli (src/migrations/*).
+    // Antes de correr este seed, asegúrate de haber corrido: npx sequelize-cli db:migrate
 
     const [copCurrency] = await Currency.findOrCreate({
         where: { code: "COP" },

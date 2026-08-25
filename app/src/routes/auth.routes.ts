@@ -12,7 +12,7 @@
  */
 
 import { Router } from 'express';
-import { findUser } from '../controllers/auth.controller';
+import { findUser, logout } from '../controllers/auth.controller';
 
 const router = Router();
 
@@ -67,5 +67,42 @@ const router = Router();
  *         
  */
 router.post("/login", findUser);
+
+/**
+ * POST /logout
+ * ------------
+ * Cierra la sesion del usuario.
+ * 
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Cierra la sesion del usuario y revoca el token.
+ *     tags: [User_Auth]
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado exitosamente
+ *         content:
+ *           application/json:
+ *             example:
+ *               id: 1
+ *               name: "John Doe"
+ *               email: "john.doe@example.com"
+ *               password: "********"
+ *       404:
+ *         description: Usuario no encontrado
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Usuario no encontrado"
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Error al buscar el usuario"
+ *         
+ */
+router.post("/logout", logout);
+
 
 export default router

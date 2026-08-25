@@ -40,7 +40,7 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
         const validation = await AuthUser.login(user, password);
 
         const plainUser = validation.get ? validation.get({ plain: true }) : validation;
-        const {passwordHash:_ , ...withoutpassword} = plainUser;
+        const {passwordHash:_ , ...withoutpassword} = plainUser;    
 
         const token = await generateToken({email: user.email});
 
@@ -58,4 +58,10 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
             error: error.message
         });
     }
+};
+
+export const logout = async (req: Request, res: Response): Promise<Response> => {
+    res.clearCookie("accesstoken")
+
+    return res.status(200).json()
 };

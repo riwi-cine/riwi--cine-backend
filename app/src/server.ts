@@ -17,6 +17,7 @@ import moviesRoutes from "./routes/movies.routes";
 import userRoutes from "./routes/user.routes";
 import notificationsRoutes from "./routes/notifications.routes";
 import functionTypeRoutes from "./routes/function-type.routes";
+import functionRoutes from "./routes/function.routes"
 
 const app = express();
 
@@ -50,6 +51,8 @@ app.use("/api/notifications", notificationsRoutes);
  * Rutas de las funciones de las películas
  */
 app.use("/api/function-types", functionTypeRoutes);
+app.use("/api/functions", functionRoutes);
+
 
 app.get("/api/docs.json", (_req, res) => {
   res.status(200).json(swaggerSpec);

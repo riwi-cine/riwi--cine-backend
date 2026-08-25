@@ -109,3 +109,144 @@ export const getFunctionFinalPrice = async (
         });
     }
 };
+
+/**
+ * Crea una nueva función de cine.
+ *
+ * @param req
+ * @param res
+ * @returns
+ */
+export const createFunction = async (
+    req: Request,
+    res: Response
+): Promise<Response> => {
+    try {
+        const cineFunction = await functionService.create(req.body);
+
+        return res.status(201).json(cineFunction);
+
+    } catch (error: any) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
+
+/**
+ * Actualiza una función de cine.
+ *
+ * @param req
+ * @param res
+ * @returns
+ */
+export const updateFunction = async (
+    req: Request,
+    res: Response
+): Promise<Response> => {
+    try {
+        const functionId = Number(req.params.id);
+
+        if (Number.isNaN(functionId) || functionId <= 0) {
+            return res.status(400).json({
+                error: "El id de la función debe ser un número válido."
+            });
+        }
+
+        const cineFunction = await functionService.update(
+            functionId,
+            req.body
+        );
+
+        if (!cineFunction) {
+            return res.status(404).json({
+                error: "Función de cine no encontrada."
+            });
+        }
+
+        return res.status(200).json(cineFunction);
+
+    } catch (error: any) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
+
+/**
+ * Elimina una función de cine mediante soft-delete.
+ *
+ * @param req
+ * @param res
+ * @returns
+ */
+export const deleteFunction = async (
+    req: Request,
+    res: Response
+): Promise<Response> => {
+    try {
+        const functionId = Number(req.params.id);
+
+        if (Number.isNaN(functionId) || functionId <= 0) {
+            return res.status(400).json({
+                error: "El id de la función debe ser un número válido."
+            });
+        }
+
+        const deleted = await functionService.delete(functionId);
+
+        if (!deleted) {
+            return res.status(404).json({
+                error: "Función de cine no encontrada."
+            });
+        }
+
+        return res.status(200).json({
+            message: "Función de cine eliminada correctamente."
+        });
+
+    } catch (error: any) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
+
+/**
+ * Restaura una función de cine eliminada mediante soft-delete.
+ *
+ * @param req
+ * @param res
+ * @returns
+ */
+export const restoreFunction = async (
+    req: Request,
+    res: Response
+): Promise<Response> => {
+    try {
+        const functionId = Number(req.params.id);
+
+        if (Number.isNaN(functionId) || functionId <= 0) {
+            return res.status(400).json({
+                error: "El id de la función debe ser un número válido."
+            });
+        }
+
+        await functionService.restore(functionId);
+
+        return res.status(200).json({
+            message: "Función de cine restaurada correctamente."
+        });
+
+    } catch (error: any) {
+        if (error.message === "Función de cine no encontrada") {
+            return res.status(404).json({
+                error: error.message
+            });
+        }
+
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};

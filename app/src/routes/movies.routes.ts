@@ -4,7 +4,6 @@ import { Router } from "express";
 import {
     getFilteredBillboard,
     getMovieDetail,
-    getMovieFunctions,
     getMovieRecommendations,
     getMovies,
     getTodayBillboard,
@@ -12,6 +11,7 @@ import {
     getUpcomingMovies,
     getWeeklyBillboard,
 } from "../controllers/movies.controller";
+import { getUpcomingFunctions } from "../controllers/function.controller";
 
 const router = Router();
 
@@ -319,7 +319,7 @@ router.get("/:id", getMovieDetail);
  *       200:
  *         description: Lista de funciones
  */
-router.get("/:id/functions", getMovieFunctions);
+router.get("/:id/functions", getUpcomingFunctions);
 
 /**
  * @swagger

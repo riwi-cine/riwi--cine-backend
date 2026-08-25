@@ -1,7 +1,6 @@
 // app/src/repositories/interfaces/movie.repository.interface.ts
 
 import Movie from "../../models/movie.model";
-import { FunctionDetail } from "../../models/function.model";
 
 
 /**
@@ -21,16 +20,6 @@ export interface IMovieRepository {
      * mostrar el detalle de la película.
      */
     findDetailById(id: number): Promise<Movie | null>;
-
-    /**
-     * Obtiene las funciones futuras de una película.
-     *
-     * Permite filtrar las funciones según la ciudad seleccionada.
-     */
-    findFutureFunctions(
-        movieId: number,
-        cityId?: number
-    ): Promise<FunctionDetail[]>;
 
     /**
      * Obtiene recomendaciones de películas similares.

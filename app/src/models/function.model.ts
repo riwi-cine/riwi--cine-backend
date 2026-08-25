@@ -35,7 +35,8 @@ export interface FunctionCreationAttributes
   | "active"
   | "functionTypeId"
   | "movieId"
-  | "roomId"> {}
+  | "roomId"
+  > {}
 
 /**
  * Clase que representa el modelo Function.
@@ -57,7 +58,7 @@ class Function
   public functionTypeId!: number;
 
   /** Fecha y hora de inicio. */
-  public startsAt!: Date;
+  public startsAt!: Date ;
 
   /** Precio base del boleto. */
   public basePrice!: number;
@@ -123,7 +124,7 @@ Function.init(
 );
 
 /**
- * Esta es la respuesta esperada para algunas parte del CRUD, como update o findOne.
+ * Esta es la respuesta esperada para algunas parte del CRUD findOne, además se usará en varias capas como billboard, movie o en cart.
  */
 export interface FunctionDetail {
     id: number;

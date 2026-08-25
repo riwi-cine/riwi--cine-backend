@@ -1,7 +1,4 @@
-// app/src/services/interfaces/movie.service.interface.ts
-
 import Movie from "../../models/movie.model";
-import { FunctionDetail } from "../../models/function.model";
 
 /**
  * Contrato del Servicio de Películas
@@ -14,7 +11,6 @@ export interface IMovieService {
 
     // Métodos especializados de cartelera y recomendaciones (de feat/movie)
     findDetailById(id: number): Promise<Movie>;
-    findFutureFunctions(movieId: number, cityId?: number): Promise<FunctionDetail[]>;
     findRecommendations(movieId: number): Promise<Movie[]>;
     getUpcoming(countryId: number, cityId?: number): Promise<any[]>;
     getUpcomingDetail(movieId: number, countryId: number): Promise<any>;

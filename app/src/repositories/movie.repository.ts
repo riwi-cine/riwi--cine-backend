@@ -4,24 +4,11 @@ import { Op } from "sequelize";
 import Movie from "../models/movie.model";
 import Actor from "../models/actor.model";
 import Genre from "../models/genre.model";
-import FunctionModel, {FunctionDetail} from "../models/function.model";
-import Room from "../models/room.model";
-import Cinema from "../models/cinema.model";
-import City from "../models/city.model";
-import FunctionType from "../models/function-type.model";
-import RoomType from "../models/room-type.model";
 import MovieBanner from "../models/movie-banner.model";
 import MovieRelease from "../models/movie-release.model";
-import Ticket from "../models/ticket.model";
-import SeatLock from "../models/seat-lock.model";
-import {
-    IMovieRepository
-} from "./interfaces/movie.repository.interface";
+import { IMovieRepository } from "./interfaces/movie.repository.interface";
 
 const MovieModel: any = Movie;
-const FunctionEntity: any = FunctionModel;
-const TicketModel: any = Ticket;
-const SeatLockModel: any = SeatLock;
 
 /**
  * Repositorio de Películas
@@ -96,105 +83,6 @@ class MovieRepository implements IMovieRepository {
                 },
             ],
         });
-    }
-
-    /**
-     * Obtiene las funciones futuras de una película.
-     *
-     * Las funciones pueden filtrarse según la ciudad seleccionada.
-     */
-    async findFutureFunctions(
-        movieId: number,
-        cityId?: number
-    ): Promise<FunctionDetail[]> {
-        const whereClause: any = {
-            movieId,
-            active: true,
-            startsAt: {
-                [Op.gt]: new Date(),
-            },
-        };
-
-        const functions = await FunctionEntity.findAll({
-            where: whereClause,
-            include: [
-                {
-                    model: FunctionType,
-                    as: "functionType",
-                },
-                {
-                    model: Room,
-                    as: "room",
-                    include: [
-                        {
-                            model: RoomType,
-                            as: "roomType",
-                        },
-                        {
-                            model: Cinema,
-                            as: "cinema",
-                            include: [
-                                {
-                                    model: City,
-                                    as: "city",
-                                    ...(cityId !== undefined ? { where: { id: cityId } } : {}),
-                                },
-                            ],
-                        },
-                    ],
-                },
-                {
-                    model: MovieRelease,
-                    as: "movieRelease",
-                    include: [
-                        {
-                            model: Movie,
-                            as: "movie"
-                        }
-                    ]
-                },
-            ],
-            order: [["startsAt", "ASC"]],
-        });
-
-        const functionsWithCounts = await Promise.all(
-            functions.map(async (func: any) => {
-                const ticketsCount = await TicketModel.count({
-                    where: {
-                        functionId: func.id,
-                    },
-                });
-
-                const seatLocksCount = await SeatLockModel.count({
-                    where: {
-                        functionId: func.id,
-                    },
-                });
-
-                const base = func.get({ plain: true }) as any;
-                return {
-                    id: base.id,
-                    startsAt: base.startsAt,
-                    basePrice: base.basePrice,
-                    active: base.active,
-                    functionType: base.functionType ?? null,
-                    room: base.room ?? null,
-                    movieRelease: base.movieRelease ? {
-                        id: base.movieRelease.id,
-                        releaseDate: base.movieRelease.releaseDate,
-                        countryId: base.movieRelease.countryId,
-                        movie: base.movieRelease.movie ? {
-                            id: base.movieRelease.movie.id,
-                            title: base.movieRelease.title
-                        } : undefined
-                    } : undefined,
-                    ticketsCount,
-                    seatLocksCount,
-                };
-            }),
-        );
-
-        return functionsWithCounts;
     }
 
     /**

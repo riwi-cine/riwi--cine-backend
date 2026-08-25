@@ -13,7 +13,7 @@ export interface IfunctionRepository {
      * 
      * @param {FunctionCreationAttributes} data 
      */
-    create(data: FunctionCreationAttributes): Promise<Function>;
+    create(data: FunctionCreationAttributes): Promise<Function>; 
 
     /**
      * Obtener todas las entidades de tipo Function.
@@ -24,14 +24,21 @@ export interface IfunctionRepository {
      * Devuelve una función pero con todos los detalles.
      * @param {number} id 
      */
-    findOne(id: number): Promise<FunctionDetail>;
+    findOne(id: number): Promise<FunctionDetail | null>;
+
+    /**
+     * 
+     * @param {number} movieId -ID de la entidad movie asociada
+     * @param {number} cityId -ID de la entidad city asociada
+     */
+    findFutureFunctions(movieId: number, cityId?: number): Promise<FunctionDetail[]>;
     
     /**
      * Recibe el parámetro ID para localizar una entidad y luego actualizarla utilizando los parammetros de la función.
      * @param {number} id 
      * @param {FunctionCreationAttributes} data 
      */
-    update(id: number, data: Partial<FunctionCreationAttributes>): Promise<FunctionDetail | null>;
+    update(id: number, data: FunctionCreationAttributes): Promise<Function | null>;
 
     /**
      * Localiza una entidad usando el ID y luego la elimina con un soft-delete.

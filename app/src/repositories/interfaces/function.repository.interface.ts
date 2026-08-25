@@ -1,4 +1,4 @@
-import Function, {FunctionCreationAttributes, FunctionDetail} from "../../models/function.model";
+import Function, {FunctionCreationAttributes, FunctionDetail, FunctionPriceDetail} from "../../models/function.model";
 
 /**
  * Contrato de Repository de las funciones a presentar en los cines
@@ -32,6 +32,12 @@ export interface IfunctionRepository {
      * @param {number} cityId -ID de la entidad city asociada
      */
     findFutureFunctions(movieId: number, cityId?: number): Promise<FunctionDetail[]>;
+
+    /**
+     * Obtiene el precio de una función.
+     * @param {number} id - ID de la función.
+     */
+    getPrices(id: number): Promise<FunctionPriceDetail | null>;
     
     /**
      * Recibe el parámetro ID para localizar una entidad y luego actualizarla utilizando los parammetros de la función.

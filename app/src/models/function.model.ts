@@ -171,5 +171,11 @@ export interface FunctionDetail {
     isSoldOut?: boolean | null;
 }
 
+export interface FunctionPriceDetail {
+    functionId: number;
+    basePrice: number;
+    roomExtraPrice: number;
+    finalPrice: number;
+}
 
 export default Function;

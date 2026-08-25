@@ -1,4 +1,4 @@
-import Function, {FunctionDetail, FunctionCreationAttributes} from "../../models/function.model";
+import Function, {FunctionDetail, FunctionCreationAttributes, FunctionPriceDetail} from "../../models/function.model";
 
 /**
  * Contrato del Servicio de Funciones
@@ -15,7 +15,9 @@ export interface IFunctionService {
 
     findFutureFunctions(movieId: number, cityId?: number): Promise<FunctionDetail[]>;
 
-    update(id: number, data: Partial<FunctionCreationAttributes>): Promise<Function | null>;
+    getPrice(id: number): Promise<FunctionPriceDetail | null>;
+
+    update(id: number, data: FunctionCreationAttributes): Promise<Function | null>;
 
     delete(id: number): Promise<boolean>;
 

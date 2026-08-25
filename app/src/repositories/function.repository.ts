@@ -1,4 +1,4 @@
-import Function, {FunctionCreationAttributes, FunctionDetail} from "../models/function.model";
+import Function, {FunctionCreationAttributes, FunctionDetail, FunctionPriceDetail} from "../models/function.model";
 import { IfunctionRepository } from "./interfaces/function.repository.interface";
 import FunctionType from "../models/function-type.model";
 import Room from "../models/room.model";
@@ -339,6 +339,39 @@ class FunctionRepository implements IfunctionRepository {
         return functionsWithCounts;
     }
 
+
+    async getPrices(id: number): Promise<FunctionPriceDetail | null> {
+        const cineFunction = await Function.findOne({
+            where: {
+                id,
+                active: true,
+                startsAt: {
+                    [Op.gt]: new Date(),
+                },
+            },
+            include: [
+                {
+                    model: Room,
+                    as: "room",
+                },
+            ],
+        });
+
+        if (!cineFunction) {
+            return null;
+        }
+
+        const roomExtraPrice = cineFunction.room?.extraPrice ?? 0;
+
+        const finalPrice = cineFunction.basePrice + roomExtraPrice;
+
+        return {
+            functionId: cineFunction.id,
+            basePrice: cineFunction.basePrice,
+            roomExtraPrice,
+            finalPrice,
+        };
+    }
     /**
      * 
      * @param {number} id -ID de la entidad a actualizar 

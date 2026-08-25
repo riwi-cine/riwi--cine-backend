@@ -1,4 +1,4 @@
-import Function, {FunctionDetail} from "../models/function.model";
+import Function, {FunctionDetail, FunctionPriceDetail} from "../models/function.model";
 import repository from "../repositories/function.repository";
 import { IFunctionService } from "./interfaces/function.service.interface";
 import { CreateFunctionDto } from "../dto/create-function.dto";
@@ -29,23 +29,22 @@ class FunctionService implements IFunctionService {
      * Aplica RN-014: solo funciones futuras.
      * Aplica RN-015: devuelve información suficiente para identificar funciones agotadas.
      */
-    async findFutureFunctions(
-        movieId: number,
-        cityId?: number,
-    ): Promise<FunctionDetail[]> {
+    async findFutureFunctions(movieId: number,cityId?: number): Promise<FunctionDetail[]> {
         const movie = await movieRepository.findDetailById(movieId);
         if (!movie) {
             throw new Error("Película no encontrada.");
         }
-
         const functions = await repository.findFutureFunctions(movieId, cityId);
-
         return functions.map((func) => ({
             ...func,
             isSoldOut: func.room && func.room.capacity !== undefined
                 ? func.ticketsCount >= func.room.capacity
                 : false,
         }));
+    }
+
+    async getPrice(id: number): Promise<FunctionPriceDetail | null> {
+        return await repository.getPrices(id);
     }
 
     async update(id: number, data: CreateFunctionDto): Promise<Function | null> {

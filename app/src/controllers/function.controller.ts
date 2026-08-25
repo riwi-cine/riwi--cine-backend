@@ -72,3 +72,40 @@ export const getFunctionById = async (req: Request, res: Response): Promise<Resp
         });
     }
 };
+
+/**
+ * Obtiene el precio final de una función.
+ *
+ * @param req
+ * @param res
+ * @returns
+ */
+export const getFunctionFinalPrice = async (
+    req: Request,
+    res: Response
+): Promise<Response> => {
+    try {
+        const functionId = Number(req.params.id);
+
+        if (Number.isNaN(functionId) || functionId <= 0) {
+            return res.status(400).json({
+                error: "El id de la función debe ser un número válido."
+            });
+        }
+
+        const price = await functionService.getPrice(functionId);
+
+        if (!price) {
+            return res.status(404).json({
+                error: "Función no encontrada."
+            });
+        }
+
+        return res.status(200).json(price);
+
+    } catch (error: any) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};

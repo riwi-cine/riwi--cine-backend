@@ -133,8 +133,14 @@ class UserService implements IUserService {
      * 
      * @returns {Promise<User>} -Retorna el usuario en forma de promesa luego de la verificación
      */
+    /**
+     * Obtiene un usuario por email o lanza un error si no existe.
+     */
     async findOne(email: string): Promise<User> {
         const user = await repository.findOne(email);
+        if (!user) {
+            throw new Error("El usuario no existe o el correo es incorrecto.");
+        }
         return user;
     }
 

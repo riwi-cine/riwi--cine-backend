@@ -23,7 +23,7 @@ export interface GiftCardAttributes {
     initialValue: number;
     balance: number;
     recipientEmail: string;
-    expiresAt: Date;
+    expiresAt: Date | string;
     status: string;
 }
 
@@ -59,7 +59,7 @@ class GiftCard
     public recipientEmail!: string;
 
     /** Fecha de expiración. */
-    public expiresAt!: Date;
+    public expiresAt!: Date | string;
 
     /** Estado de la Gift Card. */
     public status!: string;
@@ -106,7 +106,7 @@ GiftCard.init(
         },
 
         expiresAt: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.DATE,   
             allowNull: false,
             field: "expires_at",
         },
@@ -117,10 +117,9 @@ GiftCard.init(
         },
     },
     {
-        sequelize,
+        sequelize: sequelize as any,
         modelName: "GiftCard",
         tableName: "gift_cards",
-
         timestamps: false,
     },
 );

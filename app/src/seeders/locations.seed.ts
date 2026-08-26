@@ -1,14 +1,24 @@
-import sequelize from "../config/database";
+import dbInstance from "../config/database";
 import "../models/associations";
-import Cinema from "../models/cinema.model";
-import City from "../models/city.model";
-import Country from "../models/country.model";
-import Currency from "../models/currency.model";
-import Department from "../models/department.model";
+import CinemaModel from "../models/cinema.model";
+import CityModel from "../models/city.model";
+import CountryModel from "../models/country.model";
+import CurrencyModel from "../models/currency.model";
+import DepartmentModel from "../models/department.model";
+
+// Casteos para evitar los conflictos de tipado estático en el script de seed
+const sequelize: any = dbInstance;
+const Currency: any = CurrencyModel;
+const Country: any = CountryModel;
+const Department: any = DepartmentModel;
+const City: any = CityModel;
+const Cinema: any = CinemaModel;
 
 const seedLocations = async () => {
     await sequelize.authenticate();
-    await sequelize.sync({ alter: true });
+    // ⚠️ Ya NO se hace sync({ alter: true }) aquí.
+    // La estructura de las tablas la maneja únicamente sequelize-cli (src/migrations/*).
+    // Antes de correr este seed, asegúrate de haber corrido: npx sequelize-cli db:migrate
 
     const [copCurrency] = await Currency.findOrCreate({
         where: { code: "COP" },
@@ -162,9 +172,6 @@ const seedLocations = async () => {
             }
         }
     }
-
-    console.log("Seed de ubicaciones ejecutado correctamente.");
-    await sequelize.close();
 };
 
 seedLocations()

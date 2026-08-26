@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { 
-    getFunctionById,
-    getFunctionFinalPrice,
-    createFunction,
-    updateFunction,
-    deleteFunction,
-    restoreFunction
+import {
+  getFunctionById,
+  getFunctionFinalPrice,
+  createFunction,
+  updateFunction,
+  deleteFunction,
+  restoreFunction,
 } from "../controllers/function.controller";
 
 const router = Router();
@@ -179,5 +179,225 @@ const router = Router();
  *         description: Error interno del servidor.
  */
 router.get("/:id", getFunctionById);
+
+/**
+ * GET /:id/prices
+ * -------
+ * Obtiene el precio de una función específica.
+ *
+ * @swagger
+ * /api/functions/{id}/prices:
+ *   get:
+ *     summary: Obtener el precio de una función
+ *     description: Obtiene el precio base, el recargo de la sala y el precio final de una función activa y futura.
+ *     tags: [Functions]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la función
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         example: 15
+ *     responses:
+ *       200:
+ *         description: Precio de la función obtenido exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 functionId:
+ *                   type: integer
+ *                   example: 15
+ *                 basePrice:
+ *                   type: number
+ *                   format: float
+ *                   example: 15000
+ *                 roomExtraPrice:
+ *                   type: number
+ *                   format: float
+ *                   example: 3000
+ *                 finalPrice:
+ *                   type: number
+ *                   format: float
+ *                   example: 18000
+ *       400:
+ *         description: El ID proporcionado no es válido.
+ *       404:
+ *         description: Función no encontrada.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+router.get("/:id/prices", getFunctionFinalPrice);
+
+/**
+ * POST /
+ * -------
+ * Crea una nueva función de cine.
+ *
+ * @swagger
+ * /api/functions:
+ *   post:
+ *     summary: Crear una función de cine
+ *     tags: [Functions]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - startsAt
+ *               - basePrice
+ *             properties:
+ *               movieId:
+ *                 type: integer
+ *                 example: 25
+ *               roomId:
+ *                 type: integer
+ *                 example: 3
+ *               functionTypeId:
+ *                 type: integer
+ *                 example: 1
+ *               startsAt:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2026-08-30T19:30:00.000Z"
+ *               basePrice:
+ *                 type: number
+ *                 format: float
+ *                 example: 15000
+ *               active:
+ *                 type: boolean
+ *                 example: true
+ *     responses:
+ *       201:
+ *         description: Función creada exitosamente.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+router.post("/", createFunction);
+
+/**
+ * PUT /:id
+ * -------
+ * Actualiza una función de cine.
+ *
+ * @swagger
+ * /api/functions/{id}/update:
+ *   patch:
+ *     summary: Actualizar una función de cine
+ *     tags: [Functions]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la función
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         example: 15
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               movieId:
+ *                 type: integer
+ *                 example: 25
+ *               roomId:
+ *                 type: integer
+ *                 example: 3
+ *               functionTypeId:
+ *                 type: integer
+ *                 example: 1
+ *               startsAt:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2026-08-30T21:00:00.000Z"
+ *               basePrice:
+ *                 type: number
+ *                 format: float
+ *                 example: 18000
+ *               active:
+ *                 type: boolean
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: Función actualizada exitosamente.
+ *       400:
+ *         description: El ID proporcionado no es válido.
+ *       404:
+ *         description: Función no encontrada.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+router.patch("/:id/update", updateFunction);
+
+/**
+ * DELETE /:id
+ * -------
+ * Elimina una función mediante soft-delete.
+ *
+ * @swagger
+ * /api/functions/{id}/delete:
+ *   delete:
+ *     summary: Eliminar una función
+ *     tags: [Functions]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la función
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         example: 15
+ *     responses:
+ *       200:
+ *         description: Función eliminada correctamente.
+ *       400:
+ *         description: El ID proporcionado no es válido.
+ *       404:
+ *         description: Función no encontrada.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+router.delete("/:id/delete", deleteFunction);
+
+/**
+ * PATCH /:id/restore
+ * -------
+ * Restaura una función eliminada mediante soft-delete.
+ *
+ * @swagger
+ * /api/functions/{id}/restore:
+ *   patch:
+ *     summary: Restaurar una función
+ *     tags: [Functions]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la función
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         example: 15
+ *     responses:
+ *       200:
+ *         description: Función restaurada correctamente.
+ *       400:
+ *         description: El ID proporcionado no es válido.
+ *       404:
+ *         description: Función no encontrada.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+router.patch("/:id/restore", restoreFunction);
 
 export default router;

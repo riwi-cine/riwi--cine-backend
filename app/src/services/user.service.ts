@@ -6,6 +6,7 @@ import Country from "../models/country.model";
 import { CreateUserDto } from "../dto/create-user.dto";
 import repository from "../repositories/user.repository";
 import { IUserService } from "./interfaces/user.service.interface";
+import { Response, Request } from "express";
 
 /**
  * Servicio de Usuarios
@@ -83,6 +84,11 @@ class UserService implements IUserService {
 
         const countryId = await this.resolveCountryId(dto.country, dto.countryId);
         const { country, countryId: _countryId, ...userData } = dto as CreateUserDto & { countryId?: number };
+        const {passwordConfirm, passwordHash} = dto;
+
+        if (passwordConfirm !== passwordHash) {
+            throw new Error("Confirmacion de contraseña incorrecta.");
+        }
 
         return await repository.create({
             ...userData,

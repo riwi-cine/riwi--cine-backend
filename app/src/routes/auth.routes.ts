@@ -80,26 +80,17 @@ router.post("/login", findUser);
  *     tags: [User_Auth]
  *     responses:
  *       200:
- *         description: Usuario encontrado exitosamente
+ *         description: OK
  *         content:
  *           application/json:
  *             example:
- *               id: 1
- *               name: "John Doe"
- *               email: "john.doe@example.com"
- *               password: "********"
- *       404:
- *         description: Usuario no encontrado
- *         content:
- *           application/json:
- *             example:
- *               error: "Usuario no encontrado"
+ *               message: "sesion cerrada exitosamente"
  *       500:
  *         description: Error interno del servidor
  *         content:
  *           application/json:
  *             example:
- *               error: "Error al buscar el usuario"
+ *               error: "Error al cerrar sesion"
  *         
  */
 router.post("/logout", logout);

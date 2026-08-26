@@ -62,6 +62,11 @@ export interface CreateUserDto{
     passwordHash: string;
 
     /**
+     * Confirmar contraseña
+     */
+    passwordConfirm: string;
+
+    /**
      * Correo electrónico del usuario.
      */
     email: string;

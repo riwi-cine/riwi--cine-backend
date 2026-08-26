@@ -16,6 +16,8 @@ import countryRoutes from "./routes/locations.routes";
 import moviesRoutes from "./routes/movies.routes";
 import userRoutes from "./routes/user.routes";
 import notificationsRoutes from "./routes/notifications.routes";
+import functionTypeRoutes from "./routes/function-type.routes";
+import functionRoutes from "./routes/function.routes"
 
 const app = express();
 
@@ -23,14 +25,34 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public"))); // leera los archivos que estan en la carpeta public
 app.use(cookieParser());
 
-// Rutas
+/**
+ * Rutas de Usuario
+ */
 app.use("/api/users", userRoutes);
+
+/**
+ * Rutas de autenticación
+ */
 app.use("/api/auth", authRoutes);
+
+/**
+ * Rutas de moneda y locación.
+ */
 app.use("/api/currencies", currencyRoutes);
 app.use("/api/countries", countryRoutes);
-// Rutas de películas: catálogo, detalles, funciones y recomendaciones
+
+/**
+ * Rutas de películas: catálogo, detalles, funciones y recomendaciones
+ */
 app.use("/api/movies", moviesRoutes);
 app.use("/api/notifications", notificationsRoutes);
+
+/**
+ * Rutas de las funciones de las películas
+ */
+app.use("/api/function-types", functionTypeRoutes);
+app.use("/api/functions", functionRoutes);
+
 
 app.get("/api/docs.json", (_req, res) => {
   res.status(200).json(swaggerSpec);
@@ -48,11 +70,11 @@ app.use(
       },
       persistAuthorization: true,
     },
-  })
+  }),
 );
 
 app.use("/health", (req, res) => {
-    res.status(200).json({ message: "Healthy" });
+  res.status(200).json({ message: "Healthy" });
 });
 
 export default app;

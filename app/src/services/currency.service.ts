@@ -26,7 +26,7 @@ import { ICurrencyService } from "./interfaces/currency.service.interface";
  */
 
 class CurrencyService implements ICurrencyService { 
-    async create(dto: CreateCurrencyDto): Promise<Currency> {   
+    async create(data: CreateCurrencyDto): Promise<Currency> {   
         /**
          * Ejemplo de regla de negocio:
          *
@@ -44,7 +44,7 @@ class CurrencyService implements ICurrencyService {
          *  - Registrar la operación en una bitácora.
          */
 
-        return await repository.create(dto);
+        return await repository.create(data);
     }
 
     /**
@@ -86,4 +86,4 @@ class CurrencyService implements ICurrencyService {
     }   
 }
 
-export default new CurrencyService()
+export default new CurrencyService();

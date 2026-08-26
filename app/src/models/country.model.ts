@@ -108,6 +108,7 @@ Country.init(
         modelName: "Country",
         tableName: "countries",
         timestamps: false,
+        paranoid: true,
     },
 );
 

@@ -1,14 +1,12 @@
-// app/src/services/movie.service.ts
-
 import Movie from "../models/movie.model";
 import repository from "../repositories/movie.repository";
-import { IMovieService, MovieFunctionDetail } from "./interfaces/movie.service.interface";
+import { IMovieService } from "./interfaces/movie.service.interface";
 
 /**
  * Servicio de Películas
  * --------------------
  * Contiene la lógica de negocio relacionada con el catálogo general,
- * la consulta de detalles, funciones futuras y recomendaciones de películas.
+ * la consulta de detalles y recomendaciones de películas.
  */
 class MovieService implements IMovieService {
     private normalizeTrailerUrl(trailerUrl: string): string {
@@ -49,31 +47,6 @@ class MovieService implements IMovieService {
         movie.trailerUrl = this.normalizeTrailerUrl(movie.trailerUrl);
 
         return movie;
-    }
-
-    /**
-     * Obtiene las funciones futuras de una película.
-     *
-     * Aplica RN-014: solo funciones futuras.
-     * Aplica RN-015: devuelve información suficiente para identificar funciones agotadas.
-     */
-    async findFutureFunctions(
-        movieId: number,
-        cityId?: number,
-    ): Promise<MovieFunctionDetail[]> {
-        const movie = await repository.findDetailById(movieId);
-        if (!movie) {
-            throw new Error("Película no encontrada.");
-        }
-
-        const functions = await repository.findFutureFunctions(movieId, cityId);
-
-        return functions.map((func) => ({
-            ...func,
-            isSoldOut: func.room && func.room.capacity !== undefined
-                ? func.ticketsCount >= func.room.capacity
-                : false,
-        }));
     }
 
     /**

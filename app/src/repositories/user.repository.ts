@@ -66,8 +66,14 @@ class UserRepository implements IUserRepository {
     }
 
     async restore(email: string): Promise<void> {
-        const row = User.restore({ where: { email } });
-        return row;
+        const user = await User.findOne({ where: { email }, paranoid: false });
+
+        if (!user) {
+            throw new Error("Usuario no encontrado");
+        }
+        await user.restore();
+        await user.reload();
+        return user;
     }
 }
 

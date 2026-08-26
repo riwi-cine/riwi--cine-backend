@@ -19,11 +19,11 @@
 
 import { Router } from "express";
 import {
-    createCountry,
-    getAllCountries,
-    getCities,
-    getCountryById,
-    getDepartments,
+  createCountry,
+  getAllCountries,
+  getCities,
+  getCountryById,
+  getDepartments,
 } from "../controllers/locations.controller";
 
 const router = Router();
@@ -32,7 +32,7 @@ const router = Router();
  * Crea un nuevo país en la base de datos.
  *
  * @swagger
- * /api/countries:
+ * /api/countries/create_countries:
  *   post:
  *     summary: Crear un nuevo país
  *     tags: [Locations]
@@ -77,13 +77,13 @@ const router = Router();
  *             example:
  *               error: "La moneda \"COP\" no existe."
  */
-router.post("/countries", createCountry);
+router.post("/create_countries", createCountry);
 
 /**
  * Obtiene todos los países registrados en la base de datos.
  *
  * @swagger
- * /api/countries:
+ * /api/countries/all_countries:
  *   get:
  *     summary: Obtener todos los países
  *     tags: [Locations]
@@ -103,11 +103,11 @@ router.post("/countries", createCountry);
  *             example:
  *               error: "Error al obtener los países."
  */
-router.get("/countries", getAllCountries);
+router.get("/all_countries", getAllCountries);
 
 /**
  * @swagger
- * /api/departments/{countryId}:
+ * /api/countries/departments/{countryId}:
  *   get:
  *     summary: Obtener departamentos activos por país
  *     tags: [Locations]
@@ -128,7 +128,7 @@ router.get("/departments/:countryId", getDepartments);
 
 /**
  * @swagger
- * /api/cities/{departmentId}:
+ * /api/countries/cities/{departmentId}:
  *   get:
  *     summary: Obtener ciudades activas por departamento
  *     description: RN-006 - Solo retorna ciudades activas que tienen al menos un cine activo.
@@ -152,7 +152,7 @@ router.get("/cities/:departmentId", getCities);
  * Obtiene un país específico por su nombre.
  *
  * @swagger
- * /api/countries/{id}:
+ * /api/countries/country/{id}:
  *   get:
  *     summary: Obtener un país por ID
  *     tags: [Locations]
@@ -180,7 +180,7 @@ router.get("/cities/:departmentId", getCities);
  *         content:
  *           application/json:
  *             example:
- *               error: "El ID del país es obligatorio."    
+ *               error: "El ID del país es obligatorio."
  *       404:
  *         description: País no encontrado.
  *         content:
@@ -194,6 +194,6 @@ router.get("/cities/:departmentId", getCities);
  *             example:
  *               error: "Error interno del servidor."
  */
-router.get("/countries/:id", getCountryById);
+router.get("/country/:id", getCountryById);
 
 export default router;

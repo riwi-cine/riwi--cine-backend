@@ -30,7 +30,13 @@ export interface FunctionAttributes {
  * Atributos utilizados durante la creación.
  */
 export interface FunctionCreationAttributes
-  extends Optional<FunctionAttributes, "id" | "active"> {}
+  extends Optional<FunctionAttributes, 
+  | "id" 
+  | "active"
+  | "functionTypeId"
+  | "movieId"
+  | "roomId"
+  > {}
 
 /**
  * Clase que representa el modelo Function.
@@ -52,7 +58,7 @@ class Function
   public functionTypeId!: number;
 
   /** Fecha y hora de inicio. */
-  public startsAt!: Date;
+  public startsAt!: Date ;
 
   /** Precio base del boleto. */
   public basePrice!: number;
@@ -116,5 +122,60 @@ Function.init(
     timestamps: false,
   },
 );
+
+/**
+ * Esta es la respuesta esperada para algunas parte del CRUD findOne, además se usará en varias capas como billboard, movie o en cart.
+ */
+export interface FunctionDetail {
+    id: number;
+    startsAt: Date;
+    basePrice: number;
+    active: boolean;
+    functionType: {
+        id: number;
+        name: string;
+        projection: string;
+        language: string;
+    } | null;
+    room: {
+        id: number;
+        name: string;
+        capacity: number;
+        extraPrice: number;
+        roomType: {
+            id: number;
+            name: string;
+            description: string;
+        } | null;
+        cinema: {
+            id: number;
+            name: string;
+            address: string;
+            city: {
+                id: number;
+                name: string;
+            } | null;
+        } | null;
+    } | null;
+    movieRelease?: {
+        id: number;
+        releaseDate: Date;
+        countryId: number;
+        movie?: {
+          id: number;
+          title: string;
+        }
+    };
+    ticketsCount: number;
+    seatLocksCount: number;
+    isSoldOut?: boolean | null;
+}
+
+export interface FunctionPriceDetail {
+    functionId: number;
+    basePrice: number;
+    roomExtraPrice: number;
+    finalPrice: number;
+}
 
 export default Function;

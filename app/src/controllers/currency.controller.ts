@@ -1,6 +1,7 @@
 import {Request, Response} from 'express';
 import currencyService from '../services/currency.service';
 import {CreateCurrencyDto} from '../dto/create-currency.dto';
+import Currency from '../models/currency.model';
 
 /**
  * Controlador para manejar las operaciones relacionadas con las monedas.
@@ -35,7 +36,7 @@ import {CreateCurrencyDto} from '../dto/create-currency.dto';
  * 
  * @param {Response} res - Objeto de la respuesta HTTP.
  * 
- * @returns {Promise<void>} - Retorna una promesa que resuelve la respuesta HTTP.
+ * @returns {Promise<Currency | void>} - Retorna una promesa que resuelve la respuesta HTTP.
  * 
  *  **201 Created**: Si la moneda se crea exitosamente, retorna un objeto JSON con la información de la moneda creada.
  * 
@@ -43,7 +44,7 @@ import {CreateCurrencyDto} from '../dto/create-currency.dto';
  * 
  * @throws {Error} - Lanza un error si ocurre algún problema durante la creación de la moneda.
  */
-export const createCurrency = async (req: Request, res: Response): Promise<void> => {
+export const createCurrency = async (req: Request, res: Response): Promise< Currency | void> => {
     try {
         const createCurrencyDto: CreateCurrencyDto = req.body;
 
@@ -60,13 +61,13 @@ export const createCurrency = async (req: Request, res: Response): Promise<void>
  * @async
  * @param {Response} res - Objeto de la respuesta HTTP.
  * 
- * @returns {Promise<void>} - Retorna una promesa que resuelve la respuesta HTTP.
+ * @returns {Promise<Currency[] | void>} - Retorna una promesa que resuelve la respuesta HTTP.
  * 
  * **200 OK**: Si la operación es exitosa, retorna un array JSON con todas las monedas registradas.
  * 
  * **500 Internal Server Error**: Si ocurre algún problema durante la obtención de las monedas, retorna un mensaje de error.
  */
-export const getCurrencies = async (_req: Request, res: Response): Promise<void> => {
+export const getCurrencies = async (_req: Request, res: Response): Promise <Currency[] | void> => {
     try {
         const currencies = await currencyService.findAll();
         res.status(200).json(currencies);
@@ -82,7 +83,7 @@ export const getCurrencies = async (_req: Request, res: Response): Promise<void>
  * @param {Request} req - Objeto de la petición HTTP.
  * @param {Response} res - Objeto de la respuesta HTTP.
  * 
- * @returns {Promise<void>} - Retorna una promesa que resuelve la respuesta HTTP.
+ * @returns {Promise<Currency | void>} - Retorna una promesa que resuelve la respuesta HTTP.
  * 
  * **200 OK**: Si la moneda se actualiza exitosamente, retorna un objeto JSON con la información de la moneda actualizada.
  * 
@@ -90,7 +91,7 @@ export const getCurrencies = async (_req: Request, res: Response): Promise<void>
  * 
  * **400 Bad Request**: Si los datos enviados por el cliente son inválidos o incompletos, retorna un mensaje de error.
  */
-export const updateCurrency = async (req: Request, res: Response): Promise<void> => {
+export const updateCurrency = async (req: Request, res: Response): Promise <Currency | void> => {
     try {
         const { id } = req.params;
         const updateCurrencyDto: Partial<CreateCurrencyDto> = req.body;
@@ -144,12 +145,12 @@ export const deleteCurrency = async (req: Request, res: Response): Promise<void>
  * 
  * **400 Bad Request**: Si los datos enviados por el cliente son inválidos o incompletos, retorna un mensaje de error.
  */
-export const restoreCurrency = async (req: Request, res: Response): Promise<void> => {
+export const restoreCurrency = async (req: Request, res: Response): Promise<Currency | void> => {
     try {
         const { id } = req.params;
 
-        await currencyService.restore(parseInt(id));
-        res.status(200).json({ message: "Moneda restaurada correctamente." });
+        const currencyUpdated = await currencyService.restore(parseInt(id));
+        res.status(200).json({ message: "Moneda restaurada correctamente.", newData: currencyUpdated});
     } catch (error) {
         res.status(400).json({ message: (error as Error).message });
     }

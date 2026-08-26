@@ -89,6 +89,7 @@ City.init(
         modelName: "City",
         tableName: "cities",
         timestamps: false,
+        paranoid: true,
     },
 );
 

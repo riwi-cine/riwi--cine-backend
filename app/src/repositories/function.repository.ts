@@ -362,13 +362,16 @@ class FunctionRepository implements IfunctionRepository {
             return null;
         }
 
-        const roomExtraPrice = cineFunction.room?.extraPrice ?? 0;
+        // Sequelize/pg devuelve las columnas DECIMAL como string; se convierten
+        // a número para poder sumarlas en lugar de concatenarlas.
+        const basePrice = Number(cineFunction.basePrice);
+        const roomExtraPrice = Number(cineFunction.room?.extraPrice ?? 0);
 
-        const finalPrice = cineFunction.basePrice + roomExtraPrice;
+        const finalPrice = basePrice + roomExtraPrice;
 
         return {
             functionId: cineFunction.id,
-            basePrice: cineFunction.basePrice,
+            basePrice,
             roomExtraPrice,
             finalPrice,
         };

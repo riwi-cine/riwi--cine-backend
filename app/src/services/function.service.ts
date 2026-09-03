@@ -1,7 +1,7 @@
-import Function, {FunctionDetail, FunctionPriceDetail} from "../models/function.model";
+import Function from "../models/function.model";
 import repository from "../repositories/function.repository";
 import { IFunctionService } from "./interfaces/function.service.interface";
-import { CreateFunctionDto } from "../dto/create-function.dto";
+import { CreateFunctionDto, FunctionDetail, FunctionPriceDetail } from "../dto/function.dto";
 import movieRepository from "../repositories/movie.repository";
 
 /**

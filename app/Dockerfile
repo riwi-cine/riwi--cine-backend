@@ -12,5 +12,5 @@ RUN npm install
 # Exponer el puerto
 EXPOSE 3000
 
-# Comando por defecto
-CMD ["npm", "run", "dev"]
+# Comando por defecto: ejecuta todos los seeders y luego levanta el backend
+CMD ["npm", "run", "create"]

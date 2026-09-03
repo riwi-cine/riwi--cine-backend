@@ -406,7 +406,7 @@ const createSoldOutData = async (
             firstName: "Seed",
             lastName: "Billboard",
             phone: "3000000000",
-            birthDate: new Date("1995-01-01T00:00:00"),
+            birthDate: "1995-01-01",
             emailVerified: true,
             marketingOptIn: false,
             status: "ACTIVE",

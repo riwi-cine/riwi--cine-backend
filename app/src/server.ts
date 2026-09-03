@@ -18,6 +18,8 @@ import userRoutes from "./routes/user.routes";
 import notificationsRoutes from "./routes/notifications.routes";
 import functionTypeRoutes from "./routes/function-type.routes";
 import functionRoutes from "./routes/function.routes"
+import seatRoutes from "./routes/seat.routes";
+import reservationRoutes from "./routes/reservation.routes";
 
 const app = express();
 
@@ -52,6 +54,12 @@ app.use("/api/notifications", notificationsRoutes);
  */
 app.use("/api/function-types", functionTypeRoutes);
 app.use("/api/functions", functionRoutes);
+
+/**
+ * Rutas de la HU-010: mapa de sillas y reserva temporal de sillas
+ */
+app.use("/api/functions", seatRoutes);
+app.use("/api/reservations", reservationRoutes);
 
 
 app.get("/api/docs.json", (_req, res) => {

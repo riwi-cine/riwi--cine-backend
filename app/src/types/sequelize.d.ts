@@ -25,6 +25,9 @@ declare module "sequelize" {
         static create(values?: any, options?: any): Promise<any>;
         static destroy(options?: any): Promise<number>;
         static update(values: any, options: any): Promise<[number, any[]]>;
+        static findOrCreate(options: any): Promise<[any, boolean]>;
+        static bulkCreate(records: any[], options?: any): Promise<any[]>;
+        static upsert(values: any, options?: any): Promise<[any, boolean | null]>;
         get(options?: any): any;
     }
 
@@ -32,6 +35,7 @@ declare module "sequelize" {
         constructor(database: string, username: string, password: string, options: any);
         authenticate(): Promise<void>;
         sync(options?: any): Promise<void>;
+        close(): Promise<void>;
     }
 
     export { Sequelize };

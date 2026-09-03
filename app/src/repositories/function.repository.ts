@@ -1,4 +1,5 @@
-import Function, {FunctionCreationAttributes, FunctionDetail, FunctionPriceDetail} from "../models/function.model";
+import Function, {FunctionCreationAttributes} from "../models/function.model";
+import {FunctionDetail, FunctionPriceDetail} from "../dto/function.dto";
 import { IfunctionRepository } from "./interfaces/function.repository.interface";
 import FunctionType from "../models/function-type.model";
 import Room from "../models/room.model";

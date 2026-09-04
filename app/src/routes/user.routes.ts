@@ -40,6 +40,7 @@ const router = Router();
  *             required:
  *               - country
  *               - passwordHash
+ *               - passwordConfirm
  *               - email
  *               - firstName
  *               - lastName
@@ -51,6 +52,9 @@ const router = Router();
  *                 type: string
  *                 example: "Colombia"
  *               passwordHash:
+ *                 type: string
+ *                 example: "password123"
+ *               passwordConfirm:
  *                 type: string
  *                 example: "password123"
  *               email:

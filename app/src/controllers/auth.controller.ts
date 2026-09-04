@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import userService from "../services/user.service";
 import AuthUser from "../services/auth.service";
 import { generateToken } from "../utils/jwt";
+import { generateRefresh } from '../utils/refreshToken'
 
 /**
  * Inicio de sesión el cual utiliza dos parametros como verificación, correo electrónico y contraseña
@@ -39,14 +40,24 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
 
         const validation = await AuthUser.login(user, password);
 
-        const { passwordHash: _, ...userWithoutPassword } = (validation as any).toJSON();
-        const token = await generateToken(userWithoutPassword);
+        const plainUser = validation.get ? validation.get({ plain: true }) : validation;
+        const {passwordHash:_ , ...withoutpassword} = plainUser;    
+
+        const token = await generateToken({email: user.email});
+        const refreshToken = generateRefresh({email: user.email})
 
         res.cookie('accesstoken', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 1000 * 60 * 60
+        maxAge: 1000 * 60 * 15
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
         return res.status(200).json(userWithoutPassword);
@@ -56,4 +67,11 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
             error: error.message
         });
     }
+};
+
+export const logout = async (req: Request, res: Response): Promise<Response> => {
+    res.clearCookie("accesstoken")
+    res.clearCookie("refreshToken")
+
+    return res.status(200).json()
 };

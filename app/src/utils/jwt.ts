@@ -1,7 +1,7 @@
 import jwt, {SignOptions} from 'jsonwebtoken'
 import { UserPayload } from '../services/interfaces/user.payload.interface'
 
- /**
+/**
   * funciones principales del jwt
   */
 
@@ -22,3 +22,4 @@ export const generateToken = (payload: Omit<UserPayload, 'iat' | 'exp'>):string 
 export const verifytoken = (token: string): UserPayload => {
     return jwt.verify(token, JWT_SECRET) as UserPayload;
 };
+

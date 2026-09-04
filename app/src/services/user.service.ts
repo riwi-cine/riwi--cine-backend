@@ -9,6 +9,7 @@ import { CreateUserDto } from "../dto/create-user.dto";
 import repository from "../repositories/user.repository";
 import { IUserService } from "./interfaces/user.service.interface";
 import { Response, Request } from "express";
+import { EmailVerificationController } from "../controllers/emailVerification.controller";
 
 /**
  * Servicio de Usuarios
@@ -92,10 +93,15 @@ class UserService implements IUserService {
             throw new Error("Confirmacion de contraseña incorrecta.");
         }
 
-        return await repository.create({
+        const user = await repository.create({
             ...userData,
             countryId,
+            role: "user",
         } as UserCreationAttributes);
+
+        await EmailVerificationController.generateAndSendToken(user.id, user.email);
+
+        return user;
 
     }
 

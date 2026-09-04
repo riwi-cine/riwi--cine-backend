@@ -1,6 +1,10 @@
 import {transporter} from '../config/mailer'
 
 export class EmailService {
+    public static async sendVerificationEmail(toEmail: string, token: string): Promise<void> {
+        return EmailService.sendServiceEmail(toEmail, token);
+    }
+
     public static async sendServiceEmail(toEmail: string, token: string): Promise<void> {
         const appUrl = process.env.APP_URL ;
         const confirmUrl = `${appUrl}/api/auth/verify-email?token=${token}`;

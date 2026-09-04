@@ -1,6 +1,7 @@
 import jwt, {SignOptions} from 'jsonwebtoken'
 import { UserPayload } from '../services/interfaces/user.payload.interface'
 
+
 /**
  * funciones principales del jwt
   */

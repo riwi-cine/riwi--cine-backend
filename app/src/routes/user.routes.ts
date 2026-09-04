@@ -53,10 +53,10 @@ const router = Router();
  *                 example: "Colombia"
  *               passwordHash:
  *                 type: string
- *                 example: "password123"
+ *                 example: "password123@"
  *               passwordConfirm:
  *                 type: string
- *                 example: "password123"
+ *                 example: "password123@"
  *               email:
  *                 type: string
  *                 format: email
@@ -150,7 +150,7 @@ router.post("/location", authMiddleware, updateUserLocation);
  * Actualiza la información de un usuario existente.
  *
  * @swagger
- * /api/users/:
+ * /api/users/{email}:
  *   patch:
  *     summary: Actualizar un usuario por email
  *     tags: [Users]
@@ -188,7 +188,7 @@ router.post("/location", authMiddleware, updateUserLocation);
  *       500:
  *         description: Error interno del servidor
  */
-router.patch("/", updateUser);
+router.patch("/:email", updateUser);
 
 /**
  * GET /
@@ -254,7 +254,7 @@ router.get("/", getUsers);
  * Elimina a usuarios registrados en la base de datos.
  *
  * @swagger
- * /api/users/:
+ * /api/users/{email}:
  *   delete:
  *     summary: Eliminar usuarios por email
  *     tags: [Users]
@@ -290,7 +290,7 @@ router.get("/", getUsers);
  *               error: "Error al eliminar al usuario"
  *
  */
-router.delete("/", deleteUser);
+router.delete("/:email", deleteUser);
 
 /**
  * POST /restore
@@ -298,7 +298,7 @@ router.delete("/", deleteUser);
  * Restaura a usuarios registrados en la base de datos.
  *
  * @swagger
- * /api/users/restore:
+ * /api/users/restore/{email}:
  *   post:
  *     summary: Restaurar usuarios por email
  *     tags: [Users]
@@ -332,5 +332,5 @@ router.delete("/", deleteUser);
  *               error: "Error al restaurar al usuario"
  *
  */
-router.post("/restore", restoreUser);
+router.post("/restore/:email", restoreUser);
 export default router;

@@ -39,10 +39,10 @@ const router = Router();
  *             properties:
  *               email:
  *                 type: string
- *                 example: "john.doe@example.com"
+ *                 example: "luisreyes@example.com"
  *               password: 
  *                 type: string 
- *                 example: "********"
+ *                 example: "password123@"
  *     responses:
  *       200:
  *         description: Usuario encontrado exitosamente

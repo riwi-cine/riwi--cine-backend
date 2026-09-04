@@ -1,7 +1,7 @@
 // app/src/service/function-type.service.ts
 
 import FunctionType from "../models/function-type.model";
-import { CreateFunctionTypeDto } from "../dto/function-type.dto";
+import { CreateFunctionTypeDto } from "../dto/create-function-type.dto";
 import repository from "../repositories/function-type.repository";
 import { IfunctionTypeRespository } from "../repositories/interfaces/function-type.repository.interface";
 

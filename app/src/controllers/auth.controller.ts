@@ -60,7 +60,7 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
         maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
-        return res.status(200).json(userWithoutPassword);
+        return res.status(200).json(withoutpassword);
 
     } catch (error: any) {
         return res.status(401).json({

@@ -388,7 +388,7 @@ class FunctionRepository implements IfunctionRepository {
             return null;
         }
         await cineFunction.update(data);
-        return await cineFunction.findOne(id);
+        return cineFunction;
     }
 
     /**

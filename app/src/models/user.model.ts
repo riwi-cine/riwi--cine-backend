@@ -219,7 +219,7 @@ User.init(
                 }
             },
             beforeUpdate: async (user: User) => {
-                if (user.passwordHash) {
+                if ((user as any).changed("passwordHash")) {
                     user.passwordHash = await hash_password(user.passwordHash);
                 }
             },

@@ -57,6 +57,11 @@ export interface CreateUserDto{
     countryId?: number;
 
     /**
+     * ID de la ciudad seleccionada por el usuario.
+     */
+    cityId?: number;
+
+    /**
      * Contraseña del usuario.
      */
     passwordHash: string;

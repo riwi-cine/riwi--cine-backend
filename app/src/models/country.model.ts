@@ -35,12 +35,7 @@ export interface CountryAttributes {
  * Se utiliza `Optional` para indicar que `id` no es requerido al momento
  * de la creación, ya que es generado automáticamente por la base de datos.
  */
-export interface CountryCreationAttributes
-    extends Optional<CountryAttributes, 
-    | "id"
-    | "active"
-    | "currencyId"
-    > {}
+export interface CountryCreationAttributes extends Optional<CountryAttributes, "id" | "active" | "currencyId"> {}
 
 /**
  * Clase que representa el modelo `Country` en Sequelize.
@@ -48,10 +43,7 @@ export interface CountryCreationAttributes
  * Implementa los atributos definidos en `CountryAttributes`
  * y `CountryCreationAttributes`.
  */
-class Country
-    extends Model<CountryAttributes, CountryCreationAttributes>
-    implements CountryAttributes
-{
+class Country extends Model<CountryAttributes, CountryCreationAttributes> implements CountryAttributes {
     /** Identificador único del país. */
     public id!: number;
 
@@ -107,10 +99,10 @@ Country.init(
         sequelize,
         modelName: "Country",
         tableName: "countries",
-        timestamps: false,
+        timestamps: true,
+        createdAt: "created_at",
+        updatedAt: "updated_at",
     },
 );
-
-
 
 export default Country;

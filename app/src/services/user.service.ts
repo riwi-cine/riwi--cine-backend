@@ -2,6 +2,8 @@
 
 import { Op } from "sequelize";
 import { CreateUserDto } from "../dto/create-user.dto";
+import Cinema from "../models/cinema.model";
+import City from "../models/city.model";
 import Country from "../models/country.model";
 import User, { UserCreationAttributes } from "../models/user.model";
 import repository from "../repositories/user.repository";
@@ -147,8 +149,14 @@ class UserService implements IUserService {
      *
      * @returns {Promise<User>} -Retorna el usuario en forma de promesa luego de la verificación
      */
+    /**
+     * Obtiene un usuario por email o lanza un error si no existe.
+     */
     async findOne(email: string): Promise<User> {
         const user = await repository.findOne(email);
+        if (!user) {
+            throw new Error("El usuario no existe o el correo es incorrecto.");
+        }
         return user;
     }
 
@@ -163,6 +171,38 @@ class UserService implements IUserService {
         }
 
         return await repository.update(email, dataToUpdate);
+    }
+
+    async updateLocation(userId: number, cityId: number): Promise<User | null> {
+        if (!Number.isInteger(userId) || userId <= 0) {
+            throw new Error("El ID del usuario autenticado no es válido.");
+        }
+
+        if (!Number.isInteger(cityId) || cityId <= 0) {
+            throw new Error("El ID de la ciudad debe ser un número válido.");
+        }
+
+        const city = await City.findOne({
+            where: {
+                id: cityId,
+                active: true,
+            },
+            include: [
+                {
+                    model: Cinema,
+                    as: "cinemas",
+                    where: { active: true },
+                    required: true,
+                    attributes: [],
+                },
+            ],
+        });
+
+        if (!city) {
+            throw new Error("La ciudad no existe o no tiene cines activos.");
+        }
+
+        return await repository.updateById(userId, { cityId });
     }
 
     async delete(email: string): Promise<Boolean> {

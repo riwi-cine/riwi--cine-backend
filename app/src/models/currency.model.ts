@@ -30,16 +30,12 @@ export interface CurrencyAttributes {
 /**
  * Atributos utilizados durante la creación.
  */
-export interface CurrencyCreationAttributes
-    extends Optional<CurrencyAttributes, "id"> {}
+export interface CurrencyCreationAttributes extends Optional<CurrencyAttributes, "id"> {}
 
 /**
  * Clase que representa el modelo Currency.
  */
-class Currency
-    extends Model<CurrencyAttributes, CurrencyCreationAttributes>
-    implements CurrencyAttributes
-{
+class Currency extends Model<CurrencyAttributes, CurrencyCreationAttributes> implements CurrencyAttributes {
     /** Identificador único de la moneda. */
     public id!: number;
 
@@ -85,6 +81,9 @@ Currency.init(
         modelName: "Currency",
         tableName: "currencies",
         timestamps: true,
+        paranoid: false,
+        createdAt: "created_at",
+        updatedAt: "updated_at",
     },
 );
 

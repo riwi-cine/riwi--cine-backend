@@ -27,8 +27,7 @@ export interface FunctionTypeAttributes {
 /**
  * Atributos utilizados durante la creación.
  */
-export interface FunctionTypeCreationAttributes
-    extends Optional<FunctionTypeAttributes, "id"> {}
+export interface FunctionTypeCreationAttributes extends Optional<FunctionTypeAttributes, "id"> {}
 
 /**
  * Clase que representa el modelo FunctionType.
@@ -80,7 +79,11 @@ FunctionType.init(
         sequelize,
         modelName: "FunctionType",
         tableName: "function_types",
-        timestamps: false,
+        timestamps: true,
+        paranoid: true,
+        createdAt: "created_at",
+        updatedAt: "updated_at",
+        deletedAt: "deleted_at",
     },
 );
 

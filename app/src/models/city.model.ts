@@ -30,16 +30,12 @@ export interface CityAttributes {
 /**
  * Atributos utilizados para la creación de una nueva ciudad.
  */
-export interface CityCreationAttributes
-    extends Optional<CityAttributes, "id"> {}
+export interface CityCreationAttributes extends Optional<CityAttributes, "id" | "departmentId"> {}
 
 /**
  * Clase que representa el modelo `City`.
  */
-class City
-    extends Model<CityAttributes, CityCreationAttributes>
-    implements CityAttributes
-{
+class City extends Model<CityAttributes, CityCreationAttributes> implements CityAttributes {
     /** Identificador único de la ciudad. */
     public id!: number;
 
@@ -85,7 +81,9 @@ City.init(
         sequelize,
         modelName: "City",
         tableName: "cities",
-        timestamps: false,
+        timestamps: true,
+        createdAt: "created_at",
+        updatedAt: "updated_at",
     },
 );
 

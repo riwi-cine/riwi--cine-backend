@@ -20,17 +20,18 @@ import { hash_password } from "../utils/auth";
 export interface UserAttributes {
     id: number;
     countryId: number;
+    cityId: number | null;
     email: string;
     passwordHash: string;
     firstName: string;
     lastName: string;
     phone: string;
-    birthDate: Date;
+    birthDate: Date | string;
     emailVerified: boolean;
     marketingOptIn: boolean;
     status: string;
     failedAttempts: number;
-    lockedUntil: Date | null;
+    lockedUntil: Date | string | null;
     role: string;
 }
 
@@ -39,7 +40,7 @@ export interface UserAttributes {
  */
 export interface UserCreationAttributes extends Optional<
     UserAttributes,
-    "id" | "emailVerified" | "countryId" | "status" | "marketingOptIn" | "failedAttempts" | "lockedUntil" | "role"
+    "id" | "emailVerified" | "countryId" | "cityId" | "status" | "marketingOptIn" | "failedAttempts" | "lockedUntil"
 > {}
 
 /**
@@ -51,6 +52,9 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
 
     /** País de residencia. */
     public countryId!: number;
+
+    /** Ciudad seleccionada para personalizar la experiencia. */
+    public cityId!: number | null;
 
     /** Correo electrónico. */
     public email!: string;
@@ -68,7 +72,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public phone!: string;
 
     /** Fecha de nacimiento. */
-    public birthDate!: Date;
+    public birthDate!: Date | string;
 
     /** Indica si el correo fue verificado. */
     public emailVerified!: boolean;
@@ -83,7 +87,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public failedAttempts!: number;
 
     /** Fecha hasta la que permanece bloqueada la cuenta. */
-    public lockedUntil!: Date | null;
+    public lockedUntil!: Date | string | null;
 
     /** Rol del usuario. */
     public role!: string;
@@ -104,7 +108,12 @@ User.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             field: "country_id",
-            defaultValue: 1, // Valor por defecto para el país (ejemplo: 1 para un país específico)
+        },
+
+        cityId: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            field: "city_id",
         },
 
         email: {
@@ -140,7 +149,7 @@ User.init(
         },
 
         birthDate: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.DATE,
             allowNull: false,
             field: "birth_date",
         },
@@ -185,13 +194,14 @@ User.init(
         },
     },
     {
-        sequelize,
+        sequelize: sequelize as any,
         modelName: "User",
         tableName: "users",
         timestamps: true,
         createdAt: "created_at",
-        updatedAt: false,
+        updatedAt: "updated_at",
         paranoid: true,
+        deletedAt: "deleted_at",
         hooks: {
             beforeCreate: async (user: User) => {
                 if (user.passwordHash) {

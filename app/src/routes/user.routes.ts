@@ -15,9 +15,8 @@
  */
 
 import { Router } from "express";
-import { createUser, deleteUser, getUsers, restoreUser, updateUser } from "../controllers/user.controller";
-import { authMiddleware } from '../middlewares/auth.middleware'
-import { roleMiddleware } from '../middlewares/role.middleware'
+import { createUser, deleteUser, getUsers, restoreUser, updateUser, updateUserLocation } from "../controllers/user.controller";
+import { authMiddleware } from "../middlewares/auth.middleware";
 
 const router = Router();
 
@@ -115,12 +114,43 @@ const router = Router();
 router.post("/", createUser);
 
 /**
- * PATCH /:email
+ * @swagger
+ * /api/users/location:
+ *   post:
+ *     summary: Guardar ciudad seleccionada por el usuario autenticado
+ *     description: Debe llamarse después del login. El frontend puede enviar el cityId seleccionado desde localStorage. Solo acepta ciudades activas con al menos un cine activo.
+ *     tags: [Users]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - cityId
+ *             properties:
+ *               cityId:
+ *                 type: integer
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Ubicación actualizada correctamente.
+ *       400:
+ *         description: Ciudad inválida o sin cines activos.
+ *       401:
+ *         description: Usuario no autenticado.
+ */
+router.post("/location", authMiddleware, updateUserLocation);
+
+/**
+ * PATCH /:
  * ----------
  * Actualiza la información de un usuario existente.
  *
  * @swagger
- * /api/users/{email}:
+ * /api/users/:
  *   patch:
  *     summary: Actualizar un usuario por email
  *     tags: [Users]
@@ -130,9 +160,8 @@ router.post("/", createUser);
  *         required: true
  *         schema:
  *           type: string
- *           format: email
- *         description: Email actual del usuario a actualizar
- *     requestBody: 
+ *         description: Email del usuario a actualizar
+ *     requestBody:
  *       required: true
  *       content:
  *         application/json:
@@ -142,30 +171,25 @@ router.post("/", createUser);
  *               name:
  *                 type: string
  *                 example: "John Doe Actualizado"
+ *               email:
+ *                 type: string
+ *                 example: "john.actualizado@example.com"
  *               phoneNumber:
  *                 type: string
  *                 example: "3109876543"
  *               password:
  *                 type: string
- *                 format: password
  *                 example: "nuevapass123"
- *     security:
- *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Usuario actualizado exitosamente
- *       400:
- *         description: Petición inválida o datos mal formados
- *       401:
- *         description: No autenticado (Sesión no válida)
- *       403:
- *         description: No autorizado (Requiere rol de administrador)
  *       404:
  *         description: Usuario no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-router.patch("/:email", authMiddleware, roleMiddleware(["admin"]), updateUser);
+router.patch("/", updateUser);
+
 /**
  * GET /
  *
@@ -177,8 +201,6 @@ router.patch("/:email", authMiddleware, roleMiddleware(["admin"]), updateUser);
  *   get:
  *     summary: Obtener todos los usuarios
  *     tags: [Users]
- *     security:
- *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Lista de usuarios obtenida exitosamente
@@ -224,17 +246,17 @@ router.patch("/:email", authMiddleware, roleMiddleware(["admin"]), updateUser);
  *             example:
  *               error: "Error al obtener los usuarios"
  */
-router.get("/" ,getUsers);
+router.get("/", getUsers);
 
 /**
- * DELETE /:email:
+ * DELETE /:
  * -----------
- * Elimina un usuario registrado en la base de datos a partir de su email.
+ * Elimina a usuarios registrados en la base de datos.
  *
  * @swagger
- * /api/users/{email}:
+ * /api/users/:
  *   delete:
- *     summary: Eliminar usuario por email
+ *     summary: Eliminar usuarios por email
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -251,13 +273,13 @@ router.get("/" ,getUsers);
  *           application/json:
  *             example:
  *               message: "Usuario eliminado correctamente"
- *               email: "john.doe@example.com"
+ *               id: 1
  *       400:
  *         description: Solicitud inválida
  *         content:
  *           application/json:
  *             example:
- *               error: "Formato de email inválido"
+ *               error: "Parámetros incorrectos"
  *       404:
  *         description: Usuario no encontrado
  *       500:
@@ -266,18 +288,19 @@ router.get("/" ,getUsers);
  *           application/json:
  *             example:
  *               error: "Error al eliminar al usuario"
+ *
  */
-router.delete("/:email", deleteUser);
+router.delete("/", deleteUser);
 
 /**
- * POST /restore/{email}:
+ * POST /restore
  * -----------------
- * Restaura a un usuario registrado en la base de datos por su email.
+ * Restaura a usuarios registrados en la base de datos.
  *
  * @swagger
- * /api/users/restore/{email}:
+ * /api/users/restore:
  *   post:
- *     summary: Restaurar usuario por email
+ *     summary: Restaurar usuarios por email
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -301,14 +324,13 @@ router.delete("/:email", deleteUser);
  *           application/json:
  *             example:
  *               error: "Parámetros incorrectos"
- *       404:
- *         description: Usuario no encontrado
  *       500:
  *         description: Error interno del servidor
  *         content:
  *           application/json:
  *             example:
  *               error: "Error al restaurar al usuario"
+ *
  */
-router.post("/restore/:email", restoreUser);
-    export default router;
+router.post("/restore", restoreUser);
+export default router;

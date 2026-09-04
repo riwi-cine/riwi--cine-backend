@@ -31,16 +31,12 @@ export interface CinemaAttributes {
 /**
  * Atributos utilizados para la creación de un nuevo cine.
  */
-export interface CinemaCreationAttributes
-    extends Optional<CinemaAttributes, "id"> {}
+export interface CinemaCreationAttributes extends Optional<CinemaAttributes, "id"> {}
 
 /**
  * Clase que representa el modelo `Cinema`.
  */
-class Cinema
-    extends Model<CinemaAttributes, CinemaCreationAttributes>
-    implements CinemaAttributes
-{
+class Cinema extends Model<CinemaAttributes, CinemaCreationAttributes> implements CinemaAttributes {
     /** Identificador único del cine. */
     public id!: number;
 
@@ -94,7 +90,9 @@ Cinema.init(
         sequelize,
         modelName: "Cinema",
         tableName: "cinemas",
-        timestamps: false,
+        timestamps: true,
+        createdAt: "created_at",
+        updatedAt: "updated_at",
     },
 );
 

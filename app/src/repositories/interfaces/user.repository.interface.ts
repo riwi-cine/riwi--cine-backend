@@ -6,12 +6,8 @@ import User, { UserCreationAttributes } from "../../models/user.model";
  * Contrato del Repositorio de Usuarios
  * -----------------------------------
  * Define las operaciones de persistencia disponibles para la entidad User.
- *
- * Cualquier implementación deberá cumplir esta interfaz.
  */
-
 export interface IUserRepository {
-
     /**
      * Crea un usuario.
      */
@@ -23,19 +19,24 @@ export interface IUserRepository {
     findAll(): Promise<User[]>;
 
     /**
-     * Obtener usuario basado en email.
+     * Obtiene un usuario por email o null si no existe.
      */
-    findOne(email: string): Promise<User>;
+    findOne(email: string): Promise<User | null>;
 
     /**
-     * Actualiza un usuario.
+     * Actualiza un usuario por email.
      */
     update(email: string, data: Partial<UserCreationAttributes>): Promise<User | null>;
 
     /**
+     * Actualiza un usuario por ID.
+     */
+    updateById(id: number, data: Partial<UserCreationAttributes>): Promise<User | null>;
+
+    /**
      * Elimina un usuario (soft delete).
      */
-    delete(email: string): Promise<Boolean>;
+    delete(email: string): Promise<boolean>;
 
     /**
      * Restaura un usuario eliminado.

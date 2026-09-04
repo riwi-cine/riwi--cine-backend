@@ -14,7 +14,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
         next()  
     } catch {
-        res.clearCookie('accessToken');
+        res.clearCookie('accesstoken');
         return res.status(401).json({ message: 'Token inválido o expirado' });
     }
 };

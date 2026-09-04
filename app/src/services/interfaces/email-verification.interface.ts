@@ -1,7 +1,7 @@
 export interface IEmailVerification {
     id: number;
-    userID: number;
+    userId: number;
     token: string;
-    createdAt: Date;
-    updateAt: Date;
+    expiresAt: Date;
+    usedAt: Date | null;
 }

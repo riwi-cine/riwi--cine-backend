@@ -13,6 +13,7 @@
 
 import { Router } from 'express';
 import { findUser, logout } from '../controllers/auth.controller';
+import { EmailVerificationController } from '../controllers/emailVerification.controller';
 
 const router = Router();
 
@@ -94,6 +95,79 @@ router.post("/login", findUser);
  *         
  */
 router.post("/logout", logout);
+
+/**
+ * @swagger
+ * /api/auth/verify-email:
+ *   get:
+ *     summary: Verificar correo electrónico
+ *     tags: [User_Auth]
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Token enviado al correo del usuario
+ *     responses:
+ *       200:
+ *         description: Correo verificado correctamente
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Correo verificado con éxito."
+ *               userId: 1
+ *       400:
+ *         description: Token inválido, expirado o ausente
+ *       404:
+ *         description: Usuario asociado al token no encontrado
+ *       500:
+ *         description: Error interno al verificar el correo
+ */
+router.get("/verify-email", EmailVerificationController.verifyEmail);
+
+/**
+ * @swagger
+ * /api/auth/resend-verification:
+ *   post:
+ *     summary: Reenviar enlace de verificación por correo
+ *     tags: [User_Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *               - email
+ *             properties:
+ *               userId:
+ *                 type: integer
+ *                 example: 1
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: usuario@correo.com
+ *     responses:
+ *       200:
+ *         description: Solicitud procesada; puede incluir warning si falla SMTP
+ *         content:
+ *           application/json:
+ *             examples:
+ *               enviado:
+ *                 value:
+ *                   message: "Nuevo enlace de confirmación enviado."
+ *               smtp_fallido:
+ *                 value:
+ *                   message: "Nuevo enlace de confirmación enviado."
+ *                   warning: "El correo no pudo enviarse en este momento, pero el token sigue disponible para validación."
+ *       400:
+ *         description: Faltan userId o email
+ *       500:
+ *         description: Error interno al reenviar el correo
+ */
+router.post("/resend-verification", EmailVerificationController.resendEmail);
 
 
 export default router

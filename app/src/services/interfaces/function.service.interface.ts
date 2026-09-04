@@ -1,4 +1,5 @@
-import Function, {FunctionDetail, FunctionCreationAttributes, FunctionPriceDetail} from "../../models/function.model";
+import Function, {FunctionCreationAttributes} from "../../models/function.model";
+import {FunctionDetail, FunctionPriceDetail} from "../../dto/function.dto";
 
 /**
  * Contrato del Servicio de Funciones

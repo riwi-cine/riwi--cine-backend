@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 
-import userService from "../services/user.service";
 import { CreateUserDto } from "../dto/create-user.dto";
 import AuthUser from "../services/auth.service";
+import userService from "../services/user.service";
 
 /**
  * ============================================================================
@@ -86,26 +86,31 @@ import AuthUser from "../services/auth.service";
  * y retornada como una respuesta HTTP con código 500.
  */
 export const createUser = async (req: Request, res: Response): Promise<Response> => {
-
     try {
+        const { password, passwordHash, passwordConfirm, ...rest } = req.body;
+        const normalizedPassword = password ?? passwordHash;
+        const normalizedConfirm = passwordConfirm ?? normalizedPassword;
 
-        // Construcción del DTO recibido desde el cliente.
-        const dto: CreateUserDto = req.body;
+        const dto: CreateUserDto = {
+            ...rest,
+            passwordHash: normalizedPassword,
+            passwordConfirm: normalizedConfirm,
+        };
 
-        // Delega la lógica de negocio al servicio.
         const user = await userService.create(dto);
 
-        // Retorna el recurso creado.
         return res.status(201).json(user);
-
     } catch (error: any) {
+        const statusCode =
+            error?.message === "Confirmacion de contraseña incorrecta." ||
+            error?.message === "Debe enviar un país válido."
+                ? 400
+                : 500;
 
-        return res.status(500).json({
-            error: error.message
+        return res.status(statusCode).json({
+            error: error.message,
         });
-
     }
-
 };
 
 /**
@@ -156,34 +161,28 @@ export const createUser = async (req: Request, res: Response): Promise<Response>
  * ]
  */
 export const getUsers = async (_req: Request, res: Response): Promise<Response> => {
-
     try {
-
         // Solicita la información al servicio.
         const users = await userService.findAll();
 
         // Retorna la colección de usuarios.
         return res.status(200).json(users);
-
     } catch (error: any) {
-
         return res.status(500).json({
-            error: error.message
+            error: error.message,
         });
-
     }
-
 };
 
 /**
  * Inicio de sesión el cual utiliza dos parametros como verificación, correo electrónico y contraseña
- * 
- * @param {Request} req 
+ *
+ * @param {Request} req
  *  Objeto de la petición HTTP
- * 
- * @param {Response} res 
+ *
+ * @param {Response} res
  *  Objeto utilizado para construir la respuesta HTTP.
- * 
+ *
  * @returns {Promise<Response>}
  *  * Promesa que resuelve una respuesta HTTP.
  *
@@ -193,7 +192,7 @@ export const getUsers = async (_req: Request, res: Response): Promise<Response> 
  *   Lista de usuarios obtenida correctamente.
  *
  * - **400**
- * 
+ *
  * - **401**
  */
 export const findUser = async (req: Request, res: Response): Promise<Response> => {
@@ -202,7 +201,7 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
 
         if (!email) {
             return res.status(400).json({
-                error: "El email y la contraseña son obligatorios."
+                error: "El email y la contraseña son obligatorios.",
             });
         }
 
@@ -211,21 +210,20 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
         const validation = await AuthUser.login(user, password);
 
         return res.status(200).json(validation);
-
     } catch (error: any) {
         return res.status(401).json({
-            error: error.message
+            error: error.message,
         });
     }
 };
 
 /**
- * 
- * @param {Request} req 
+ *
+ * @param {Request} req
  * Obtiene la petición HTTP
- * 
- * @param {Response} res 
- * @returns 
+ *
+ * @param {Response} res
+ * @returns
  */
 export const updateUser = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -234,7 +232,7 @@ export const updateUser = async (req: Request, res: Response): Promise<Response>
 
         if (!email) {
             return res.status(400).json({
-                error: "El email es obligatorio."
+                error: "El email es obligatorio.",
             });
         }
 
@@ -242,15 +240,14 @@ export const updateUser = async (req: Request, res: Response): Promise<Response>
 
         if (!user) {
             return res.status(404).json({
-                error: "Usuario no encontrado."
+                error: "Usuario no encontrado.",
             });
         }
 
         return res.status(200).json(user);
-
     } catch (error: any) {
         return res.status(500).json({
-            error: error.message
+            error: error.message,
         });
     }
 };
@@ -261,29 +258,27 @@ export const deleteUser = async (req: Request, res: Response): Promise<Response>
 
         if (!email) {
             return res.status(400).json({
-                error: "El email es obligatorio."
+                error: "El email es obligatorio.",
             });
         }
         const deleted = await userService.delete(String(email));
 
         if (!deleted) {
             return res.status(404).json({
-                error: "Usuario no encontrado."
+                error: "Usuario no encontrado.",
             });
         }
 
         return res.status(200).json({
             message: "Usuario eliminado correctamente.",
-            email: String(email)
+            email: String(email),
         });
-
     } catch (error: any) {
         return res.status(500).json({
-            error: error.message
+            error: error.message,
         });
     }
-
-}
+};
 
 export const restoreUser = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -291,18 +286,18 @@ export const restoreUser = async (req: Request, res: Response): Promise<Response
 
         if (!email) {
             return res.status(400).json({
-                error: "El email es obligatorio."
+                error: "El email es obligatorio.",
             });
         }
         await userService.restore(String(email));
 
         return res.status(200).json({
             message: "Usuario restaurado correctamente.",
-            email: String(email)
+            email: String(email),
         });
     } catch (error: any) {
         return res.status(500).json({
-            error: error.message
+            error: error.message,
         });
     }
-}
+};

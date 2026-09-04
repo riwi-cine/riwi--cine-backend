@@ -224,7 +224,7 @@ router.patch("/:email", authMiddleware, roleMiddleware(["admin"]), updateUser);
  *             example:
  *               error: "Error al obtener los usuarios"
  */
-router.get("/", authMiddleware ,getUsers);
+router.get("/" ,getUsers);
 
 /**
  * DELETE /:email:

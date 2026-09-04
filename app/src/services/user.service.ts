@@ -1,12 +1,11 @@
 // app/src/services/user.service.ts
 
 import { Op } from "sequelize";
-import User, { UserCreationAttributes } from "../models/user.model";
-import Country from "../models/country.model";
 import { CreateUserDto } from "../dto/create-user.dto";
+import Country from "../models/country.model";
+import User, { UserCreationAttributes } from "../models/user.model";
 import repository from "../repositories/user.repository";
 import { IUserService } from "./interfaces/user.service.interface";
-import { Response, Request } from "express";
 
 /**
  * Servicio de Usuarios
@@ -62,7 +61,6 @@ class UserService implements IUserService {
     }
 
     async create(dto: CreateUserDto): Promise<User> {
-
         /**
          * Ejemplo de regla de negocio:
          *
@@ -82,19 +80,32 @@ class UserService implements IUserService {
          *  - Enviar un correo de bienvenida.
          */
 
-        const countryId = await this.resolveCountryId(dto.country, dto.countryId);
-        const { country, countryId: _countryId, ...userData } = dto as CreateUserDto & { countryId?: number };
-        const {passwordConfirm, passwordHash} = dto;
+        const normalizedPassword = dto.passwordHash ?? (dto as any).password;
+        const normalizedConfirm = dto.passwordConfirm ?? normalizedPassword;
 
-        if (passwordConfirm !== passwordHash) {
+        if (!normalizedPassword) {
+            throw new Error("La contraseña es obligatoria.");
+        }
+
+        if (normalizedConfirm !== normalizedPassword) {
             throw new Error("Confirmacion de contraseña incorrecta.");
         }
 
+        const countryId = await this.resolveCountryId(dto.country, dto.countryId);
+        const {
+            country,
+            countryId: _countryId,
+            passwordHash,
+            passwordConfirm,
+            ...userData
+        } = dto as CreateUserDto & { countryId?: number };
+
         return await repository.create({
             ...userData,
+            passwordHash: normalizedPassword,
             countryId,
+            role: "user",
         } as UserCreationAttributes);
-
     }
 
     /**
@@ -128,13 +139,12 @@ class UserService implements IUserService {
         return await repository.findAll();
     }
 
-
     /**
      * Este metodo esta encargado de delegar el inicio de sesión o log-in.
      * Toma dos inputs el primero se usa para validar mediante el email si el usuario existe en la base de datos
-     * 
+     *
      * @param {string} email -Correo electrónico de usuario
-     * 
+     *
      * @returns {Promise<User>} -Retorna el usuario en forma de promesa luego de la verificación
      */
     async findOne(email: string): Promise<User> {

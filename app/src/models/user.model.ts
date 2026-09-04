@@ -12,7 +12,7 @@
 
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database";
-import  {hash_password}  from "../utils/auth";
+import { hash_password } from "../utils/auth";
 
 /**
  * Atributos principales de la entidad User.
@@ -37,25 +37,15 @@ export interface UserAttributes {
 /**
  * Atributos utilizados durante la creación.
  */
-export interface UserCreationAttributes
-    extends Optional<
-        UserAttributes,
-        | "id"
-        | "emailVerified"
-        | "countryId"
-        | "status"
-        | "marketingOptIn"
-        | "failedAttempts"
-        | "lockedUntil"
-    > {}
+export interface UserCreationAttributes extends Optional<
+    UserAttributes,
+    "id" | "emailVerified" | "countryId" | "status" | "marketingOptIn" | "failedAttempts" | "lockedUntil" | "role"
+> {}
 
 /**
  * Clase que representa el modelo User.
  */
-class User
-    extends Model<UserAttributes, UserCreationAttributes>
-    implements UserAttributes
-{
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     /** Identificador del usuario. */
     public id!: number;
 
@@ -211,7 +201,8 @@ User.init(
             beforeUpdate: async (user: User) => {
                 if (user.passwordHash) {
                     user.passwordHash = await hash_password(user.passwordHash);
-                } },
+                }
+            },
         },
     },
 );

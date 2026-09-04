@@ -1,7 +1,11 @@
-export interface IEmailVerification {
+export interface IEmailVerificationToken {
     id: number;
-    userID: number;
+    userId: number;
     token: string;
-    createdAt: Date;
-    updateAt: Date;
+    expiresAt: Date;
+    usedAt: Date | null;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
+
+export type IEmailVerification = IEmailVerificationToken;

@@ -1,5 +1,8 @@
-import jwt, {SignOptions} from 'jsonwebtoken'
-import { UserPayload } from '../services/interfaces/user.payload.interface'
+import jwt, {SignOptions} from 'jsonwebtoken';
+import { UserPayload } from '../services/interfaces/user.payload.interface';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 /**
   * funciones principales del jwt

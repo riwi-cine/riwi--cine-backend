@@ -12,7 +12,8 @@
         "seed:billboard": "tsx src/seeders/billboard.seed.ts",
         "seed:seats": "tsx src/seeders/seats.seed.ts",
         "seed:all": "npm run seed:locations && npm run seed:billboard && npm run seed:seats",
-        "create": "npm run seed:all && npm run dev"
+        "db:migrate": "sequelize-cli db:migrate",
+        "create": "npm run db:migrate && npm run seed:all && npm run dev"
     },
     "dependencies": {
         "bcrypt": "^6.0.0",

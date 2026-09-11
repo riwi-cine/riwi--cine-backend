@@ -19,7 +19,7 @@ export interface MovieReleaseAttributes {
     id: number;
     movieId: number;
     countryId: number;
-    releaseDate: Date;
+    releaseDate: Date | string;
 }
 
 /**
@@ -45,7 +45,7 @@ class MovieRelease
     public countryId!: number;
 
     /** Fecha de estreno. */
-    public releaseDate!: Date;
+    public releaseDate!: Date | string;
 }
 
 /**
@@ -72,16 +72,22 @@ MovieRelease.init(
         },
 
         releaseDate: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.DATE,
             allowNull: false,
             field: "release_date",
         },
     },
     {
-        sequelize,
+        sequelize: sequelize as any,
         modelName: "MovieRelease",
         tableName: "movie_releases",
-        timestamps: true,
+        timestamps: false,
+        indexes: [
+            {
+                unique: true,
+                fields: ["movie_id", "country_id"],
+            },
+        ],
     },
 );
 

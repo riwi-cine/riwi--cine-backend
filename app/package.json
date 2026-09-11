@@ -1,30 +1,49 @@
 {
-  "name": "app",
-  "version": "1.0.0",
-  "description": "API con Node, Express, TypeScript, Swagger, Jest y Sequelize para PostgreSQL",
-  "main": "dist/index.js",
-  "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "test": "jest --passWithNoTests"
-  },
-  "dependencies": {
-    "express": "^4.19.2",
-    "pg": "^8.11.5",
-    "sequelize": "^6.37.3",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.21",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.30",
-    "@types/swagger-jsdoc": "^6.0.4",
-    "@types/swagger-ui-express": "^4.1.8",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.2.5",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.4.5"
-  }
+    "name": "app",
+    "version": "1.0.0",
+    "description": "API con Node, Express, TypeScript, Swagger, Jest y Sequelize para PostgreSQL",
+    "main": "dist/index.js",
+    "scripts": {
+        "dev": "tsx --watch src/index.ts",
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "test": "jest --passWithNoTests",
+        "seed:locations": "tsx src/seeders/locations.seed.ts",
+        "seed:billboard": "tsx src/seeders/billboard.seed.ts",
+        "seed:seats": "tsx src/seeders/seats.seed.ts",
+        "seed:all": "npm run seed:locations && npm run seed:billboard && npm run seed:seats",
+        "db:migrate": "sequelize-cli db:migrate",
+        "create": "npm run db:migrate && npm run seed:all && npm run dev"
+    },
+    "dependencies": {
+        "bcrypt": "^6.0.0",
+        "cookie-parser": "^1.4.7",
+        "express": "^4.19.2",
+        "jsonwebtoken": "^9.0.3",
+        "nodemailer": "^9.0.5",
+        "pg": "^8.11.5",
+        "sequelize": "^6.37.8",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^5.0.1"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "^6.0.0",
+        "@types/cookie-parser": "^1.4.10",
+        "@types/express": "^4.17.21",
+        "@types/jest": "^29.5.12",
+        "@types/jsonwebtoken": "^9.0.10",
+        "@types/node": "^20.11.30",
+        "@types/nodemailer": "^8.0.1",
+        "@types/swagger-jsdoc": "^6.0.4",
+        "@types/swagger-ui-express": "^4.1.8",
+        "dotenv": "^16.4.5",
+        "jest": "^29.7.0",
+        "pg": "^8.23.0",
+        "pg-hstore": "^2.3.4",
+        "sequelize-cli": "^6.6.5",
+        "ts-jest": "^29.2.5",
+        "ts-node": "^10.9.2",
+        "tsx": "^4.7.1",
+        "typescript": "^5.4.5"
+    }
 }

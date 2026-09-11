@@ -4,25 +4,28 @@
  * Rutas de Usuario
  * ----------------
  * Este archivo define las rutas HTTP relacionadas con la entidad `User`.
- * 
+ *
  * Endpoints disponibles:
  *  - `POST /users/`        : Crear un nuevo usuario.
+ *  - `PATCH /users/:id`    : Actualizar un usuario por ID.
  *  - `GET /users/`         : Obtener todos los usuarios registrados.
  *  - `POST /users/search`  : Buscar un usuario específico por email.
- * 
+ *
  * Cada ruta se conecta con su respectivo controlador.
  */
 
 import { Router } from "express";
-import { createUser, getUsers, findUser } from "../controllers/user.controller";
+import { createUser, deleteUser, getUsers, restoreUser, updateUser, updateUserLocation } from "../controllers/user.controller";
+import { authMiddleware } from "../middlewares/auth.middleware";
 
 const router = Router();
 
 /**
  * POST /
- * -----
+ *
+ * ---
  * Crea un nuevo usuario en la base de datos.
- * 
+ *
  * @swagger
  * /api/users:
  *   post:
@@ -35,35 +38,72 @@ const router = Router();
  *           schema:
  *             type: object
  *             required:
- *               - name
+ *               - country
+ *               - passwordHash
+ *               - passwordConfirm
  *               - email
- *               - password
+ *               - firstName
+ *               - lastName
+ *               - phone
+ *               - birthDate
+ *               - marketingOptIn
  *             properties:
- *               name:
+ *               country:
  *                 type: string
- *                 example: "John Doe"
+ *                 example: "Colombia"
+ *               passwordHash:
+ *                 type: string
+ *                 example: "password123"
+ *               passwordConfirm:
+ *                 type: string
+ *                 example: "password123"
  *               email:
  *                 type: string
- *                 example: "john.doe@example.com"
- *               password:
+ *                 format: email
+ *                 example: "luisreyes@example.com"
+ *               firstName:
  *                 type: string
- *                 example: "********"
+ *                 example: "Luis"
+ *               lastName:
+ *                 type: string
+ *                 example: "Reyes"
+ *               phone:
+ *                 type: string
+ *                 example: "3025949099"
+ *               birthDate:
+ *                 type: string
+ *                 format: date
+ *                 example: "1999-04-05"
+ *               marketingOptIn:
+ *                 type: boolean
+ *                 example: true
+ *
  *     responses:
  *       201:
  *         description: Usuario creado exitosamente
  *         content:
  *           application/json:
  *             example:
- *               id: 3
- *               name: "John Doe"
- *               email: "john.doe@example.com"
- *               password: "********"
+ *               id: 1
+ *               countryId: 57
+ *               email: "luisreyes@example.com"
+ *               firstName: "Luis"
+ *               lastName: "Reyes"
+ *               phone: "3025949099"
+ *               birthDate: "1999-04-05T00:00:00.000Z"
+ *               emailVerified: false
+ *               marketingOptIn: true
+ *               status: "active"
+ *               failedAttempts: 0
+ *               lockedUntil: null
+ *
  *       400:
  *         description: Datos inválidos
  *         content:
  *           application/json:
  *             example:
  *               error: "El correo ya existe"
+ *
  *       500:
  *         description: Error interno del servidor
  *         content:
@@ -74,10 +114,88 @@ const router = Router();
 router.post("/", createUser);
 
 /**
+ * @swagger
+ * /api/users/location:
+ *   post:
+ *     summary: Guardar ciudad seleccionada por el usuario autenticado
+ *     description: Debe llamarse después del login. El frontend puede enviar el cityId seleccionado desde localStorage. Solo acepta ciudades activas con al menos un cine activo.
+ *     tags: [Users]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - cityId
+ *             properties:
+ *               cityId:
+ *                 type: integer
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Ubicación actualizada correctamente.
+ *       400:
+ *         description: Ciudad inválida o sin cines activos.
+ *       401:
+ *         description: Usuario no autenticado.
+ */
+router.post("/location", authMiddleware, updateUserLocation);
+
+/**
+ * PATCH /:
+ * ----------
+ * Actualiza la información de un usuario existente.
+ *
+ * @swagger
+ * /api/users/:
+ *   patch:
+ *     summary: Actualizar un usuario por email
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Email del usuario a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "John Doe Actualizado"
+ *               email:
+ *                 type: string
+ *                 example: "john.actualizado@example.com"
+ *               phoneNumber:
+ *                 type: string
+ *                 example: "3109876543"
+ *               password:
+ *                 type: string
+ *                 example: "nuevapass123"
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado exitosamente
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ */
+router.patch("/", updateUser);
+
+/**
  * GET /
- * ----
+ *
+ * ---
  * Obtiene la lista completa de usuarios registrados en la base de datos.
- * 
+ *
  * @swagger
  * /api/users:
  *   get:
@@ -90,13 +208,116 @@ router.post("/", createUser);
  *           application/json:
  *             example:
  *               - id: 1
- *                 name: "John Doe"
- *                 email: "john.doe@example.com"
- *                 password: "********"
+ *                 countryId: 57
+ *                 email: "luisreyes@example.com"
+ *                 firstName: "Luis"
+ *                 lastName: "Reyes"
+ *                 phone: "3025949099"
+ *                 birthDate: "1999-04-05T00:00:00.000Z"
+ *                 emailVerified: false
+ *                 marketingOptIn: true
+ *                 status: "active"
+ *                 failedAttempts: 0
+ *                 lockedUntil: null
  *               - id: 2
- *                 name: "Jane Doe"
- *                 email: "john.doe@example.com"
- *                 password: "********"
+ *                 countryId: 57
+ *                 email: "david@example.com"
+ *                 firstName: "David"
+ *                 lastName: "Doe"
+ *                 phone: "3109876543"
+ *                 birthDate: "1998-08-20T00:00:00.000Z"
+ *                 emailVerified: true
+ *                 marketingOptIn: false
+ *                 status: "active"
+ *                 failedAttempts: 0
+ *                 lockedUntil: null
+ *
+ *       400:
+ *         description: Solicitud inválida
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Parámetros incorrectos"
+ *
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Error al obtener los usuarios"
+ */
+router.get("/", getUsers);
+
+/**
+ * DELETE /:
+ * -----------
+ * Elimina a usuarios registrados en la base de datos.
+ *
+ * @swagger
+ * /api/users/:
+ *   delete:
+ *     summary: Eliminar usuarios por email
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         description: Email del usuario a eliminar
+ *         schema:
+ *           type: string
+ *           example: "john.doe@example.com"
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado exitosamente
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Usuario eliminado correctamente"
+ *               id: 1
+ *       400:
+ *         description: Solicitud inválida
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Parámetros incorrectos"
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Error al eliminar al usuario"
+ *
+ */
+router.delete("/", deleteUser);
+
+/**
+ * POST /restore
+ * -----------------
+ * Restaura a usuarios registrados en la base de datos.
+ *
+ * @swagger
+ * /api/users/restore:
+ *   post:
+ *     summary: Restaurar usuarios por email
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         description: Email del usuario a restaurar
+ *         schema:
+ *           type: string
+ *           example: "john.doe@example.com"
+ *     responses:
+ *       200:
+ *         description: Usuario restaurado exitosamente
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Usuario restaurado correctamente"
+ *               id: 1
  *       400:
  *         description: Solicitud inválida
  *         content:
@@ -108,60 +329,8 @@ router.post("/", createUser);
  *         content:
  *           application/json:
  *             example:
- *               error: "Error al obtener los usuarios"
+ *               error: "Error al restaurar al usuario"
+ *
  */
-router.get("/", getUsers);
-
-/**
- * POST /search
- * ------------
- * Busca un usuario específico utilizando los criterios enviados en el body.
- * 
- * @swagger
- * /api/users/search:
- *   post:
- *     summary: Buscar un usuario por email
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 example: "john.doe@example.com"
- *               password: 
- *                 type: string 
- *                 example: "********"
- *     responses:
- *       200:
- *         description: Usuario encontrado exitosamente
- *         content:
- *           application/json:
- *             example:
- *               id: 1
- *               name: "John Doe"
- *               email: "john.doe@example.com"
- *               password: "********"
- *       404:
- *         description: Usuario no encontrado
- *         content:
- *           application/json:
- *             example:
- *               error: "Usuario no encontrado"
- *       500:
- *         description: Error interno del servidor
- *         content:
- *           application/json:
- *             example:
- *               error: "Error al buscar el usuario"
- *         
- */
-router.post("/search", findUser);
-
+router.post("/restore", restoreUser);
 export default router;

@@ -1,9 +1,14 @@
 // app/src/services/user.service.ts
 
-import User from "../models/user.model";
+import { Op } from "sequelize";
+import User, { UserCreationAttributes } from "../models/user.model";
+import City from "../models/city.model";
+import Cinema from "../models/cinema.model";
+import Country from "../models/country.model";
 import { CreateUserDto } from "../dto/create-user.dto";
 import repository from "../repositories/user.repository";
 import { IUserService } from "./interfaces/user.service.interface";
+import { Response, Request } from "express";
 
 /**
  * Servicio de Usuarios
@@ -31,6 +36,32 @@ import { IUserService } from "./interfaces/user.service.interface";
  */
 
 class UserService implements IUserService {
+    private async resolveCountryId(country?: string, countryId?: number): Promise<number> {
+        if (countryId !== undefined && countryId !== null && !Number.isNaN(Number(countryId))) {
+            return Number(countryId);
+        }
+
+        if (typeof country === "string" && country.trim()) {
+            const normalizedCountry = country.trim();
+            const countryRecord = await Country.findOne({
+                where: {
+                    name: {
+                        [Op.iLike]: normalizedCountry,
+                    },
+                },
+                attributes: ["id"],
+                raw: true,
+            });
+
+            if (!countryRecord) {
+                throw new Error(`El país "${normalizedCountry}" no existe.`);
+            }
+
+            return Number(countryRecord.id);
+        }
+
+        throw new Error("Debe enviar un país válido.");
+    }
 
     async create(dto: CreateUserDto): Promise<User> {
 
@@ -53,7 +84,18 @@ class UserService implements IUserService {
          *  - Enviar un correo de bienvenida.
          */
 
-        return await repository.create(dto);
+        const countryId = await this.resolveCountryId(dto.country, dto.countryId);
+        const { country, countryId: _countryId, ...userData } = dto as CreateUserDto & { countryId?: number };
+        const {passwordConfirm, passwordHash} = dto;
+
+        if (passwordConfirm !== passwordHash) {
+            throw new Error("Confirmacion de contraseña incorrecta.");
+        }
+
+        return await repository.create({
+            ...userData,
+            countryId,
+        } as UserCreationAttributes);
 
     }
 
@@ -92,19 +134,76 @@ class UserService implements IUserService {
     /**
      * Este metodo esta encargado de delegar el inicio de sesión o log-in.
      * Toma dos inputs el primero se usa para validar mediante el email si el usuario existe en la base de datos
-     * El segundo tiene como propósito auténticar mediante una contraseña si el usuario es autorizado.
      * 
      * @param {string} email -Correo electrónico de usuario
      * 
-     * @param {string} password -Contraseña para confirmar el usuario
-     * 
      * @returns {Promise<User>} -Retorna el usuario en forma de promesa luego de la verificación
      */
-    async findOne(email: string, password: string): Promise<User> {
-        const user = await repository.findOne(email, password);
+    /**
+     * Obtiene un usuario por email o lanza un error si no existe.
+     */
+    async findOne(email: string): Promise<User> {
+        const user = await repository.findOne(email);
+        if (!user) {
+            throw new Error("El usuario no existe o el correo es incorrecto.");
+        }
         return user;
     }
 
+    async update(email: string, dto: Partial<CreateUserDto>): Promise<User | null> {
+        const dataToUpdate: Partial<UserCreationAttributes> = { ...dto } as Partial<UserCreationAttributes>;
+
+        if (dto.country !== undefined || dto.countryId !== undefined) {
+            const countryId = await this.resolveCountryId(dto.country, dto.countryId);
+            dataToUpdate.countryId = countryId;
+            delete (dataToUpdate as any).country;
+            delete (dataToUpdate as any).countryId;
+        }
+
+        return await repository.update(email, dataToUpdate);
+    }
+
+    async updateLocation(userId: number, cityId: number): Promise<User | null> {
+        if (!Number.isInteger(userId) || userId <= 0) {
+            throw new Error("El ID del usuario autenticado no es válido.");
+        }
+
+        if (!Number.isInteger(cityId) || cityId <= 0) {
+            throw new Error("El ID de la ciudad debe ser un número válido.");
+        }
+
+        const city = await City.findOne({
+            where: {
+                id: cityId,
+                active: true,
+            },
+            include: [
+                {
+                    model: Cinema,
+                    as: "cinemas",
+                    where: { active: true },
+                    required: true,
+                    attributes: [],
+                },
+            ],
+        });
+
+        if (!city) {
+            throw new Error("La ciudad no existe o no tiene cines activos.");
+        }
+
+        return await repository.updateById(userId, { cityId });
+    }
+
+    async delete(email: string): Promise<Boolean> {
+        const userEmail = await repository.delete(email);
+        return userEmail;
+    }
+
+    async restore(email: string): Promise<void> {
+        const userID = await repository.restore(email);
+        return userID;
+    }
 }
 
 export default new UserService();

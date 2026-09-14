@@ -105,7 +105,7 @@ Room.init(
         sequelize,
         modelName: "Room",
         tableName: "rooms",
-        timestamps: true,
+        timestamps: false,
     },
 );
 

@@ -31,7 +31,11 @@ export interface DepartmentAttributes {
  * Atributos utilizados para la creación de un nuevo departamento.
  */
 export interface DepartmentCreationAttributes
-    extends Optional<DepartmentAttributes, "id"> {}
+    extends Optional<DepartmentAttributes, 
+    | "id" 
+    | "countryId"
+    | "active"
+    > {}
 
 /**
  * Clase que representa el modelo `Department`.
@@ -85,7 +89,7 @@ Department.init(
         sequelize,
         modelName: "Department",
         tableName: "departments",
-        timestamps: true,
+        timestamps: false,
     },
 );
 

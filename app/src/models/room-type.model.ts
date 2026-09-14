@@ -76,7 +76,7 @@ RoomType.init(
         sequelize,
         modelName: "RoomType",
         tableName: "room_types",
-        timestamps: true,
+        timestamps: false,
     },
 );
 

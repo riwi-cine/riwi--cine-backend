@@ -137,7 +137,7 @@ Movie.init(
         sequelize,
         modelName: "Movie",
         tableName: "movies",
-        timestamps: true,
+        timestamps: false,
     },
 );
 

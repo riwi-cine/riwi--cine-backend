@@ -17,7 +17,7 @@
 
 ---
 
-##  Table of Contents
+## Table of Contents
 
 - [Project Description](#project-description)
 - [Technologies Used](#technologies-used)
@@ -67,7 +67,7 @@ Its goal is to serve as a reliable backend for web or mobile applications.
 
 ---
 
-## Architecture
+## Architectur
 
 ```
 app/src/
@@ -89,7 +89,7 @@ app/src/
 
 ---
 
-##  Key Features
+## Key Features
 
 - **Modular Architecture**: REPOSITORIES/DTO patterns with service layer
 - **Security**: JWT authentication + RBAC authorization
@@ -106,11 +106,9 @@ app/src/
 
 ---
 
-##  Documentation
+## Documentation
 
 Detailed documentation available in `/docs`:
-
-
 
 <div align=right>
 
@@ -120,7 +118,7 @@ Detailed documentation available in `/docs`:
 
 ---
 
-##  Installation
+## Installation
 
 ```bash
 # Clone repository
@@ -148,9 +146,10 @@ npm run dev
 
 ---
 
-##  Deploy all the project in Docker
+## Deploy all the project in Docker
 
 ### Linux/macOS
+
 ```bash
 # Start all services
 docker-compose up -d
@@ -164,6 +163,7 @@ docker-compose down
 ```
 
 ### Windows (Command Prompt)
+
 ```cmd
 REM Start all services
 docker-compose up -d
@@ -180,6 +180,7 @@ docker-compose down
 ```
 
 ### Windows (PowerShell)
+
 ```powershell
 # Start all services
 docker-compose up -d
@@ -203,7 +204,7 @@ docker-compose down
 
 ---
 
-## 👥 Contributors And Authors
+## Contributors And Authors
 
 | Author          | Role               | Path |
 | --------------- | ------------------ | ---- |

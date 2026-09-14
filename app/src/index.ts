@@ -9,7 +9,9 @@
  */
 
 import sequelize from "./config/database";
+import "./models/associations";
 import app from "./server";
+import "./models/associations";
 
 const PORT = process.env.APP_PORT || 3000;
 
@@ -17,10 +19,6 @@ const start = async () => {
     try {
         await sequelize.authenticate();
         console.log("Conexión a la BD establecida...");
-
-        await sequelize.sync({
-            alter: true,
-        }); // crea tablas si no existen
 
         app.listen(PORT, () => {
             console.log(`Servidor escuchando en puerto ${PORT}`);

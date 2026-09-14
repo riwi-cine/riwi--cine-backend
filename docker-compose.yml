@@ -7,6 +7,7 @@ services:
             - "${APP_PORT}:3000"
         volumes:
             - ./app:/usr/src/app:z
+            - /usr/src/app/node_modules
             - ./.env:/usr/src/app/.env
         env_file:
             - ./.env
@@ -14,7 +15,8 @@ services:
             - NODE_ENV=${NODE_ENV}
             - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/${POSTGRES_DB}
         depends_on:
-            - db
+            db:
+                condition: service_healthy
         deploy:
             resources:
                 limits:
@@ -27,10 +29,18 @@ services:
         image: postgres:15-alpine
         container_name: ${DB_CONTAINER_NAME}
         restart: always
+        ports:
+            - "5433:5432"
         environment:
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
             - POSTGRES_DB=${POSTGRES_DB}
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+            interval: 5s
+            timeout: 5s
+            retries: 10
+            start_period: 30s
         volumes:
             - db_data:/var/lib/postgresql/data
         deploy:

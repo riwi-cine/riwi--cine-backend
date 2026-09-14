@@ -81,6 +81,7 @@ FunctionType.init(
         modelName: "FunctionType",
         tableName: "function_types",
         timestamps: true,
+        paranoid: true,
     },
 );
 

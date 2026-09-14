@@ -19,6 +19,9 @@
  */
 
 import { Sequelize } from "sequelize";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 /**
  * Instancia de Sequelize configurada para PostgreSQL.

@@ -36,7 +36,11 @@ export interface CountryAttributes {
  * de la creación, ya que es generado automáticamente por la base de datos.
  */
 export interface CountryCreationAttributes
-    extends Optional<CountryAttributes, "id"> {}
+    extends Optional<CountryAttributes, 
+    | "id"
+    | "active"
+    | "currencyId"
+    > {}
 
 /**
  * Clase que representa el modelo `Country` en Sequelize.
@@ -103,8 +107,11 @@ Country.init(
         sequelize,
         modelName: "Country",
         tableName: "countries",
-        timestamps: true,
+        timestamps: false,
+        paranoid: true,
     },
 );
+
+
 
 export default Country;

@@ -94,7 +94,7 @@ Cinema.init(
         sequelize,
         modelName: "Cinema",
         tableName: "cinemas",
-        timestamps: true,
+        timestamps: false,
     },
 );
 

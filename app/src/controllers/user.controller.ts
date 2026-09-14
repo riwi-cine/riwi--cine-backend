@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 
 import userService from "../services/user.service";
 import { CreateUserDto } from "../dto/create-user.dto";
+import { UpdateUserLocationDto } from "../dto/update-user-location.dto";
+import AuthUser from "../services/auth.service";
 
 /**
  * ============================================================================
@@ -55,11 +57,16 @@ import { CreateUserDto } from "../dto/create-user.dto";
  *
  * Espera recibir en el body:
  * @example
- * {
- *   "name": "David Mtz",
- *   "email": "david@example.com"
- *   "password": "******"
- * }
+ *  {
+ *    "country": "Colombia",
+ *    "passwordHash": "password123",
+ *    "email": "luisreyes@example.com",
+ *    "firstName": "Luis",
+ *    "lastName": "Reyes",
+ *    "phone": "3025949099",
+ *    "birthDate": "1999-04-05",
+ *    "marketingOptIn": true
+ *  }
  *
  * @param {Response} res
  * Objeto utilizado para construir la respuesta HTTP.
@@ -133,11 +140,20 @@ export const createUser = async (req: Request, res: Response): Promise<Response>
  *
  * @example
  * [
- *   {
- *     "id": 1,
- *     "name": "David",
- *     "email": "david@example.com"
- *   }
+ *  {
+ *   "id": 1,
+ *   "countryId": 1,
+ *   "email": "natalia@example.com",
+ *   "firstName": "Natalia",
+ *   "lastName": "Reyes",
+ *   "phone": "3025949099",
+ *   "birthDate": "1999-04-05T00:00:00.000Z",
+ *   "emailVerified": false,
+ *   "marketingOptIn": true,
+ *   "status": "active",
+ *   "failedAttempts": 0,
+ *   "lockedUntil": null
+ *  }
  * ]
  */
 export const getUsers = async (_req: Request, res: Response): Promise<Response> => {
@@ -185,15 +201,17 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
     try {
         const { email, password } = req.body;
 
-        if (!email || !password) {
+        if (!email) {
             return res.status(400).json({
                 error: "El email y la contraseña son obligatorios."
             });
         }
 
-        const user = await userService.findOne(email, password);
+        const user = await userService.findOne(email);
 
-        return res.status(200).json(user);
+        const validation = await AuthUser.login(user, password);
+
+        return res.status(200).json(validation);
 
     } catch (error: any) {
         return res.status(401).json({
@@ -201,3 +219,129 @@ export const findUser = async (req: Request, res: Response): Promise<Response> =
         });
     }
 };
+
+/**
+ * 
+ * @param {Request} req 
+ * Obtiene la petición HTTP
+ * 
+ * @param {Response} res 
+ * @returns 
+ */
+export const updateUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const { email } = req.params;
+        const dto: Partial<CreateUserDto> = req.body;
+
+        if (!email) {
+            return res.status(400).json({
+                error: "El email es obligatorio."
+            });
+        }
+
+        const user = await userService.update(String(email), dto);
+
+        if (!user) {
+            return res.status(404).json({
+                error: "Usuario no encontrado."
+            });
+        }
+
+        return res.status(200).json(user);
+
+    } catch (error: any) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
+
+export const updateUserLocation = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const dto: UpdateUserLocationDto = req.body;
+        const userId = req.user?.id;
+        const cityId = Number(dto.cityId);
+
+        if (!userId) {
+            return res.status(401).json({
+                error: "Usuario no autenticado.",
+            });
+        }
+
+        if (!Number.isInteger(cityId) || cityId <= 0) {
+            return res.status(400).json({
+                error: "El campo cityId es obligatorio y debe ser un número válido.",
+            });
+        }
+
+        const user = await userService.updateLocation(Number(userId), cityId);
+
+        if (!user) {
+            return res.status(404).json({
+                error: "Usuario no encontrado.",
+            });
+        }
+
+        return res.status(200).json({
+            message: "Ubicación actualizada correctamente.",
+            user,
+        });
+    } catch (error: any) {
+        return res.status(400).json({
+            error: error.message,
+        });
+    }
+};
+
+export const deleteUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const { email } = req.params;
+
+        if (!email) {
+            return res.status(400).json({
+                error: "El email es obligatorio."
+            });
+        }
+        const deleted = await userService.delete(String(email));
+
+        if (!deleted) {
+            return res.status(404).json({
+                error: "Usuario no encontrado."
+            });
+        }
+
+        return res.status(200).json({
+            message: "Usuario eliminado correctamente.",
+            email: String(email)
+        });
+
+    } catch (error: any) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+
+}
+
+export const restoreUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const { email } = req.params;
+
+        if (!email) {
+            return res.status(400).json({
+                error: "El email es obligatorio."
+            });
+        }
+        await userService.restore(String(email));
+
+        return res.status(200).json({
+            message: "Usuario restaurado correctamente.",
+            email: String(email)
+        });
+    } catch (error: any) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+

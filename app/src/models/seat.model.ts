@@ -94,7 +94,7 @@ Seat.init(
         sequelize,
         modelName: "Seat",
         tableName: "seats",
-        timestamps: true,
+        timestamps: false,
     },
 );
 
